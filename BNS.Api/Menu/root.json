@@ -1,0 +1,190 @@
+[
+  {
+    "page": "Category",
+    "icon": "fas fa-tachometer-alt",
+    "header": "Category",
+    "childPage": [
+      {
+        "page": "CF_Area",
+        "icon": "far fa-circle",
+        "header": "Area",
+        "action": "/CF_Area/Index",
+        "key": "CF_Area",
+        "button": [
+          {
+            "key": "CF_Area_Add",
+            "text": "Add"
+          },
+          {
+            "key": "CF_Area_View",
+            "text": "View"
+          },
+          {
+            "key": "CF_Area_Delete",
+            "text": "Delete"
+          },
+          {
+            "key": "CF_Area_Edit",
+            "text": "Edit"
+          }
+        ]
+      },
+      {
+        "page": "CF_Branch",
+        "icon": "far fa-circle",
+        "header": "Branch",
+        "key": "CF_Branch",
+        "action": "/CF_Branch/Index",
+        "button": [
+          {
+            "key": "CF_Branch_Add",
+            "text": "Add"
+          },
+          {
+            "key": "CF_Branch_View",
+            "text": "View"
+          },
+          {
+            "key": "CF_Branch_Delete",
+            "text": "Delete"
+          },
+          {
+            "key": "CF_Branch_Edit",
+            "text": "Edit"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page": "Employee",
+    "header": "Employee",
+    "icon": "far fa-users",
+    "childPage": [
+      {
+        "page": "CF_Employee",
+        "header": "List",
+        "key": "CF_Employee",
+        "icon": "far fa-circle",
+        "action": "/CF_Employee/Index",
+        "button": [
+          {
+            "key": "CF_Employee_Add",
+            "text": "Add"
+          },
+          {
+            "key": "CF_Employee_View",
+            "text": "View"
+          },
+          {
+            "key": "CF_Employee_Delete",
+            "text": "Delete"
+          },
+          {
+            "key": "CF_Employee_Edit",
+            "text": "Edit"
+          }
+        ]
+      },
+      {
+        "page": "CF_Position",
+        "icon": "far fa-circle",
+        "header": "Position",
+        "key": "CF_Position",
+        "action": "/CF_Position/Index",
+        "button": [
+          {
+            "key": "CF_Position_Add",
+            "text": "Add"
+          },
+          {
+            "key": "CF_Position_View",
+            "text": "View"
+          },
+          {
+            "key": "CF_Position_Delete",
+            "text": "Delete"
+          },
+          {
+            "key": "CF_Position_Edit",
+            "text": "Edit"
+          }
+        ]
+      },
+      {
+        "page": "CF_Department",
+        "header": "Department",
+        "icon": "far fa-circle",
+        "key": "CF_Department",
+        "action": "/CF_Department/Index",
+        "button": [
+          {
+            "key": "CF_Department_Add",
+            "text": "Add"
+          },
+          {
+            "key": "CF_Department_View",
+            "text": "View"
+          },
+          {
+            "key": "CF_Department_Delete",
+            "text": "Delete"
+          },
+          {
+            "key": "CF_Department_Edit",
+            "text": "Edit"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "page": "Decentralize",
+    "icon": "fas fa-tachometer-alt",
+    "header": "Decentralize",
+    "childPage": [
+      {
+        "page": "SYS_Role",
+        "icon": "far fa-circle",
+        "header": "Role",
+        "key": "SYS_Role",
+        "action": "/SYS_Role/Index",
+        "button": [
+          {
+            "key": "SYS_Role_Add",
+            "text": "Add"
+          },
+          {
+            "key": "SYS_Role_View",
+            "text": "View"
+          },
+          {
+            "key": "SYS_Role_Delete",
+            "text": "Delete"
+          },
+          {
+            "key": "SYS_Role_Edit",
+            "text": "Edit"
+          }
+        ]
+      },
+      {
+        "page": "SYS_Decentralize",
+        "icon": "far fa-circle",
+        "header": "Decentralize",
+        "key": "SYS_Decentralize",
+        "action": "/SYS_Decentralize/Index",
+        "button": [
+          {
+            "key": "SYS_Decentralize_Save",
+            "text": "Add"
+          },
+          {
+            "key": "SYS_Decentralize_View",
+            "text": "View"
+          }
+        ]
+      }
+    ]
+  }
+]

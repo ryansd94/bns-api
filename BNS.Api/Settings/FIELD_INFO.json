@@ -1,0 +1,107 @@
+[
+  {
+    "action": "cf_area",
+    "field": [
+      {
+        "Column": "Number"
+      },
+      {
+        "Column": "Note"
+      }
+    ]
+  },
+  {
+    "action": "cf_branch",
+    "field": [
+      {
+        "Column": "Number"
+      },
+      {
+        "Column": "Note"
+      }
+    ]
+  },
+  {
+    "action": "cf_department",
+    "field": [
+      {
+        "Column": "Number"
+      },
+      {
+        "Column": "Note"
+      }
+    ]
+  },
+  {
+    "action": "cf_position",
+    "field": [
+      {
+        "Column": "Number"
+      },
+      {
+        "Column": "Note"
+      }
+    ]
+  },
+  {
+    "action": "cf_employee",
+    "field": [
+      {
+        "Column": "EmployeeCode"
+      },
+      {
+        "Column": "DepartmentIndex"
+      },
+      {
+        "Column": "BrithDate"
+      },
+      {
+        "Column": "Gender"
+      },
+      {
+        "Column": "Phone"
+      },
+      {
+        "Column": "Email"
+      },
+      {
+        "Column": "Nric"
+      },
+      {
+        "Column": "DateOfNric"
+      },
+      {
+        "Column": "PlaceOfNric"
+      },
+      {
+        "Column": "PermanentAddress"
+      },
+      {
+        "Column": "TemporaryAddress"
+      },
+      {
+        "Column": "UserName"
+      },
+      {
+        "Column": "Password"
+      },
+      {
+        "Column": "ConfirmPassword"
+      },
+      {
+        "Column": "WorkingDate"
+      },
+      {
+        "Column": "PositionIndex"
+      }
+    ]
+  },
+  {
+    "action": "sys_role",
+    "field": [
+      {
+        "Column": "Note"
+      }
+    ]
+  }
+]
