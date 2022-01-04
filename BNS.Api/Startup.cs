@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace BNS.Api
 {
@@ -61,9 +63,19 @@ namespace BNS.Api
             //        });
             //});
             services.AddDbContext<BNSDbContext>(
-            options => options.UseSqlServer(appSettings.ConnectionStrings.bnsConnection));
+            options => options.UseSqlServer(appSettings.ConnectionStrings.bnsConnection)
 
-             
+
+            );
+            //services.AddDbContext<BNSDbContext>((serviceProvider, dbContextBuilder) =>
+            //{
+            //    var connectionStringPlaceHolder = appSettings.ConnectionStrings.bnsConnection;
+            //    var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            //    var dbName = httpContextAccessor.HttpContext.Request.Headers["tenantId"].First();
+            //    var connectionString = connectionStringPlaceHolder.Replace("{dbName}", dbName);
+            //    dbContextBuilder.UseSqlServer(connectionString);
+            //});
+
             services.AddDataProtection();
 
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CF_AccountLoginValidator>());

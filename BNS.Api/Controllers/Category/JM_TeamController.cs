@@ -32,13 +32,11 @@ namespace BNS.Api.Controllers.Category
         public async Task<IActionResult> Save(CreateJM_TeamCommand.CreateTeamRequest request)
         {
             request.CreatedBy = UserId;
-            request.ShopIndex = ShopIndex;
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
         public async Task<IActionResult> GetAllData(GetJM_TeamQuery.GetJM_TeamRequest request)
         {
-            request.ShopIndex = ShopIndex;
             return Ok(await _mediator.Send(request));
         }
 
@@ -47,7 +45,6 @@ namespace BNS.Api.Controllers.Category
         {
             var request = new GetJM_TeamByIdQuery.GetJM_TeamByIdRequest();
             request.Id = id;
-            request.ShopIndex = ShopIndex;
             return Ok(await _mediator.Send(request));
         }
 
@@ -56,7 +53,6 @@ namespace BNS.Api.Controllers.Category
         public async Task<IActionResult> Delete(DeleteJM_TeamCommand.DeleteJM_TeamRequest request)
         {
             request.CreatedBy = UserId;
-            request.ShopIndex = ShopIndex;
             return Ok(await _mediator.Send(request));
         }
 
@@ -64,7 +60,6 @@ namespace BNS.Api.Controllers.Category
         public async Task<IActionResult> Update(UpdateJM_TeamCommand.UpdateJM_TeamRequest request)
         {
             request.CreatedBy = UserId;
-            request.ShopIndex = ShopIndex;
             return Ok(await _mediator.Send(request));
         }
 
