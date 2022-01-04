@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BNS.Data.Entities.JM_Entities
@@ -12,7 +13,10 @@ namespace BNS.Data.Entities.JM_Entities
         public string Avartar { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public Guid JM_TemplateId { get; set; }
         public virtual IEnumerable<JM_ProjectTeam> JM_ProjectTeams { get; set; }
         public virtual IEnumerable<JM_ProjectMember> JM_ProjectMembers { get; set; }
+        [ForeignKey("JM_TemplateId")]
+        public virtual JM_Template JM_Template { get; set; }
     }
 }

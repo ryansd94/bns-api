@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220104085157_updateTbJM_ProjectSprint")]
+    partial class updateTbJM_ProjectSprint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2861,9 +2863,6 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("JM_TemplateId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -2879,8 +2878,6 @@ namespace BNS.Data.Migrations
                     b.HasKey("Index");
 
                     b.HasIndex("CompanyIndex");
-
-                    b.HasIndex("JM_TemplateId");
 
                     b.ToTable("JM_Project");
                 });
@@ -2932,6 +2929,9 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AssigneeIssueStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
@@ -2947,11 +2947,17 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<string>("IssueType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReporterIssueStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -3055,55 +3061,6 @@ namespace BNS.Data.Migrations
                     b.HasIndex("UpdatedUser");
 
                     b.ToTable("JM_Teams");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AssigneeIssueStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CompanyIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("IssueType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReporterIssueStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.HasIndex("CompanyIndex");
-
-                    b.ToTable("JM_Templates");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.SYS_VersionConfig", b =>
@@ -3433,15 +3390,7 @@ namespace BNS.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyIndex");
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Template", "JM_Template")
-                        .WithMany()
-                        .HasForeignKey("JM_TemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("JM_Company");
-
-                    b.Navigation("JM_Template");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectMember", b =>
@@ -3524,15 +3473,6 @@ namespace BNS.Data.Migrations
                     b.Navigation("JM_Company");
 
                     b.Navigation("UpdateUserAccount");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyIndex");
-
-                    b.Navigation("JM_Company");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.Sys_RoleGroup", b =>

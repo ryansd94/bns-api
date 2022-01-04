@@ -1279,6 +1279,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_ProjectTeam> JM_ProjectTeams { get; set; }
         public virtual DbSet<JM_ProjectMember> JM_ProjectMembers { get; set; }
         public virtual DbSet<JM_ProjectSprint> JM_ProjectSprints { get; set; }
+        public virtual DbSet<JM_Template> JM_Templates { get; set; }
 
     }
 }

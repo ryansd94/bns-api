@@ -63,7 +63,15 @@ namespace BNS.Utilities
             Product,
             Employee
         }
-
+        public enum EStatusIssue
+        {
+            NEW = 1,
+            IN_PROGRESS = 2,
+            RESLOVED = 3,
+            DONE = 4,
+            FEEDBACK = 5,
+            CANCELED = 6
+        }
         public enum EVersionType
         {
             Trial = 1,
