@@ -6,6 +6,7 @@ using BNS.Data.Entities;
 using BNS.Data.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Data.EntityContext
 {
@@ -113,17 +114,21 @@ namespace BNS.Data.EntityContext
 
 
 
-            modelBuilder.Entity<CF_Account>()
+            modelBuilder.Entity<JM_Account>()
             .HasMany(a => a.JM_TeamsCreate)
             .WithOne(b => b.CreateUserAccount)
             .HasForeignKey(b => b.CreatedUser);
 
 
-            modelBuilder.Entity<CF_Account>()
+            modelBuilder.Entity<JM_Account>()
             .HasMany(a => a.JM_TeamsUpdate)
             .WithOne(b => b.UpdateUserAccount)
             .HasForeignKey(b => b.UpdatedUser);
 
+
+
+            modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectTeams);
+            modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
             modelBuilder.Entity<Sys_RoleGroup>(entity =>
             {
                 entity.HasKey(e => e.Index);
@@ -1270,6 +1275,10 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<Sys_RoleClaim> Sys_RoleClaims { get; set; }
         public virtual DbSet<JM_Team> JM_Teams { get; set; }
         public virtual DbSet<JM_Account> JM_Accounts { get; set; }
+        public virtual DbSet<JM_Project> JM_Project { get; set; }
+        public virtual DbSet<JM_ProjectTeam> JM_ProjectTeams { get; set; }
+        public virtual DbSet<JM_ProjectMember> JM_ProjectMembers { get; set; }
+        public virtual DbSet<JM_ProjectSprint> JM_ProjectSprints { get; set; }
 
     }
 }

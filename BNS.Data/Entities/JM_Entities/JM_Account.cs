@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.Data.Entities
+namespace BNS.Data.Entities.JM_Entities
 {
   public  class JM_Account : IdentityUser<Guid>
     {
@@ -16,5 +16,7 @@ namespace BNS.Data.Entities
         public bool IsDelete { get; set; }
         public string GoogleId { get; set; }
         public string FullName { get; set; }
+        public ICollection<JM_Team> JM_TeamsCreate { get; set; }
+        public ICollection<JM_Team> JM_TeamsUpdate { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BNS.Data.Entities.JM_Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 
@@ -23,8 +24,6 @@ namespace BNS.Data.Entities
         public string BranchDefault { get; set; }
         public CF_Employee Cf_Employee { get; set; }
         public CF_Shop CF_Shop { get; set; }
-        public ICollection<JM_Team> JM_TeamsCreate { get; set; }
-        public ICollection<JM_Team> JM_TeamsUpdate { get; set; }
 
         //public List<CF_Bill> CF_Bills { get; set; }
         //public List<CF_Order> CF_Orders { get; set; }

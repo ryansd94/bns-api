@@ -1,4 +1,5 @@
 ﻿using BNS.Data.Entities;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;

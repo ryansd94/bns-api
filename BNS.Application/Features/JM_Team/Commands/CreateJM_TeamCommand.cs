@@ -1,4 +1,4 @@
-﻿using BNS.Data.Entities;
+﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
@@ -43,7 +43,7 @@ namespace BNS.Application.Features
                 if(dataCheck != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
-                    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_TokenError];
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                     return response;
                 }
                 var data = new JM_Team
