@@ -52,7 +52,7 @@ namespace BNS.Application.Features
                 }
                 var data = new JM_Project
                 {
-                    Index = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Code = request.Code,
                     Name = request.Name,
                     Description = request.Description,
@@ -67,8 +67,8 @@ namespace BNS.Application.Features
                     {
                         await _context.JM_ProjectTeams.AddAsync(new JM_ProjectTeam
                         {
-                            Index = Guid.NewGuid(),
-                            ProjectId = data.Index,
+                            Id = Guid.NewGuid(),
+                            ProjectId = data.Id,
                             TeamId = team,
                             CreatedDate = DateTime.UtcNow,
                             CreatedUser = request.CreatedBy,
@@ -81,8 +81,8 @@ namespace BNS.Application.Features
                     {
                         await _context.JM_ProjectMembers.AddAsync(new JM_ProjectMember
                         {
-                            Index = Guid.NewGuid(),
-                            ProjectId = data.Index,
+                            Id = Guid.NewGuid(),
+                            ProjectId = data.Id,
                             UserId = team,
                             CreatedDate = DateTime.UtcNow,
                             CreatedUser = request.CreatedBy,
@@ -91,7 +91,7 @@ namespace BNS.Application.Features
                 }
                 await _context.JM_Project.AddAsync(data);
                 await _context.SaveChangesAsync();
-                response.data = data.Index;
+                response.data = data.Id;
                 return response;
             }
 

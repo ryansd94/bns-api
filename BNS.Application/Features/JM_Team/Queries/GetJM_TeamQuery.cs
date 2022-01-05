@@ -36,12 +36,12 @@ namespace BNS.Application.Features
                 var response = new ApiResult<JM_TeamResponse>();
                 response.data = new JM_TeamResponse();
                 var query = _context.JM_Teams.Where(s => !string.IsNullOrEmpty(s.Name) &&
-                s.IsDelete == null )
+                !s.IsDelete)
                     .Select(s => new JM_TeamResponseItem
                     {
                         Name = s.Name,
                         Description = s.Description,
-                        Id = s.Index,
+                        Id = s.Id,
                         UpdatedDate = s.UpdatedDate,
                         CreatedDate = s.CreatedDate,
                         CreatedUserId = s.CreatedUser,
@@ -63,12 +63,6 @@ namespace BNS.Application.Features
                 if (request.isEdit)
                     query = query.OrderByDescending(s => s.UpdatedDate);
 
-                if (request.search != null && !string.IsNullOrEmpty(request.search.value))
-                {
-                    var valueSearch = request.search.value;
-                    query = Common.SearchBy(query, new CategoryResponseModel(), valueSearch);
-
-                }
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
 

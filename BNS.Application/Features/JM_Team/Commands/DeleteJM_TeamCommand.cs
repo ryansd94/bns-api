@@ -35,7 +35,7 @@ namespace BNS.Application.Features
             public async Task<ApiResult<Guid>> Handle(DeleteJM_TeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataChecks = await _context.JM_Teams.Where(s => request.ids.Contains(s.Index)).ToListAsync();
+                var dataChecks = await _context.JM_Teams.Where(s => request.ids.Contains(s.Id)).ToListAsync();
                 if (dataChecks == null || dataChecks.Count() ==0)
                 {
                     response.errorCode = EErrorCode.NotExistsData.ToString();

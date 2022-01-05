@@ -40,7 +40,7 @@ namespace BNS.Application.Features
             public async Task<ApiResult<Guid>> Handle(UpdateJM_TeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataCheck = await _context.JM_Teams.Where(s => s.Index == request.Id ).FirstOrDefaultAsync();
+                var dataCheck = await _context.JM_Teams.Where(s => s.Id == request.Id ).FirstOrDefaultAsync();
                 if (dataCheck == null)
                 {
                     response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -48,7 +48,7 @@ namespace BNS.Application.Features
                     return response;
                 }
 
-                var checkDuplicate = await _context.JM_Teams.Where(s => s.Name.Equals(request.Name)  && s.Index != request.Id).FirstOrDefaultAsync();
+                var checkDuplicate = await _context.JM_Teams.Where(s => s.Name.Equals(request.Name)  && s.Id != request.Id).FirstOrDefaultAsync();
                 if (checkDuplicate != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -64,7 +64,7 @@ namespace BNS.Application.Features
 
                 _context.JM_Teams.Update(dataCheck);
                 await _context.SaveChangesAsync();
-                response.data = dataCheck.Index;
+                response.data = dataCheck.Id;
                 return response;
             }
 

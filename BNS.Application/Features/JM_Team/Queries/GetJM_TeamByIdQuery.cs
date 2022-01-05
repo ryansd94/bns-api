@@ -39,7 +39,7 @@ namespace BNS.Application.Features
                     {
                         Name = s.Name,
                         Description = s.Description,
-                        Id = s.Index,
+                        Id = s.Id,
                         UpdatedDate = s.UpdatedDate,
                         CreatedDate = s.CreatedDate,
                         CreatedUserId = s.CreatedUser,

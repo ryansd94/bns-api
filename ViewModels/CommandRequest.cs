@@ -14,9 +14,6 @@ namespace BNS.ViewModels
         public bool isAdd { get; set; }
         public bool isEdit { get; set; }
 
-        public List<columnField> columns { get; set; }
-        public List<orderField> order { get; set; }
-        public searchField search { get; set; }
         public List<sortField> sortModel { get; set; }
     }
     public class CommandByIdRequest<T> : IRequest<T> where T : class

@@ -50,7 +50,7 @@ namespace BNS.Application.Features.JM_Template.Commands
                 }
                 var data = new BNS.Data.Entities.JM_Entities.JM_Template
                 {
-                    Index = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = request.Name,
                     Description = request.Description,
                     CreatedDate = DateTime.UtcNow,
@@ -63,7 +63,7 @@ namespace BNS.Application.Features.JM_Template.Commands
 
                 await _context.JM_Templates.AddAsync(data);
                 await _context.SaveChangesAsync();
-                response.data = data.Index;
+                response.data = data.Id;
                 return response;
             }
 

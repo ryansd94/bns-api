@@ -9,7 +9,7 @@ namespace BNS.Data.Entities.JM_Entities
     public class BaseJMEntity
     {
         [Key]
-        public Guid Index { get; set; }
+        public Guid Id { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public Guid? UpdatedUser { get; set; }
         public DateTime CreatedDate { get; set; }

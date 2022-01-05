@@ -48,7 +48,7 @@ namespace BNS.Application.Features
                 }
                 var data = new JM_Team
                 {
-                    Index = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Code = request.Code,
                     Name = request.Name,
                     Description = request.Description,
@@ -58,7 +58,7 @@ namespace BNS.Application.Features
                 };
                 await _context.JM_Teams.AddAsync(data);
                 await _context.SaveChangesAsync();
-                response.data = data.Index;
+                response.data = data.Id;
                 return response;
             }
 
