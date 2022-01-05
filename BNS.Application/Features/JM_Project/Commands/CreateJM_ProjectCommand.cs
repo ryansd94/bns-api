@@ -24,6 +24,7 @@ namespace BNS.Application.Features
             public string Name { get; set; }
             public string Code { get; set; }
             public string Description { get; set; }
+            public Guid TemplateId { get; set; }
             public DateTime? StartDate { get; set; }
             public DateTime? EndDate { get; set; }
             public List<Guid> Teams { get; set; }
@@ -43,14 +44,14 @@ namespace BNS.Application.Features
             public async Task<ApiResult<Guid>> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataCheck = await _context.JM_Project.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
+                var dataCheck = await _context.JM_Projects.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
                 if (dataCheck != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                     return response;
                 }
-                var data = new JM_Project
+                var data = new BNS.Data.Entities.JM_Entities.JM_Project
                 {
                     Id = Guid.NewGuid(),
                     Code = request.Code,
@@ -60,6 +61,7 @@ namespace BNS.Application.Features
                     EndDate = request.EndDate,
                     CreatedDate = DateTime.UtcNow,
                     CreatedUser = request.CreatedBy,
+                    JM_TemplateId = request.TemplateId
                 };
                 if (request.Teams != null && request.Teams.Count > 0)
                 {
@@ -89,7 +91,7 @@ namespace BNS.Application.Features
                         });
                     }
                 }
-                await _context.JM_Project.AddAsync(data);
+                await _context.JM_Projects.AddAsync(data);
                 await _context.SaveChangesAsync();
                 response.data = data.Id;
                 return response;

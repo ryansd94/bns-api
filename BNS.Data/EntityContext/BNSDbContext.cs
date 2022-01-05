@@ -1275,7 +1275,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<Sys_RoleClaim> Sys_RoleClaims { get; set; }
         public virtual DbSet<JM_Team> JM_Teams { get; set; }
         public virtual DbSet<JM_Account> JM_Accounts { get; set; }
-        public virtual DbSet<JM_Project> JM_Project { get; set; }
+        public virtual DbSet<JM_Project> JM_Projects { get; set; }
         public virtual DbSet<JM_ProjectTeam> JM_ProjectTeams { get; set; }
         public virtual DbSet<JM_ProjectMember> JM_ProjectMembers { get; set; }
         public virtual DbSet<JM_ProjectSprint> JM_ProjectSprints { get; set; }

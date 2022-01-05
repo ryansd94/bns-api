@@ -14,11 +14,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 
-namespace BNS.Application.Features.JM_Template.Commands
+namespace BNS.Application.Features
 {
     public class CreateJM_TemplateCommand
     {
-        public class CreateTemplateRequest : CommandBase<ApiResult<Guid>>
+        public class CreateJM_TemplateRequest : CommandBase<ApiResult<Guid>>
         {
             [Required]
             public string Name { get; set; }
@@ -27,7 +27,7 @@ namespace BNS.Application.Features.JM_Template.Commands
             public string ReporterIssueStatus { get; set; }
             public string AssigneeIssueStatus { get; set; }
         }
-        public class CreateJM_TemplateCommandHandler : IRequestHandler<CreateTemplateRequest, ApiResult<Guid>>
+        public class CreateJM_TemplateCommandHandler : IRequestHandler<CreateJM_TemplateRequest, ApiResult<Guid>>
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -38,7 +38,7 @@ namespace BNS.Application.Features.JM_Template.Commands
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
             }
-            public async Task<ApiResult<Guid>> Handle(CreateTemplateRequest request, CancellationToken cancellationToken)
+            public async Task<ApiResult<Guid>> Handle(CreateJM_TemplateRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
                 var dataCheck = await _context.JM_Templates.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();

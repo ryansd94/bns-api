@@ -19,7 +19,6 @@ namespace BNS.ViewModels
     public class CommandByIdRequest<T> : IRequest<T> where T : class
     {
         public Guid Id { get; set; }
-        public Guid ShopIndex { get; set; }
     }
 
 }
