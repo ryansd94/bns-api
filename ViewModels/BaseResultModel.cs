@@ -21,7 +21,5 @@ namespace BNS.ViewModels
         public string CreatedUser { get; set; }
         public Guid CreatedUserId { get; set; }
         public Guid Id { get; set; }
-        public string BranchName { get; set; }
-        public Guid? BranchIndex { get; set; }
     }
 }

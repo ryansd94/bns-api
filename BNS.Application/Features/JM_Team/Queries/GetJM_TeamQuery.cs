@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Utilities;
@@ -24,11 +25,14 @@ namespace BNS.Application.Features
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+            private readonly IMapper _mapper;
 
             public GetJM_TeamRequestHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer)
+             IStringLocalizer<SharedResource> sharedLocalizer,
+                IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
                 _sharedLocalizer = sharedLocalizer;
             }
             public async Task<ApiResult<JM_TeamResponse>> Handle(GetJM_TeamRequest request, CancellationToken cancellationToken)
@@ -37,16 +41,7 @@ namespace BNS.Application.Features
                 response.data = new JM_TeamResponse();
                 var query = _context.JM_Teams.Where(s => !string.IsNullOrEmpty(s.Name) &&
                 !s.IsDelete)
-                    .Select(s => new JM_TeamResponseItem
-                    {
-                        Name = s.Name,
-                        Description = s.Description,
-                        Id = s.Id,
-                        UpdatedDate = s.UpdatedDate,
-                        CreatedDate = s.CreatedDate,
-                        CreatedUserId = s.CreatedUser,
-                        UpdatedUserId = s.UpdatedUser
-                    });
+                    .Select(s => _mapper.Map<JM_TeamResponseItem>(s));
                 if (request.sortModel != null && request.sortModel.Count > 0)
                 {
                     var columnSort = request.sortModel[0].field;

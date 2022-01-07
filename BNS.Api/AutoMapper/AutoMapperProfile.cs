@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BNS.Data.Entities;
+using BNS.Data.Entities.JM_Entities;
 using BNS.ViewModels.Requests;
 using BNS.ViewModels.Responses;
 using BNS.ViewModels.Responses.Category;
+using BNS.ViewModels.Responses.Project;
 using System;
 using System.Reflection;
 
@@ -18,9 +20,13 @@ namespace BNS.Api.AutoMapper
 
             CreateMap<CF_Employee, CF_EmployeeModel>();
             CreateMap<CF_EmployeeModel, CF_Employee>();
-            CreateMap<CF_Employee, CF_EmployeeResponseModel>();
-            CreateMap<CF_Branch, CF_BranchResponseModel>();
             CreateMap<CF_BranchModel, CF_Branch>();
+            CreateMap<CF_BranchModel, CF_Branch>();
+            CreateMap<JM_Issue, JM_IssueResponseItem>();
+            CreateMap<JM_Project, JM_ProjectResponseItem>();
+            CreateMap<JM_Team, JM_TeamResponseItem>();
+            CreateMap<JM_Template, JM_TemplateResponseItem>();
+
         }
     }
     public static class Extensions

@@ -303,6 +303,12 @@
   <data name="MSG_NotExistsUser" xml:space="preserve">
     <value>Người dùng không tồn tại</value>
   </data>
+  <data name="MSG_NotPermissionEdit" xml:space="preserve">
+    <value>Người dùng không có quyền chỉnh sửa</value>
+  </data>
+  <data name="MSG_ObjectNotExists" xml:space="preserve">
+    <value>{0} không tồn tại</value>
+  </data>
   <data name="MSG_PasswordNotEmpty" xml:space="preserve">
     <value>Mật khẩu bắt buộc nhập</value>
   </data>
@@ -371,6 +377,9 @@
   </data>
   <data name="PreviousMonth" xml:space="preserve">
     <value>Tháng trước</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Dự án</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Đăng ký</value>

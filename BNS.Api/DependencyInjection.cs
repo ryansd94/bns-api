@@ -22,12 +22,7 @@ namespace BNS.Api
             services.AddIdentity<CF_Account, Sys_Role>().AddEntityFrameworkStores<BNSDbContext>()
                 .AddDefaultTokenProviders();
             services.AddTransient<ICF_AccountService, CF_AccountService>();
-            services.AddTransient<ICF_AreaService, CF_AreaService>();
-            services.AddTransient<ICF_DepartmentService, CF_DepartmentService>();
-            services.AddTransient<ICF_PositionService, CF_PositionService>();
-            services.AddTransient<ICF_EmployeeService, CF_EmployeeService>();
             services.AddTransient<ISYS_ControlService, SYS_ControlService>();
-            services.AddTransient<ICF_BranchService, CF_BranchService>();
             services.AddTransient<ISys_RoleService, Sys_RoleService>();
             services.AddTransient<ISys_RoleClaimService, Sys_RoleClaimService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();

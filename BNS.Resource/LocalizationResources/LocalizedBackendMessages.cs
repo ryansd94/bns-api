@@ -27,7 +27,7 @@ namespace BNS.Resource.LocalizationResources
         public const string Detail = "Detail";
         public const string Filter = "Filter";
         public const string Keyword = "Keyword";
-        
+
         public const string Delete = "Delete";
         public const string AreaName = "AreaName";
         public const string BranchName = "BranchName";
@@ -57,6 +57,16 @@ namespace BNS.Resource.LocalizationResources
         public const string MSG_NotDeleteMasterBranch = "MSG_NotDeleteMasterBranch";
         public const string MSG_ShopExpried = "MSG_ShopExpried";
         public const string MSG_TokenError = "MSG_TokenError";
+        public const string MSG_ObjectNotExists = "MSG_ObjectNotExists";
 
+        public class Message
+        {
+
+            public const string MSG_NotPermissionEdit = "MSG_NotPermissionEdit";
+        }
+        public class Project
+        {
+            public const string ProjectName = "ProjectName";
+        }
     }
 }

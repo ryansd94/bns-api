@@ -48,7 +48,7 @@ namespace BNS.Application.Features.JM_Project.Commands
                 if (dataCheck == null)
                 {
                     response.errorCode = EErrorCode.NotExistsData.ToString();
-                    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
+                    response.title = string.Format(_sharedLocalizer[LocalizedBackendMessages.MSG_ObjectNotExists], _sharedLocalizer[LocalizedBackendMessages.Project.ProjectName]);
                     return response;
                 }
 

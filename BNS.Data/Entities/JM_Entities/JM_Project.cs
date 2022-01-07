@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace BNS.Data.Entities.JM_Entities
 {
@@ -16,6 +15,8 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid JM_TemplateId { get; set; }
         public virtual IEnumerable<JM_ProjectTeam> JM_ProjectTeams { get; set; }
         public virtual IEnumerable<JM_ProjectMember> JM_ProjectMembers { get; set; }
+        public virtual IEnumerable<JM_Sprint> JM_Sprints { get; set; }
+        public virtual IEnumerable<JM_Issue> JM_Issues { get; set; }
         [ForeignKey("JM_TemplateId")]
         public virtual JM_Template JM_Template { get; set; }
     }

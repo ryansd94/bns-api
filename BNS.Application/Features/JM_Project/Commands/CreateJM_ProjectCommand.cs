@@ -48,7 +48,7 @@ namespace BNS.Application.Features
                 if (dataCheck != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
-                    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ObjectNotExists];
                     return response;
                 }
                 var data = new BNS.Data.Entities.JM_Entities.JM_Project

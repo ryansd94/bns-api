@@ -129,6 +129,13 @@ namespace BNS.Data.EntityContext
 
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectTeams);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
+            modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Sprints);
+            modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Issues);
+            modelBuilder.Entity<JM_Sprint>().HasMany(x => x.JM_Issues);
+            modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueAssign).WithOne(b => b.JM_AccountAssign)
+            .HasForeignKey(b => b.AssignUserId);
+            modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueReport).WithOne(b => b.JM_AccountReporter)
+            .HasForeignKey(b => b.ReporterId);
             modelBuilder.Entity<Sys_RoleGroup>(entity =>
             {
                 entity.HasKey(e => e.Index);
@@ -1280,6 +1287,9 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_ProjectMember> JM_ProjectMembers { get; set; }
         public virtual DbSet<JM_ProjectSprint> JM_ProjectSprints { get; set; }
         public virtual DbSet<JM_Template> JM_Templates { get; set; }
+        public virtual DbSet<JM_Sprint> JM_Sprints { get; set; }
+        public virtual DbSet<JM_Issue> JM_Issues { get; set; }
+        
 
     }
 }

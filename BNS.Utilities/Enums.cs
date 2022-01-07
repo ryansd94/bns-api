@@ -15,7 +15,7 @@ namespace BNS.Utilities
             USERNAME_ISEXISTS,
             NotExistsData,
             IsExistsData,
-            SystemError
+            SystemError,
         }
 
         public enum EAccountType
@@ -23,6 +23,14 @@ namespace BNS.Utilities
             Admin = 1,
             User = 2
         }
+        public enum EIssueType
+        {
+            STORY = 1,
+            EPIC = 2,
+            BUG = 3,
+            TASK = 4
+        }
+        
         public enum EType
         {
             Add,
@@ -63,7 +71,7 @@ namespace BNS.Utilities
             Product,
             Employee
         }
-        public enum EStatusIssue
+        public enum EIssueStatus
         {
             NEW = 1,
             IN_PROGRESS = 2,

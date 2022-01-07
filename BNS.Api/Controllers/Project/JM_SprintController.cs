@@ -6,31 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
-namespace BNS.Api.Controllers.Category
+namespace BNS.Api.Controllers.Project
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class JM_TeamController : BaseController
+    public class JM_SprintController : BaseController
     {
 
         private IMediator _mediator;
         private readonly ClaimsPrincipal _caller;
-        public JM_TeamController(IHttpContextAccessor httpContextAccessor,
+        public JM_SprintController(IHttpContextAccessor httpContextAccessor,
             IMediator mediator) : base(httpContextAccessor)
         {
             _mediator = mediator;
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost]
-        public async Task<IActionResult> Save(CreateJM_TeamCommand.CreateTeamRequest request)
+        public async Task<IActionResult> Save(CreateJM_SprintCommand.CreateJM_SprintRequest request)
         {
             request.CreatedBy = UserId;
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(GetJM_TeamQuery.GetJM_TeamRequest request)
+        public async Task<IActionResult> GetAllData(GetJM_SprintQuery.GetJM_SprintRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

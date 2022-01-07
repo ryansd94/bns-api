@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220106033905_addTableJM_Sprint2")]
+    partial class addTableJM_Sprint2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2831,89 +2833,6 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_Company");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Issue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssignUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CompanyIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("IssueParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("IssueStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IssueType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OriginalTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RemainingTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ReporterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("SprintId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignUserId");
-
-                    b.HasIndex("CompanyIndex");
-
-                    b.HasIndex("IssueParentId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ReporterId");
-
-                    b.HasIndex("SprintId");
-
-                    b.ToTable("JM_Issues");
-                });
-
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3141,7 +3060,7 @@ namespace BNS.Data.Migrations
 
                     b.HasIndex("JM_ProjectId");
 
-                    b.ToTable("JM_Sprints");
+                    b.ToTable("JM_Sprint");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
@@ -3558,49 +3477,6 @@ namespace BNS.Data.Migrations
                     b.Navigation("CF_Shop");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Issue", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_AccountAssign")
-                        .WithMany("JM_IssueAssign")
-                        .HasForeignKey("AssignUserId");
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyIndex");
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Issue", "JM_IssueParent")
-                        .WithMany()
-                        .HasForeignKey("IssueParentId");
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
-                        .WithMany("JM_Issues")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_AccountReporter")
-                        .WithMany("JM_IssueReport")
-                        .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Sprint", "JM_Sprint")
-                        .WithMany("JM_Issues")
-                        .HasForeignKey("SprintId");
-
-                    b.Navigation("JM_AccountAssign");
-
-                    b.Navigation("JM_AccountReporter");
-
-                    b.Navigation("JM_Company");
-
-                    b.Navigation("JM_IssueParent");
-
-                    b.Navigation("JM_Project");
-
-                    b.Navigation("JM_Sprint");
-                });
-
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Project", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
@@ -3776,10 +3652,6 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
                 {
-                    b.Navigation("JM_IssueAssign");
-
-                    b.Navigation("JM_IssueReport");
-
                     b.Navigation("JM_TeamsCreate");
 
                     b.Navigation("JM_TeamsUpdate");
@@ -3787,18 +3659,11 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Project", b =>
                 {
-                    b.Navigation("JM_Issues");
-
                     b.Navigation("JM_ProjectMembers");
 
                     b.Navigation("JM_ProjectTeams");
 
                     b.Navigation("JM_Sprints");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Sprint", b =>
-                {
-                    b.Navigation("JM_Issues");
                 });
 #pragma warning restore 612, 618
         }
