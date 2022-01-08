@@ -30,8 +30,14 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(GetJM_TeamQuery.GetJM_TeamRequest request)
+        public async Task<IActionResult> GetAllData(int draw, int start, int length)
         {
+            var request = new GetJM_TeamQuery.GetJM_TeamRequest
+            {
+                draw = draw,
+                length = length,
+                start = start,
+            };
             return Ok(await _mediator.Send(request));
         }
 
