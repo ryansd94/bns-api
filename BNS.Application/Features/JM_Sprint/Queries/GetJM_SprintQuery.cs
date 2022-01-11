@@ -53,10 +53,10 @@ namespace BNS.Application.Features
                         CreatedUserId = s.CreatedUser,
                         UpdatedUserId = s.UpdatedUser
                     });
-                if (request.sortModel != null && request.sortModel.Count > 0)
+                if (!string.IsNullOrEmpty(request.fieldSort))
                 {
-                    var columnSort = request.sortModel[0].field;
-                    var sortType = request.sortModel[0].sort;
+                    var columnSort = request.fieldSort;
+                    var sortType = request.sort;
                     if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
                     {
                         columnSort = columnSort[0].ToString().ToUpper() + columnSort.Substring(1, columnSort.Length - 1);

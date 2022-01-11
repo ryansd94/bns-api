@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 
-namespace BNS.Application.Features 
+namespace BNS.Application.Features
 {
     public class GetJM_TemplateQuery
     {
@@ -41,10 +41,10 @@ namespace BNS.Application.Features
                 var query = _context.JM_Templates.Where(s => !string.IsNullOrEmpty(s.Name) &&
                 !s.IsDelete)
                     .Select(s => _mapper.Map<JM_TemplateResponseItem>(s));
-                if (request.sortModel != null && request.sortModel.Count > 0)
+                if (!string.IsNullOrEmpty(request.fieldSort))
                 {
-                    var columnSort = request.sortModel[0].field;
-                    var sortType = request.sortModel[0].sort;
+                    var columnSort = request.fieldSort;
+                    var sortType = request.sort;
                     if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
                     {
                         columnSort = columnSort[0].ToString().ToUpper() + columnSort.Substring(1, columnSort.Length - 1);

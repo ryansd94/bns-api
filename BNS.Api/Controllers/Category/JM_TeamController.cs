@@ -1,4 +1,5 @@
 ﻿using BNS.Application.Features;
+using BNS.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +31,7 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(int draw, int start, int length)
+        public async Task<IActionResult> GetAllData(int draw, int start, int length, sortField sortModel)
         {
             var request = new GetJM_TeamQuery.GetJM_TeamRequest
             {
