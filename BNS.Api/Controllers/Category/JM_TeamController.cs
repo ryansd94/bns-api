@@ -31,13 +31,16 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(int draw, int start, int length, sortField sortModel)
+        public async Task<IActionResult> GetAllData(int draw, int start, int length,
+            string fieldSort, string sort)
         {
             var request = new GetJM_TeamQuery.GetJM_TeamRequest
             {
                 draw = draw,
                 length = length,
                 start = start,
+                fieldSort = fieldSort,
+                sort = sort
             };
             return Ok(await _mediator.Send(request));
         }
