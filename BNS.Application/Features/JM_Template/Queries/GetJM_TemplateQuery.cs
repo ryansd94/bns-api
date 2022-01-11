@@ -39,8 +39,7 @@ namespace BNS.Application.Features
                 var response = new ApiResult<JM_TemplateResponse>();
                 response.data = new JM_TemplateResponse();
                 var query = _context.JM_Templates.Where(s => !string.IsNullOrEmpty(s.Name) &&
-                !s.IsDelete)
-                    .Select(s => _mapper.Map<JM_TemplateResponseItem>(s));
+                !s.IsDelete);
                 if (!string.IsNullOrEmpty(request.fieldSort))
                 {
                     var columnSort = request.fieldSort;
@@ -60,7 +59,7 @@ namespace BNS.Application.Features
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
 
-                var rs = await query.ToListAsync();
+                var rs = await query.Select(s => _mapper.Map<JM_TemplateResponseItem>(s)).ToListAsync();
                 response.data.Items = rs;
                 return response;
             }

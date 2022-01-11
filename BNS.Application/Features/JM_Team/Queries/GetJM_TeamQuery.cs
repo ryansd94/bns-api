@@ -41,7 +41,7 @@ namespace BNS.Application.Features
                 response.data = new JM_TeamResponse();
                 var query = _context.JM_Teams.Where(s => !string.IsNullOrEmpty(s.Name) &&
                 !s.IsDelete)
-                    .Select(s => _mapper.Map<JM_TeamResponseItem>(s));
+                    ;
                 if (!string.IsNullOrEmpty(request.fieldSort))
                 {
                     var columnSort = request.fieldSort;
@@ -61,7 +61,7 @@ namespace BNS.Application.Features
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
 
-                var rs = await query.ToListAsync();
+                var rs = await query.Select(s => _mapper.Map<JM_TeamResponseItem>(s)).ToListAsync();
                 response.data.Items = rs;
                 return response;
             }

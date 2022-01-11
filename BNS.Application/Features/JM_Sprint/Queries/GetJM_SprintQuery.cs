@@ -40,19 +40,7 @@ namespace BNS.Application.Features
                 var response = new ApiResult<JM_SprintResponse>();
                 response.data = new JM_SprintResponse();
                 var query = _context.JM_Sprints.Where(s => s.JM_ProjectId == request.JM_ProjectId &&
-                !s.IsDelete)
-                    .Select(s => new JM_SprintResponseItem
-                    {
-                        Name = s.Name,
-                        Description = s.Description,
-                        StartDate = s.StartDate,
-                        EndDate = s.EndDate,
-                        Id = s.Id,
-                        UpdatedDate = s.UpdatedDate,
-                        CreatedDate = s.CreatedDate,
-                        CreatedUserId = s.CreatedUser,
-                        UpdatedUserId = s.UpdatedUser
-                    });
+                !s.IsDelete);
                 if (!string.IsNullOrEmpty(request.fieldSort))
                 {
                     var columnSort = request.fieldSort;
@@ -72,7 +60,18 @@ namespace BNS.Application.Features
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
 
-                var rs = await query.ToListAsync();
+                var rs = await query.Select(s => new JM_SprintResponseItem
+                {
+                    Name = s.Name,
+                    Description = s.Description,
+                    StartDate = s.StartDate,
+                    EndDate = s.EndDate,
+                    Id = s.Id,
+                    UpdatedDate = s.UpdatedDate,
+                    CreatedDate = s.CreatedDate,
+                    CreatedUserId = s.CreatedUser,
+                    UpdatedUserId = s.UpdatedUser
+                }).ToListAsync();
                 response.data.Items = rs;
                 return response;
             }
