@@ -61,7 +61,7 @@ namespace BNS.Application.Features
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
 
-                var rs = await query.Select(s => _mapper.Map<JM_TeamResponseItem>(s)).ToListAsync();
+                var rs = await query.Include(s => s.TeamParent).Select(s => _mapper.Map<JM_TeamResponseItem>(s)).ToListAsync();
                 response.data.Items = rs;
                 return response;
             }
