@@ -63,10 +63,11 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateJM_SprintCommand.UpdateJM_SprintRequest request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id,UpdateJM_TeamCommand.UpdateJM_TeamRequest request)
         {
             request.CreatedBy = UserId;
+            request.Id = id;
             return Ok(await _mediator.Send(request));
         }
 
