@@ -36,7 +36,7 @@ namespace BNS.Application.Features
             {
                 var response = new ApiResult<JM_TeamResponseItem>();
                 var query = _context.JM_Teams.Where(s => s.Id == request.Id &&
-                !s.IsDelete)
+                !s.IsDelete).Include(s => s.TeamParent)
                     .Select(s => _mapper.Map<JM_TeamResponseItem>(s));
                 var rs = await query.FirstOrDefaultAsync();
                 response.data = rs;
