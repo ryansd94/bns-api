@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BNS.Data.Entities.JM_Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,5 +15,6 @@ namespace BNS.ViewModels.Responses.Category
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
+        public JM_Team TeamParent { get; set; }
     }
 }

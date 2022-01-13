@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BNS.Data\BNS.Data.csproj" />
     <ProjectReference Include="..\BNS.Resource\BNS.Resource.csproj" />
     <ProjectReference Include="..\BNS.Utilities\BNS.Utilities.csproj" />
   </ItemGroup>
