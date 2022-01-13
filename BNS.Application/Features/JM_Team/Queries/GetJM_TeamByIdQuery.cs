@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.ViewModels;
@@ -21,28 +22,22 @@ namespace BNS.Application.Features
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+            private readonly IMapper _mapper;
 
             public GetJM_TeamByIdRequestHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer)
+             IStringLocalizer<SharedResource> sharedLocalizer,
+                IMapper mapper)
             {
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
+                _mapper = mapper;
             }
             public async Task<ApiResult<JM_TeamResponseItem>> Handle(GetJM_TeamByIdRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<JM_TeamResponseItem>();
                 var query = _context.JM_Teams.Where(s => s.Id == request.Id &&
                 !s.IsDelete)
-                    .Select(s => new JM_TeamResponseItem
-                    {
-                        Name = s.Name,
-                        Description = s.Description,
-                        Id = s.Id,
-                        UpdatedDate = s.UpdatedDate,
-                        CreatedDate = s.CreatedDate,
-                        CreatedUserId = s.CreatedUser,
-                        UpdatedUserId = s.UpdatedUser
-                    });
+                    .Select(s => _mapper.Map<JM_TeamResponseItem>(s));
                 var rs = await query.FirstOrDefaultAsync();
                 response.data = rs;
                 return response;
