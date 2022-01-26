@@ -16,6 +16,5 @@ namespace BNS.ViewModels.Responses.Category
         public string Description { get; set; }
         public string Code { get; set; }
         public Guid? ParentId { get; set; }
-        public JM_Team TeamParent { get; set; }
     }
 }

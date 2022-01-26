@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BNS.Data.Entities.JM_Entities
 {
-    public class BaseJMEntity
+    public abstract class BaseJMEntity
     {
         [Key]
         public Guid Id { get; set; }

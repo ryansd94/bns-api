@@ -28,7 +28,7 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(GetJM_ProjectByUserIdQuery.GetJM_ProjectByUserIdRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery]GetJM_ProjectByUserIdQuery.GetJM_ProjectByUserIdRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

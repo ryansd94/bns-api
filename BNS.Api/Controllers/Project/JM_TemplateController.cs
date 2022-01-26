@@ -29,7 +29,7 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(GetJM_TemplateQuery.GetJM_TemplateRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery] GetJM_TemplateQuery.GetJM_TemplateRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

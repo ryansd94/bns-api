@@ -1,5 +1,6 @@
 using AutoMapper;
 using BNS.Api.AutoMapper;
+using BNS.Application.Extensions;
 using BNS.Application.Middleware;
 using BNS.Data.EntityContext;
 using BNS.Utilities.Constant;
@@ -178,6 +179,7 @@ namespace BNS.Api
             services.AddSingleton(mapper);
             // Services
             services.AddTransient<MyConfiguration>();
+            services.AddElasticsearch(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

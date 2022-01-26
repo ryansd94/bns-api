@@ -6,6 +6,7 @@ using BNS.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,12 +32,15 @@ namespace BNS.Application.Features
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+            protected readonly IElasticClient _elasticClient;
 
             public CreateJM_TemplateCommandHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer)
+             IStringLocalizer<SharedResource> sharedLocalizer,
+             IElasticClient elasticClient)
             {
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
+                _elasticClient = elasticClient;
             }
             public async Task<ApiResult<Guid>> Handle(CreateJM_TemplateRequest request, CancellationToken cancellationToken)
             {
@@ -60,6 +64,7 @@ namespace BNS.Application.Features
                     ReporterIssueStatus = request.ReporterIssueStatus
 
                 };
+                var abc = await _elasticClient.IndexDocumentAsync(data);
 
                 await _context.JM_Templates.AddAsync(data);
                 await _context.SaveChangesAsync();

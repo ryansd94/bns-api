@@ -19,7 +19,7 @@ namespace BNS.Application.Features
         public class DeleteJM_SprintRequest : CommandBase<ApiResult<Guid>>
         {
             [Required]
-            public List<Guid> ids { get; set; }
+            public List<Guid> ids { get; set; } = new List<Guid>();
         }
         public class DeleteJM_SprintCommandHandler : IRequestHandler<DeleteJM_SprintRequest, ApiResult<Guid>>
         {

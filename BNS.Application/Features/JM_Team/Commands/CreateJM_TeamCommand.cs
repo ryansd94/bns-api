@@ -6,6 +6,7 @@ using BNS.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Nest;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,18 +30,20 @@ namespace BNS.Application.Features
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-
+            protected readonly IElasticClient _elasticClient;
             public CreateTeamCommandHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer)
+             IStringLocalizer<SharedResource> sharedLocalizer,
+             IElasticClient elasticClient)
             {
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
+                _elasticClient = elasticClient;
             }
             public async Task<ApiResult<Guid>> Handle(CreateTeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataCheck = await _context.JM_Teams.Where(s => s.Name.Equals(request.Name) ).FirstOrDefaultAsync();
-                if(dataCheck != null)
+                var dataCheck = await _context.JM_Teams.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
+                if (dataCheck != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
@@ -58,6 +61,12 @@ namespace BNS.Application.Features
                 };
                 await _context.JM_Teams.AddAsync(data);
                 await _context.SaveChangesAsync();
+                //_elasticClient.Index<JM_Team>(data, i => i
+                //       .Index("bns")
+                //       .Id(data.Id)
+                //       .Refresh(Elasticsearch.Net.Refresh.True));
+                var abc = await _elasticClient.IndexDocumentAsync(data);
+                //var abc = await _elasticClient.UpdateAsync<JM_Team>(data, u => u.Doc(data));
                 response.data = data.Id;
                 return response;
             }

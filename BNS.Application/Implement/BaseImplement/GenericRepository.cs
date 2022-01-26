@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,9 +60,58 @@ namespace BNS.Application.Implement
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+                                                    , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                    , int? start = null, int? length = null
+                                                    ,   Expression<Func<T, object>>[] includeProperties = null
+                                                    )
         {
-            return await _context.Set<T>().ToListAsync();
+            return await GetAsync(filter, orderBy, "", false, start, length, includeProperties);
+        }
+
+
+        private async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+                                                    , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                    , string sortColumnName = "", bool isAscending = true
+                                                    , int? start = null, int? length = null
+                                                    ,   Expression<Func<T, object>>[] includeProperties = null
+                                                    )
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+            if (!string.IsNullOrEmpty(sortColumnName))
+            {
+                ParameterExpression parameter = Expression.Parameter(query.ElementType, "");
+
+                MemberExpression property = Expression.Property(parameter, sortColumnName);
+                LambdaExpression lambda = Expression.Lambda(property, parameter);
+
+                string methodName = isAscending ? "OrderBy" : "OrderByDescending";
+
+                Expression methodCallExpression = Expression.Call(typeof(Queryable), methodName,
+                                      new Type[] { query.ElementType, property.Type },
+                                      query.Expression, Expression.Quote(lambda));
+
+                query = query.Provider.CreateQuery<T>(methodCallExpression);
+            }
+            if (start != null)
+                query = query.Skip(start.Value).Take(length.Value);
+            return await query.ToListAsync();
         }
 
         public async Task<int> Update(T entity)
@@ -75,11 +125,11 @@ namespace BNS.Application.Implement
             try
             {
                 IQueryable<D> query = null;
-                if(branchIndex !=null)
-                query= _context.Set<D>().AsQueryable().Where("ShopIndex = " + '"' + shopIndex + '"'
-                    + " && Isdelete = null && BranchIndex =" + '"' + branchIndex + '"'
-                    + "");
-                else 
+                if (branchIndex != null)
+                    query = _context.Set<D>().AsQueryable().Where("ShopIndex = " + '"' + shopIndex + '"'
+                        + " && Isdelete = null && BranchIndex =" + '"' + branchIndex + '"'
+                        + "");
+                else
                     query = _context.Set<D>().AsQueryable().Where("ShopIndex = " + '"' + shopIndex + '"'
                     + " && Isdelete = null");
                 query = Common.OrderBy(query, "Number", false);

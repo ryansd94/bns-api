@@ -31,17 +31,8 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData(int draw, int start, int length,
-            string fieldSort, string sort)
+        public async Task<IActionResult> GetAllData([FromQuery]GetJM_TeamQuery.GetJM_TeamRequest request)
         {
-            var request = new GetJM_TeamQuery.GetJM_TeamRequest
-            {
-                draw = draw,
-                length = length,
-                start = start,
-                fieldSort = fieldSort,
-                sort = sort
-            };
             return Ok(await _mediator.Send(request));
         }
 
@@ -57,7 +48,7 @@ namespace BNS.Api.Controllers.Category
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var request = new DeleteJM_SprintCommand.DeleteJM_SprintRequest();
+            var request = new DeleteJM_TeamCommand.DeleteJM_TeamRequest();
             request.ids.Add(id);
             request.CreatedBy = UserId;
             return Ok(await _mediator.Send(request));

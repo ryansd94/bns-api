@@ -19,7 +19,7 @@ namespace BNS.Application.Features
         public class DeleteJM_TeamRequest : CommandBase<ApiResult<Guid>>
         {
             [Required]
-            public List<Guid> ids { get; set; }
+            public List<Guid> ids { get; set; } = new List<Guid>();
         }
         public class DeleteJM_TeamCommandHandler : IRequestHandler<DeleteJM_TeamRequest, ApiResult<Guid>>
         {
