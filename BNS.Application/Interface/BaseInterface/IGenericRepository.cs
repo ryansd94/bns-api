@@ -11,13 +11,16 @@ namespace BNS.Application.Interface
     {
         Task<T> GetById(Guid id);
 
-        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null
-                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
-                                                  , int? start = null, int? length = null
+        Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null 
                                                   , params Expression<Func<T, object>>[] includeProperties  
                                                   );
 
-         
+        Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                  , string sortColumnName = "", bool isAscending = true 
+                                                  , Expression<Func<T, object>>[] includeProperties = null
+                                                  );
 
 
         Task<int> Add(T entity);

@@ -60,20 +60,18 @@ namespace BNS.Application.Implement
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+        public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                     , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
-                                                    , int? start = null, int? length = null
                                                     ,   Expression<Func<T, object>>[] includeProperties = null
                                                     )
         {
-            return await GetAsync(filter, orderBy, "", false, start, length, includeProperties);
+            return await GetAsync(filter, orderBy, "", false,   includeProperties);
         }
 
 
-        private async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+        public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                     , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
                                                     , string sortColumnName = "", bool isAscending = true
-                                                    , int? start = null, int? length = null
                                                     ,   Expression<Func<T, object>>[] includeProperties = null
                                                     )
         {
@@ -109,9 +107,7 @@ namespace BNS.Application.Implement
 
                 query = query.Provider.CreateQuery<T>(methodCallExpression);
             }
-            if (start != null)
-                query = query.Skip(start.Value).Take(length.Value);
-            return await query.ToListAsync();
+            return query;
         }
 
         public async Task<int> Update(T entity)
