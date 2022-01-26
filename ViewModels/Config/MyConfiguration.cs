@@ -10,6 +10,14 @@ namespace BNS.ViewModels
         public TokenElement Tokens { get; set; } = new TokenElement();
         public ConnectionElement ConnectionStrings { get; set; } = new ConnectionElement();
         public FirebaseElement Firebase { get; set; } = new FirebaseElement();
+        public Elasticsearch Elasticsearch { get; set; } = new Elasticsearch();
+
+        
+    }
+    public class Elasticsearch
+    {
+        public string url { get; set; } = "https://elastic:FzHAi3MM3OFitgTkPT9LVzeM@bns.es.us-east4.gcp.elastic-cloud.com:9243/";
+        public string index { get; set; } = "bns";
     }
     public class FirebaseElement
     {

@@ -1,4 +1,5 @@
 ﻿using BNS.Data.Entities.JM_Entities;
+using BNS.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
@@ -11,10 +12,10 @@ namespace BNS.Application.Extensions
     public static class ElasticsearchExtensions
     {
         public static void AddElasticsearch(
-           this IServiceCollection services, IConfiguration configuration)
+           this IServiceCollection services, MyConfiguration configuration)
         {
-            var url = configuration["DefaultConfig:Elasticsearch:url"];
-            var defaultIndex = configuration["DefaultConfig:Elasticsearch:index"];
+            var url = configuration.Elasticsearch.url;
+            var defaultIndex = configuration.Elasticsearch.index;
 
             var settings = new ConnectionSettings(new Uri(url))
                 .DefaultIndex(defaultIndex).DefaultMappingFor<JM_Team>(m => m

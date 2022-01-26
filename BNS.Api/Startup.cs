@@ -179,7 +179,7 @@ namespace BNS.Api
             services.AddSingleton(mapper);
             // Services
             services.AddTransient<MyConfiguration>();
-            services.AddElasticsearch(Configuration);
+            services.AddElasticsearch(appSettings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
