@@ -74,7 +74,7 @@ namespace BNS.Application.Features
                 //    response.recordsTotal = await query.CountAsync();
                 //    query = query.Skip(request.start).Take(request.length);
 
-                var query = await _teamRepository.GetAsync(s => !s.IsDelete, null, request.fieldSort, request.sort == "asc" ? true : false ,s=>s.TeamParent);
+                var query = await _teamRepository.GetAsync(s => !s.IsDelete, s=>s.OrderBy(d=>d.Name), request.fieldSort, request.sort == "asc" ? true : false ,s=>s.TeamParent);
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
                 var rs =await query.Select(s => _mapper.Map<JM_TeamResponseItem>(s)).ToListAsync();
