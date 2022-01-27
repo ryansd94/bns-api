@@ -19,7 +19,7 @@ namespace BNS.Application.Interface
         Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
                                                   , string sortColumnName = "", bool isAscending = true 
-                                                  , Expression<Func<T, object>>[] includeProperties = null
+                                                  , params Expression<Func<T, object>>[] includeProperties  
                                                   );
 
 
