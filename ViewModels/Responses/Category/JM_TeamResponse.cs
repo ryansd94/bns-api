@@ -10,11 +10,7 @@ namespace BNS.ViewModels.Responses.Category
         public List<JM_TeamResponseItem> Items { get; set; }
     }
 
-    public class JM_TeamResponseItem : BaseResultModel
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Code { get; set; }
-        public Guid? ParentId { get; set; }
+    public class JM_TeamResponseItem : JM_Team
+    { 
     }
 }

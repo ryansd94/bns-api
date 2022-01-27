@@ -65,7 +65,7 @@ namespace BNS.Application.Features
                 //       .Index("bns")
                 //       .Id(data.Id)
                 //       .Refresh(Elasticsearch.Net.Refresh.True));
-                var abc = await _elasticClient.IndexDocumentAsync(data);
+                //var abc = await _elasticClient.IndexDocumentAsync(data);
                 //var abc = await _elasticClient.UpdateAsync<JM_Team>(data, u => u.Doc(data));
                 response.data = data.Id;
                 return response;
