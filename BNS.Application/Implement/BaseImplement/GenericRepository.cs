@@ -65,22 +65,17 @@ namespace BNS.Application.Implement
                                                     ,   Expression<Func<T, object>>[] includeProperties = null
                                                     )
         {
-            return await GetAsync(filter, orderBy, "", false,   includeProperties);
+            return await GetAsync(filter, orderBy, null, null,   includeProperties);
         }
 
 
         public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                     , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
-                                                    , string sortColumnName = "", bool isAscending = true
+                                                    , string sortColumnName = "", bool? isAscending = true
                                                     ,   Expression<Func<T, object>>[] includeProperties = null
                                                     )
         {
             IQueryable<T> query = _context.Set<T>();
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
             if (includeProperties != null)
             {
                 foreach (var includeProperty in includeProperties)
@@ -88,9 +83,15 @@ namespace BNS.Application.Implement
                     query = query.Include(includeProperty);
                 }
             }
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
             if (orderBy != null)
             {
                 query = orderBy(query);
+                
             }
             if (!string.IsNullOrEmpty(sortColumnName))
             {
@@ -99,7 +100,7 @@ namespace BNS.Application.Implement
                 MemberExpression property = Expression.Property(parameter, sortColumnName);
                 LambdaExpression lambda = Expression.Lambda(property, parameter);
 
-                string methodName = isAscending ? "OrderBy" : "OrderByDescending";
+                string methodName = isAscending.Value ? "OrderBy" : "OrderByDescending";
 
                 Expression methodCallExpression = Expression.Call(typeof(Queryable), methodName,
                                       new Type[] { query.ElementType, property.Type },
@@ -144,6 +145,64 @@ namespace BNS.Application.Implement
             {
                 return 1;
             }
+        }
+
+        public async Task<IQueryable<T>> GetAsync(IQueryable<T> query, Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string sortColumnName = null, bool? isAscending = true, params Expression<Func<T, object>>[] includeProperties)
+        {
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+
+            }
+            if (!string.IsNullOrEmpty(sortColumnName))
+            {
+                ParameterExpression parameter = Expression.Parameter(query.ElementType, "");
+
+                MemberExpression property = Expression.Property(parameter, sortColumnName);
+                LambdaExpression lambda = Expression.Lambda(property, parameter);
+
+                string methodName = isAscending.Value ? "OrderBy" : "OrderByDescending";
+
+                Expression methodCallExpression = Expression.Call(typeof(Queryable), methodName,
+                                      new Type[] { query.ElementType, property.Type },
+                                      query.Expression, Expression.Quote(lambda));
+
+                query = query.Provider.CreateQuery<T>(methodCallExpression);
+            }
+            return query;
+        }
+
+        public async Task<IQueryable<T>> OrderBy(IQueryable<T> source, string columnName, bool isAscending = true)
+        {
+            if (String.IsNullOrEmpty(columnName))
+            {
+                return source;
+            }
+
+            ParameterExpression parameter = Expression.Parameter(source.ElementType, "");
+
+            MemberExpression property = Expression.Property(parameter, columnName);
+            LambdaExpression lambda = Expression.Lambda(property, parameter);
+
+            string methodName = isAscending ? "OrderBy" : "OrderByDescending";
+
+            Expression methodCallExpression = Expression.Call(typeof(Queryable), methodName,
+                                  new Type[] { source.ElementType, property.Type },
+                                  source.Expression, Expression.Quote(lambda));
+            source= source.Provider.CreateQuery<T>(methodCallExpression);
+            return source.Provider.CreateQuery<T>(methodCallExpression);
         }
     }
 }

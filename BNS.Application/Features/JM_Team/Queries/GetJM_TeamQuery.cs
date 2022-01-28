@@ -44,6 +44,52 @@ namespace BNS.Application.Features
                 _elasticClient = elasticClient;
                 _teamRepository = teamRepository;
             }
+            //public async Task<ApiResult<JM_TeamResponse>> Handle(GetJM_TeamRequest request, CancellationToken cancellationToken)
+            //{
+            //    var response = new ApiResult<JM_TeamResponse>();
+            //    response.data = new JM_TeamResponse();
+            //    //    var xxxx = await _elasticClient.SearchAsync<JM_Team>(s => s
+            //    //.From((request.start) * request.length)
+            //    //.Size(request.length));
+            //    //    var aaaaa = xxxx.Documents;
+            //    //    var query = _context.JM_Teams.Where(s => !string.IsNullOrEmpty(s.Name) &&
+            //    //    !s.IsDelete)
+            //    //        ;
+            //    //    if (!string.IsNullOrEmpty(request.fieldSort))
+            //    //    {
+            //    //        var columnSort = request.fieldSort;
+            //    //        var sortType = request.sort;
+            //    //        if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
+            //    //        {
+            //    //            columnSort = columnSort[0].ToString().ToUpper() + columnSort.Substring(1, columnSort.Length - 1);
+            //    //            query = Common.OrderBy(query, columnSort, sortType == ESortEnum.desc.ToString() ? false : true);
+
+            //    //        }
+            //    //    }
+            //    //    if (request.isAdd)
+            //    //        query = query.OrderByDescending(s => s.CreatedDate);
+            //    //    if (request.isEdit)
+            //    //        query = query.OrderByDescending(s => s.UpdatedDate);
+
+            //    //    response.recordsTotal = await query.CountAsync();
+            //    //    query = query.Skip(request.start).Take(request.length);
+
+            //    IQueryable<JM_Team> query = null;
+            //    if (!string.IsNullOrEmpty(request.fieldSort) && request.fieldSort.Equals("parentId"))
+            //        query = await _teamRepository.GetAsync(s => !s.IsDelete, s => s.OrderBy(d => d.Name), s => s.TeamParent);
+            //    else
+            //        query = await _teamRepository.GetAsync(s => !s.IsDelete, s => s.OrderBy(d => d.Name), request.fieldSort, request.sort == "asc" ? true : false, s => s.TeamParent);
+
+            //    response.recordsTotal = await query.CountAsync();
+            //    if (!string.IsNullOrEmpty(request.fieldSort) && request.fieldSort.Equals("parentId"))
+            //        query = query.OrderByDescending(s => s.TeamParent != null ? s.TeamParent.Name : "").Skip(request.start).Take(request.length);
+            //    else
+            //        query = query.Skip(request.start).Take(request.length);
+            //    var rs = await query.Select(s => _mapper.Map<JM_TeamResponseItem>(s)).ToListAsync();
+            //    response.data.Items = rs;
+            //    return response;
+            //}
+
             public async Task<ApiResult<JM_TeamResponse>> Handle(GetJM_TeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<JM_TeamResponse>();
@@ -74,10 +120,21 @@ namespace BNS.Application.Features
                 //    response.recordsTotal = await query.CountAsync();
                 //    query = query.Skip(request.start).Take(request.length);
 
-                var query = await _teamRepository.GetAsync(s => !s.IsDelete, s=>s.OrderBy(d=>d.Name), request.fieldSort, request.sort == "asc" ? true : false ,s=>s.TeamParent);
+
+                var query = (await _teamRepository.GetAsync(s => !s.IsDelete, s => s.OrderBy(d => d.Name), s => s.TeamParent)).Select(s => new JM_TeamResponseItem
+                {
+                    Name = s.Name,
+                    Id = s.Id,
+                    Description = s.Description,
+                    ParentId = s.ParentId,
+                    TeamParent = s.TeamParent,
+                    ParentName = s.TeamParent != null ? s.TeamParent.Name : string.Empty
+                });
+                if (!string.IsNullOrEmpty(request.fieldSort))
+                    query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
-                var rs =await query.Select(s => _mapper.Map<JM_TeamResponseItem>(s)).ToListAsync();
+                var rs = await query.ToListAsync();
                 response.data.Items = rs;
                 return response;
             }

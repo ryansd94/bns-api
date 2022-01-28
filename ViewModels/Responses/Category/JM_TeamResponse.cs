@@ -12,5 +12,6 @@ namespace BNS.ViewModels.Responses.Category
 
     public class JM_TeamResponseItem : JM_Team
     { 
+        public string ParentName { get; set; }
     }
 }

@@ -18,11 +18,17 @@ namespace BNS.Application.Interface
 
         Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
-                                                  , string sortColumnName = "", bool isAscending = true 
+                                                  , string sortColumnName = null, bool? isAscending = true 
                                                   , params Expression<Func<T, object>>[] includeProperties  
                                                   );
 
 
+        Task<IQueryable<T>> GetAsync(IQueryable<T> query,Expression<Func<T, bool>> filter = null
+                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                  , string sortColumnName = null, bool? isAscending = true
+                                                  , params Expression<Func<T, object>>[] includeProperties
+                                                  );
+        Task<IQueryable<T>> OrderBy  (IQueryable<T> source, string columnName, bool isAscending = true);
         Task<int> Add(T entity);
         Task<int> Delete(T entity);
         Task<int> Update(T entity);
