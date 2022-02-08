@@ -121,7 +121,7 @@ namespace BNS.Application.Implement
                     result.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                     return result;
                 }
-                rs = await _genericRepository.Add(new Sys_Role
+                rs = await _genericRepository.AddAsync(new Sys_Role
                 {
                     Name = model.Name,
                     Description = model.Note,
@@ -144,7 +144,7 @@ namespace BNS.Application.Implement
                     result.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                     return result;
                 }
-                var dataSave = await _genericRepository.GetById(model.Index);
+                var dataSave = await _genericRepository.GetByIdAsync(model.Index);
                 if (dataSave == null)
                 {
                     result.errorCode = EErrorCode.NotExistsData.ToString();
@@ -155,7 +155,7 @@ namespace BNS.Application.Implement
                 dataSave.Description = model.Note;
                 dataSave.UpdatedDate = DateTime.UtcNow;
                 dataSave.UpdatedUser = model.UserIndex;
-                rs = await _genericRepository.Update(dataSave);
+                rs = await _genericRepository.UpdateAsync(dataSave);
                 result.type = EType.Edit.ToString();
             }
             if (rs <= 0)
@@ -170,7 +170,7 @@ namespace BNS.Application.Implement
 
             var result = new ApiResult<Sys_RoleResponseModel>();
 
-            var data = await _genericRepository.GetById(id);
+            var data = await _genericRepository.GetByIdAsync(id);
             result.data = new Sys_RoleResponseModel();
             result.data.Id = data.Id;
             result.data.Name = data.Name;

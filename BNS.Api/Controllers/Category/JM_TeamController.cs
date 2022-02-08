@@ -28,11 +28,13 @@ namespace BNS.Api.Controllers.Category
         public async Task<IActionResult> Save(CreateJM_TeamCommand.CreateTeamRequest request)
         {
             request.CreatedBy = UserId;
+            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
         public async Task<IActionResult> GetAllData([FromQuery]GetJM_TeamQuery.GetJM_TeamRequest request)
         {
+            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 

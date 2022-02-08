@@ -298,7 +298,7 @@ namespace BNS.Application.Implement
             if (account == null)
             {
                 result.errorCode = EErrorCode.Failed.ToString();
-                result.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsUser];
+                result.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
                 return result;
             }
             result.data = !string.IsNullOrEmpty(account.BranchDefault) ? JsonConvert.DeserializeObject<List<string>>(account.BranchDefault) : null;
@@ -312,7 +312,7 @@ namespace BNS.Application.Implement
             if (account == null)
             {
                 result.errorCode = EErrorCode.Failed.ToString();
-                result.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsUser];
+                result.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
                 return result;
             }
             account.BranchDefault = JsonConvert.SerializeObject(model.Branchs);

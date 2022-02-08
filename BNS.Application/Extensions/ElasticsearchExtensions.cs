@@ -27,7 +27,7 @@ namespace BNS.Application.Extensions
 
             services.AddSingleton<IElasticClient>(client);
 
-            CreateIndex(client, defaultIndex);
+            //CreateIndex(client, defaultIndex);
         }
 
         private static void CreateIndex(IElasticClient client, string indexName)

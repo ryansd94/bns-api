@@ -43,19 +43,19 @@ namespace BNS.Application.Implement
                 }
             }
         }
-        public async Task<int> Add(T entity)
+        public async Task<int> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Delete(T entity)
+        public async Task<int> DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
@@ -111,7 +111,7 @@ namespace BNS.Application.Implement
             return query;
         }
 
-        public async Task<int> Update(T entity)
+        public async Task<int> UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync();
@@ -203,6 +203,16 @@ namespace BNS.Application.Implement
                                   source.Expression, Expression.Quote(lambda));
             source= source.Provider.CreateQuery<T>(methodCallExpression);
             return source.Provider.CreateQuery<T>(methodCallExpression);
+        }
+
+        public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
+        {
+            return await GetAsync(filter, orderBy, null, null, null);
+        }
+
+        public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null)
+        {
+            return await (await GetAsync(filter, null, null, null, null)).FirstAsync<T>();
         }
     }
 }

@@ -42,6 +42,7 @@ namespace BNS.Api
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddMediatR(typeof(CreateTeamCommandHandler));
 
+            services.AddScoped<ICipherService, CipherService>();
             //services.AddIdentity<CF_Account, Sys_Role>(ops =>
             //{
             //    //--- other code

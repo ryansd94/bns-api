@@ -72,7 +72,7 @@ namespace BNS.Application.Implement
             s.IsDelete == null).FirstOrDefault();
             if (saveResult == null)
             {
-                await _genericRepository.Add(new Sys_RoleClaim
+                await _genericRepository.AddAsync(new Sys_RoleClaim
                 {
                     DataId = model.DataId,
                     Roles = model.RoleId != null ? JsonConvert.SerializeObject(model.RoleId) : string.Empty,
@@ -88,7 +88,7 @@ namespace BNS.Application.Implement
                 saveResult.Roles = model.RoleId != null ? JsonConvert.SerializeObject(model.RoleId) : string.Empty;
                 saveResult.UpdatedDate = DateTime.UtcNow;
                 saveResult.UpdatedUser = model.UserIndex;
-                await _genericRepository.Update(saveResult);
+                await _genericRepository.UpdateAsync(saveResult);
             }
             return result;
 

@@ -58,6 +58,7 @@ namespace BNS.Application.Features
                     ParentId = request.ParentId,
                     CreatedDate = DateTime.UtcNow,
                     CreatedUser = request.CreatedBy,
+                    CompanyIndex=request.CompanyId
                 };
                 await _context.JM_Teams.AddAsync(data);
                 await _context.SaveChangesAsync();

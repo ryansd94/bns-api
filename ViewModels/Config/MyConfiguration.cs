@@ -11,8 +11,18 @@ namespace BNS.ViewModels
         public ConnectionElement ConnectionStrings { get; set; } = new ConnectionElement();
         public FirebaseElement Firebase { get; set; } = new FirebaseElement();
         public Elasticsearch Elasticsearch { get; set; } = new Elasticsearch();
+        public MailConfig MailConfig { get; set; } = new MailConfig();
 
-        
+
+    }
+    public class MailConfig
+    {
+        public string SmtpUserName { get; set; } = "noreply@ayasan-service.com";
+        public string SmtpPassword { get; set; } = "@y@5@nN0R3p/y";
+        public string SmtpHost { get; set; } = "cpanel02wh.bkk1.cloud.z.com";
+        public string SmtpPort { get; set; } = "587";
+        public string SmtpEmailAddress { get; set; }="noreply@ayasan-service.com";
+
     }
     public class Elasticsearch
     {

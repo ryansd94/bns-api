@@ -9,5 +9,6 @@ namespace BNS.ViewModels
     {
         public Guid CreatedBy { get; set; }
         public Guid UpdatedBy { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }

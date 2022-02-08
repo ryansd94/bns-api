@@ -25,11 +25,11 @@ namespace BNS.Api
                 return userId != null ? new Guid(userId.Value) : Guid.Empty;
             }
         }
-        public Guid ShopIndex
+        public Guid CompanyId
         {
             get
             {
-                var shopIndex = _caller.Claims.Single(c => c.Type == "ShopIndex");
+                var shopIndex = _caller.Claims.Single(c => c.Type == "CompanyId");
                 return shopIndex != null ? new Guid(shopIndex.Value) : Guid.Empty;
             }
         }

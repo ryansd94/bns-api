@@ -73,19 +73,27 @@ namespace BNS.Application.Features
             {
                 var response = new ApiResult<CF_AccountLoginResponseModel>();
 
-                var infoUser = await CheckTokenGoogle(request.Token); 
+                var infoUser = await CheckTokenGoogle(request.Token);
                 if (infoUser == null)
                 {
                     response.errorCode = EErrorCode.Failed.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                     return response;
                 }
+                var email = infoUser.email;
                 var id = infoUser.sub;
                 response.data = new CF_AccountLoginResponseModel();
-                var user = await _context.JM_Accounts.Where(s => s.GoogleId.Equals(id)).FirstOrDefaultAsync();
+                var user = await _context.JM_Accounts.Where(s => s.Email.Equals(email)).FirstOrDefaultAsync();
                 if (user == null)
                 {
                     var userid = Guid.NewGuid();
+                    var company = new JM_Company
+                    {
+                        Id = Guid.NewGuid(),
+                        IsDelete = false,
+                        CreatedDate = DateTime.UtcNow,
+                    };
+
                     user = new JM_Account
                     {
                         Id = userid,
@@ -101,8 +109,11 @@ namespace BNS.Application.Features
                         AccessFailedCount = 0,
                         GoogleId = id,
                         IsMainAccount = true,
-                        FullName= infoUser.name.ToString()
+                        FullName = infoUser.name.ToString(),
+                        CompanyId = company.Id
                     };
+                    company.CreatedUser = user.Id;
+                    await _context.JM_Companys.AddAsync(company);
                     await _context.JM_Accounts.AddAsync(user);
                     await _context.SaveChangesAsync();
                 }
@@ -141,16 +152,16 @@ namespace BNS.Application.Features
                     return null;
                 result.sub = decodedToken.Uid;
                 result.email = decodedToken.Claims.Where(s => s.Key == "email").FirstOrDefault().Value;
-                result.name= decodedToken.Claims.Where(s => s.Key == "name").FirstOrDefault().Value;
+                result.name = decodedToken.Claims.Where(s => s.Key == "name").FirstOrDefault().Value;
                 return result;
 
 
             }
             private class GoogleApiTokenInfo
-            { 
-                 
+            {
+
                 public string sub { get; set; }
-                 
+
                 /// <summary>
                 /// The user's email address. This may not be unique and is not suitable for use as a primary key. Provided only if your scope included the string "email".
                 /// </summary>

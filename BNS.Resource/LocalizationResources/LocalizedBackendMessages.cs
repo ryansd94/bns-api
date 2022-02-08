@@ -49,7 +49,6 @@ namespace BNS.Resource.LocalizationResources
         public const string MSG_RegisterSuccess = "MSG_RegisterSuccess";
         public const string BranchDefault = "BranchDefault";
         public const string MSG_ExistsData = "MSG_ExistsData";
-        public const string MSG_NotExistsUser = "MSG_NotExistsUser";
         public const string MSG_UserNameExistsData = "MSG_UserNameExistsData";
         public const string MSG_PasswordNotEmpty = "MSG_PasswordNotEmpty";
         public const string InputTextSearch = "InputTextSearch";
@@ -58,7 +57,13 @@ namespace BNS.Resource.LocalizationResources
         public const string MSG_ShopExpried = "MSG_ShopExpried";
         public const string MSG_TokenError = "MSG_TokenError";
         public const string MSG_ObjectNotExists = "MSG_ObjectNotExists";
-
+        public class User
+        {
+            public const string MSG_NotExistsUser = "MSG_NotExistsUser";
+            public const string MSG_ExistsUser = "MSG_ExistsUser";
+            public const string MSG_TokenNotValid = "MSG_TokenNotValid";
+            
+        }
         public class Message
         {
 

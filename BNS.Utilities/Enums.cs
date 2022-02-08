@@ -16,6 +16,8 @@ namespace BNS.Utilities
             NotExistsData,
             IsExistsData,
             SystemError,
+            UserHasJoinTeam,
+            TokenNotValid
         }
 
         public enum EAccountType
@@ -30,7 +32,7 @@ namespace BNS.Utilities
             BUG = 3,
             TASK = 4
         }
-        
+
         public enum EType
         {
             Add,
@@ -91,6 +93,12 @@ namespace BNS.Utilities
         {
             asc,
             desc
+        }
+        public enum EAccountStatus
+        {
+            ACTIVE = 1,
+            IN_ACTIVE = 2,
+            WAILTING_CONFIRM_MAIL = 3
         }
     }
 }

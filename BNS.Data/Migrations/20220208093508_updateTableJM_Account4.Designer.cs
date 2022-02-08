@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220208093508_updateTableJM_Account4")]
+    partial class updateTableJM_Account4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

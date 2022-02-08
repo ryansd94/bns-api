@@ -327,6 +327,9 @@
   <data name="MSG_ShopExpried" xml:space="preserve">
     <value>Tài khoản đã hết hạn sử dụng. Vui lòng gia hạn để tiếp tục sử dụng</value>
   </data>
+  <data name="MSG_TokenNotValid" xml:space="preserve">
+    <value>Token không hợp lệ</value>
+  </data>
   <data name="MSG_UserNameExistsData" xml:space="preserve">
     <value>Tên đăng nhập đã tồn tại</value>
   </data>

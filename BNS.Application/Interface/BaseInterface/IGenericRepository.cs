@@ -9,8 +9,13 @@ namespace BNS.Application.Interface
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T> GetById(Guid id);
+        Task<T> GetByIdAsync(Guid id);
 
+        Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null
+                                                  );
+        Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
+                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                  );
         Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null 
                                                   , params Expression<Func<T, object>>[] includeProperties  
@@ -29,8 +34,8 @@ namespace BNS.Application.Interface
                                                   , params Expression<Func<T, object>>[] includeProperties
                                                   );
         Task<IQueryable<T>> OrderBy  (IQueryable<T> source, string columnName, bool isAscending = true);
-        Task<int> Add(T entity);
-        Task<int> Delete(T entity);
-        Task<int> Update(T entity);
+        Task<int> AddAsync(T entity);
+        Task<int> DeleteAsync(T entity);
+        Task<int> UpdateAsync(T entity);
     }
 }

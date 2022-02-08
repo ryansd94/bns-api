@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220131161657_updateJM_CompanyV3")]
+    partial class updateJM_CompanyV3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2770,9 +2772,6 @@ namespace BNS.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -2836,7 +2835,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JM_Companys");
+                    b.ToTable("JM_Company");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Issue", b =>
