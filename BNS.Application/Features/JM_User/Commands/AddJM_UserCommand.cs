@@ -82,7 +82,6 @@ namespace BNS.Application.Features
                     AccessFailedCount = 0,
                     IsMainAccount = true,
                     FullName = request.FullName,
-                    CompanyId = data.CompanyId
                 };
                 await _accountRepository.AddAsync(user);
                 return response;

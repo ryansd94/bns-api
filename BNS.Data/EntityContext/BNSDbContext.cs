@@ -126,12 +126,13 @@ namespace BNS.Data.EntityContext
             .HasForeignKey(b => b.UpdatedUser);
 
 
-            modelBuilder.Entity<JM_Company>()
-            .HasMany(a => a.JM_Accounts)
-            .WithOne(b => b.JM_Company)
-            .HasForeignKey(b => b.CompanyId);
 
+            modelBuilder.Entity<JM_AccountCompany>(entity =>
+            {
+                entity.HasOne(s => s.JM_Company).WithMany(s => s.JM_AccountCompanys).HasForeignKey(s => s.CompanyId);
+                entity.HasOne(s => s.JM_Account).WithMany(s => s.JM_AccountCompanys).HasForeignKey(s => s.UserId);
 
+            });
 
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectTeams);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
@@ -1296,6 +1297,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_Sprint> JM_Sprints { get; set; }
         public virtual DbSet<JM_Issue> JM_Issues { get; set; }
         public virtual DbSet<JM_Company> JM_Companys { get; set; }
+        public virtual DbSet<JM_AccountCompany> JM_AccountCompanys { get; set; }
 
 
     }

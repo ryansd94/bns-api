@@ -24,5 +24,6 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid CreatedUser { get; set; }
         public bool IsDelete { get; set; }
         public virtual ICollection<JM_Account> JM_Accounts { get; set; }
+        public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
     }
 }

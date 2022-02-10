@@ -11,7 +11,6 @@ namespace BNS.Data.Entities.JM_Entities
     {
         public DateTime? UpdatedDate { get; set; }
         public Guid? UpdatedUser { get; set; }
-        public Guid? CompanyId { get; set; }
         public bool? IsMainAccount { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedUser { get; set; }
@@ -21,13 +20,9 @@ namespace BNS.Data.Entities.JM_Entities
         public EAccountStatus? Status { get; set; }
         public virtual ICollection<JM_Team> JM_TeamsCreate { get; set; }
         public virtual ICollection<JM_Team> JM_TeamsUpdate { get; set; }
-
-
         public virtual ICollection<JM_Issue> JM_IssueAssign { get; set; }
         public virtual ICollection<JM_Issue> JM_IssueReport { get; set; }
-
-        [ForeignKey("CompanyId")]
-        public JM_Company JM_Company { get; set; }
+        public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
 
     }
 }

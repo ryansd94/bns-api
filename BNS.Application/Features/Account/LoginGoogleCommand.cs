@@ -83,7 +83,8 @@ namespace BNS.Application.Features
                 var email = infoUser.email;
                 var id = infoUser.sub;
                 response.data = new CF_AccountLoginResponseModel();
-                var user = await _context.JM_Accounts.Where(s => s.Email.Equals(email)).FirstOrDefaultAsync();
+                var user = await _context.JM_Accounts.Where(s => s.Email.Equals(email)).Include(s=>s.JM_AccountCompanys).FirstOrDefaultAsync();
+                var companyId = Guid.Empty;
                 if (user == null)
                 {
                     var userid = Guid.NewGuid();
@@ -110,12 +111,27 @@ namespace BNS.Application.Features
                         GoogleId = id,
                         IsMainAccount = true,
                         FullName = infoUser.name.ToString(),
-                        CompanyId = company.Id
+                    };
+
+                    var accountCompany = new JM_AccountCompany
+                    {
+                        Id = Guid.NewGuid(),
+                        IsDelete = false,
+                        UserId = userid,
+                        CompanyId = company.Id,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedUser = userid
                     };
                     company.CreatedUser = user.Id;
+                    companyId = company.Id;
                     await _context.JM_Companys.AddAsync(company);
                     await _context.JM_Accounts.AddAsync(user);
+                    await _context.JM_AccountCompanys.AddAsync(accountCompany);
                     await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    companyId = user.JM_AccountCompanys.FirstOrDefault().CompanyId;
                 }
 
                 var roles = new List<string>();
@@ -128,7 +144,7 @@ namespace BNS.Application.Features
                 new Claim(ClaimTypes.GivenName, user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
-                new Claim("CompanyId", user.CompanyId.ToString()),
+                new Claim("CompanyId", companyId.ToString()),
                 new Claim("Role",string.Join(";",roles))
                 };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
