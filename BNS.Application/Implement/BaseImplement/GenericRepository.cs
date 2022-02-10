@@ -62,17 +62,17 @@ namespace BNS.Application.Implement
 
         public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                     , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
-                                                    ,   Expression<Func<T, object>>[] includeProperties = null
+                                                    , Expression<Func<T, object>>[] includeProperties = null
                                                     )
         {
-            return await GetAsync(filter, orderBy, null, null,   includeProperties);
+            return await GetAsync(filter, orderBy, null, null, includeProperties);
         }
 
 
         public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                     , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
                                                     , string sortColumnName = "", bool? isAscending = true
-                                                    ,   Expression<Func<T, object>>[] includeProperties = null
+                                                    , Expression<Func<T, object>>[] includeProperties = null
                                                     )
         {
             IQueryable<T> query = _context.Set<T>();
@@ -91,7 +91,7 @@ namespace BNS.Application.Implement
             if (orderBy != null)
             {
                 query = orderBy(query);
-                
+
             }
             if (!string.IsNullOrEmpty(sortColumnName))
             {
@@ -201,7 +201,7 @@ namespace BNS.Application.Implement
             Expression methodCallExpression = Expression.Call(typeof(Queryable), methodName,
                                   new Type[] { source.ElementType, property.Type },
                                   source.Expression, Expression.Quote(lambda));
-            source= source.Provider.CreateQuery<T>(methodCallExpression);
+            source = source.Provider.CreateQuery<T>(methodCallExpression);
             return source.Provider.CreateQuery<T>(methodCallExpression);
         }
 
@@ -213,6 +213,11 @@ namespace BNS.Application.Implement
         public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null)
         {
             return await (await GetAsync(filter, null, null, null, null)).FirstAsync<T>();
+        }
+
+        public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return await (await GetAsync(filter, null, null, null, includeProperties)).FirstAsync<T>();
         }
     }
 }

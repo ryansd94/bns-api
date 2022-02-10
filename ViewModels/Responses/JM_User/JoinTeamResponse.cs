@@ -8,7 +8,7 @@ namespace BNS.ViewModels.Responses
     {
         public string Key { get; set; }
         public string EmailJoin { get; set; }
-        public Guid? CompanyId { get; set; }
+        public Guid CompanyId { get; set; }
         public Guid  UserRequest { get; set; }
     }
 }

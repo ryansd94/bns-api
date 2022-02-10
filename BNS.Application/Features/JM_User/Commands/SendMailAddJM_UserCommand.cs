@@ -37,19 +37,19 @@ namespace BNS.Application.Features
             protected readonly IElasticClient _elasticClient;
             protected readonly MyConfiguration _config;
             private readonly ICipherService _cipherService;
-            private readonly IGenericRepository<JM_Account> _accountRepository;
+            private readonly IGenericRepository<JM_AccountCompany> _accountCompanyRepository;
             public SendMailAddJM_UserCommandHandler(
              IStringLocalizer<SharedResource> sharedLocalizer,
              IOptions<MyConfiguration> config,
             ICipherService CipherService,
              IElasticClient elasticClient,
-             IGenericRepository<JM_Account> accountRepository)
+             IGenericRepository<JM_AccountCompany> accountRepository)
             {
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
                 _config = config.Value;
                 _cipherService = CipherService;
-                _accountRepository = accountRepository;
+                _accountCompanyRepository = accountRepository;
             }
             public async Task<ApiResult<Guid>> Handle(SendMailAddJM_UserCommandRequest request, CancellationToken cancellationToken)
             {
@@ -63,11 +63,15 @@ namespace BNS.Application.Features
                     rootBody = reader.ReadToEnd();
                 }
                 var emails = request.Emails.Distinct();
-                var queryUser = await _accountRepository.GetAsync(s => !s.IsDelete
-                && s.Status == EAccountStatus.ACTIVE
-                && emails.Contains(s.Email));
-                var users = await queryUser.Select(s => s.Email).ToListAsync();
+                var queryUser = await _accountCompanyRepository.GetAsync(s => !s.IsDelete
+                && s.Status == EStatus.ACTIVE
+                && s.CompanyId == request.CompanyId, null, s => s.JM_Account);
+
+
+                var users = await queryUser.Select(s => s.JM_Account.Email).ToListAsync();
                 emails = emails.Where(s => !users.Contains(s)).ToList();
+
+
                 foreach (var email in emails)
                 {
                     var joinTeam = new JoinTeamResponse

@@ -35,18 +35,21 @@ namespace BNS.Application.Features
             protected readonly MyConfiguration _config;
             private readonly ICipherService _cipherService;
             private readonly IGenericRepository<JM_Account> _accountRepository;
+            private readonly IGenericRepository<JM_AccountCompany> _accountCompanyRepository;
             public AddJM_UserCommandHandler(
              IStringLocalizer<SharedResource> sharedLocalizer,
              IOptions<MyConfiguration> config,
             ICipherService CipherService,
              IElasticClient elasticClient,
-             IGenericRepository<JM_Account> accountRepository)
+             IGenericRepository<JM_Account> accountRepository,
+             IGenericRepository<JM_AccountCompany> accountCompanyRepository)
             {
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
                 _config = config.Value;
                 _cipherService = CipherService;
                 _accountRepository = accountRepository;
+                _accountCompanyRepository = accountCompanyRepository;
             }
             public async Task<ApiResult<Guid>> Handle(AddJM_UserCommandRequest request, CancellationToken cancellationToken)
             {
@@ -58,32 +61,48 @@ namespace BNS.Application.Features
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_TokenNotValid];
                     return response;
                 }
-                var user = await _accountRepository.GetDefaultAsync(s => s.Email == data.EmailJoin);
-                if (user != null)
+                var userCompanyCheck = await _accountCompanyRepository.GetDefaultAsync(s => s.CompanyId == data.CompanyId && s.JM_Account.Email == data.EmailJoin, s => s.JM_Account);
+                if (userCompanyCheck != null)
                 {
                     response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
                     return response;
                 }
-
+                var user = await _accountRepository.GetDefaultAsync(s => s.Email == data.EmailJoin);
                 var userId = Guid.NewGuid();
-                user = new JM_Account
+                if (user == null)
                 {
-                    Id = userId,
-                    UserName = data.EmailJoin,
-                    Email = data.EmailJoin,
+                    user = new JM_Account
+                    {
+                        Id = userId,
+                        UserName = data.EmailJoin,
+                        Email = data.EmailJoin,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedUser = data.UserRequest,
+                        IsDelete = false,
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = false,
+                        TwoFactorEnabled = false,
+                        LockoutEnabled = false,
+                        AccessFailedCount = 0,
+                        IsMainAccount = true,
+                        FullName = request.FullName,
+                    };
+
+                    await _accountRepository.AddAsync(user);
+                }
+                else
+                    userId = user.Id;
+                var userCompany = new JM_AccountCompany
+                {
+                    Id = Guid.NewGuid(),
+                    IsDelete = false,
+                    UserId = userId,
+                    CompanyId = data.CompanyId,
                     CreatedDate = DateTime.UtcNow,
                     CreatedUser = data.UserRequest,
-                    IsDelete = false,
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = false,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    IsMainAccount = true,
-                    FullName = request.FullName,
                 };
-                await _accountRepository.AddAsync(user);
+                await _accountCompanyRepository.AddAsync(userCompany);
                 return response;
             }
 

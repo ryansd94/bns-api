@@ -30,18 +30,21 @@ namespace BNS.Application.Features
             protected readonly MyConfiguration _config;
             private readonly ICipherService _cipherService;
             private readonly IGenericRepository<JM_Account> _accountRepository;
+            private readonly IGenericRepository<JM_AccountCompany> _accountCompanyRepository;
             public ValidateAddJM_UserCommnadHandler(
              IStringLocalizer<SharedResource> sharedLocalizer,
              IOptions<MyConfiguration> config,
             ICipherService CipherService,
              IElasticClient elasticClient,
-             IGenericRepository<JM_Account> accountRepository)
+             IGenericRepository<JM_Account> accountRepository,
+             IGenericRepository<JM_AccountCompany>  accountCompanyRepository)
             {
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
                 _config = config.Value;
                 _cipherService = CipherService;
                 _accountRepository = accountRepository;
+                _accountCompanyRepository = accountCompanyRepository;
             }
             public async Task<ApiResult<Guid>> Handle(ValidateAddJM_UserCommnadRequest request, CancellationToken cancellationToken)
             {
@@ -53,7 +56,7 @@ namespace BNS.Application.Features
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_TokenNotValid];
                     return response;
                 }
-                var user = await _accountRepository.GetAsync(s => s.Email == data.EmailJoin);
+                var user = await _accountCompanyRepository.GetAsync(s => s.CompanyId == data.CompanyId);
                 if (user != null)
                 {
                     response.errorCode = EErrorCode.UserHasJoinTeam.ToString();

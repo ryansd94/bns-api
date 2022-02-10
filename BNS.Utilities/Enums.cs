@@ -94,7 +94,7 @@ namespace BNS.Utilities
             asc,
             desc
         }
-        public enum EAccountStatus
+        public enum EStatus
         {
             ACTIVE = 1,
             IN_ACTIVE = 2,
