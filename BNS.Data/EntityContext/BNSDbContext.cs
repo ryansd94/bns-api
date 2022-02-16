@@ -134,6 +134,17 @@ namespace BNS.Data.EntityContext
 
             });
 
+
+            modelBuilder.Entity<JM_TeamMember>(entity =>
+            {
+                entity.HasOne(s => s.JM_Team).WithMany(s => s.JM_TeamMembers).HasForeignKey(s => s.TeamId);
+                entity.HasOne(s => s.JM_Account).WithMany(s => s.JM_TeamMembers).HasForeignKey(s => s.UserId);
+
+            });
+
+
+
+
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectTeams);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Sprints);
@@ -1298,6 +1309,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_Issue> JM_Issues { get; set; }
         public virtual DbSet<JM_Company> JM_Companys { get; set; }
         public virtual DbSet<JM_AccountCompany> JM_AccountCompanys { get; set; }
+        public virtual DbSet<JM_TeamMember> JM_TeamMembers { get; set; }
 
 
     }

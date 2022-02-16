@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BNS.Data.Entities.JM_Entities
@@ -15,5 +16,6 @@ namespace BNS.Data.Entities.JM_Entities
 
         public JM_Account CreateUserAccount { get; set; }
         public JM_Account UpdateUserAccount { get; set; }
+        public virtual ICollection<JM_TeamMember> JM_TeamMembers { get; set; }
     }
 }

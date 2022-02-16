@@ -2,14 +2,12 @@
 using BNS.Data.Entities;
 using BNS.Data.EntityContext;
 using BNS.Utilities;
-using LazZiya.ExpressLocalization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BNS.Application.Implement
@@ -43,21 +41,23 @@ namespace BNS.Application.Implement
                 }
             }
         }
-        public async Task<int> AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            return await _context.SaveChangesAsync();
+             _context.Set<T>().Remove(entity);
         }
 
         public async Task<T> GetByIdAsync(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);
+        }
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
@@ -111,10 +111,9 @@ namespace BNS.Application.Implement
             return query;
         }
 
-        public async Task<int> UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
-            return await _context.SaveChangesAsync();
         }
 
         protected async Task<int> GetMaxNumber<D>(Guid shopIndex, Guid? branchIndex) where D : class
@@ -219,5 +218,6 @@ namespace BNS.Application.Implement
         {
             return await (await GetAsync(filter, null, null, null, includeProperties)).FirstAsync<T>();
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using BNS.Application.Interface;
+﻿using BNS.Application.Features;
+using BNS.Application.Interface;
 using BNS.ViewModels.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,7 @@ namespace BNS.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : BaseController
-    { 
+    {
         private readonly ICF_AccountService _accountService;
         private IMediator _mediator;
         private readonly ClaimsPrincipal _caller;
@@ -64,8 +65,15 @@ namespace BNS.Api.Controllers
         }
         [HttpPost("login-google")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginGoogle(  LoginGoogleRequest request)
+        public async Task<IActionResult> LoginGoogle(LoginGoogleRequest request)
         {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPut("password-first")]
+        [Authorize]
+        public async Task<IActionResult> ChangePasswordFirst(ChangePasswordFirstLoginCommand.ChangePasswordFirstLoginRequest request)
+        {
+            request.CreatedBy=UserId;
             return Ok(await _mediator.Send(request));
         }
     }

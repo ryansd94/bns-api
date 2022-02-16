@@ -49,7 +49,7 @@ namespace BNS.Application.Features
                 var response = new ApiResult<JM_TeamResponse>();
                 response.data = new JM_TeamResponse();
 
-                var query = (await _teamRepository.GetAsync(s => !s.IsDelete && s.CompanyIndex == request.CompanyId, s => s.OrderBy(d => d.Name), s => s.TeamParent, s => s.CreateUserAccount, s => s.UpdateUserAccount)).Select(s => new JM_TeamResponseItem
+                var query = (await _teamRepository.GetAsync(s => !s.IsDelete && s.CompanyIndex == request.CompanyId, s => s.OrderBy(d => d.Name))).Select(s => new JM_TeamResponseItem
                 {
                     Name = s.Name,
                     Id = s.Id,

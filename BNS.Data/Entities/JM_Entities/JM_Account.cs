@@ -23,6 +23,7 @@ namespace BNS.Data.Entities.JM_Entities
         public virtual ICollection<JM_Issue> JM_IssueAssign { get; set; }
         public virtual ICollection<JM_Issue> JM_IssueReport { get; set; }
         public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
+        public virtual ICollection<JM_TeamMember> JM_TeamMembers { get; set; }
 
     }
 }

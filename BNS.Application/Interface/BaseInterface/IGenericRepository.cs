@@ -20,25 +20,26 @@ namespace BNS.Application.Interface
                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
                                                   );
         Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
-                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null 
-                                                  , params Expression<Func<T, object>>[] includeProperties  
+                                                  , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                  , params Expression<Func<T, object>>[] includeProperties
                                                   );
 
         Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null
                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
-                                                  , string sortColumnName = null, bool? isAscending = true 
-                                                  , params Expression<Func<T, object>>[] includeProperties  
+                                                  , string sortColumnName = null, bool? isAscending = true
+                                                  , params Expression<Func<T, object>>[] includeProperties
                                                   );
 
 
-        Task<IQueryable<T>> GetAsync(IQueryable<T> query,Expression<Func<T, bool>> filter = null
+        Task<IQueryable<T>> GetAsync(IQueryable<T> query, Expression<Func<T, bool>> filter = null
                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
                                                   , string sortColumnName = null, bool? isAscending = true
                                                   , params Expression<Func<T, object>>[] includeProperties
                                                   );
-        Task<IQueryable<T>> OrderBy  (IQueryable<T> source, string columnName, bool isAscending = true);
-        Task<int> AddAsync(T entity);
-        Task<int> DeleteAsync(T entity);
-        Task<int> UpdateAsync(T entity);
+        Task<IQueryable<T>> OrderBy(IQueryable<T> source, string columnName, bool isAscending = true);
+        Task AddAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task<int> SaveChangesAsync();
     }
 }

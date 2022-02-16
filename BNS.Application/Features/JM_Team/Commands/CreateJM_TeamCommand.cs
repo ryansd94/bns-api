@@ -1,4 +1,5 @@
-﻿using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Application.Interface;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Nest;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
@@ -25,24 +27,31 @@ namespace BNS.Application.Features
             public string Code { get; set; }
             public string Description { get; set; }
             public Guid? ParentId { get; set; }
+            public List<Guid> Members { get; set; }
         }
         public class CreateTeamCommandHandler : IRequestHandler<CreateTeamRequest, ApiResult<Guid>>
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
             protected readonly IElasticClient _elasticClient;
+            private readonly IGenericRepository<JM_Team> _teamRepository;
+            private readonly IGenericRepository<JM_TeamMember> _teamMemberRepository;
             public CreateTeamCommandHandler(BNSDbContext context,
              IStringLocalizer<SharedResource> sharedLocalizer,
-             IElasticClient elasticClient)
+             IElasticClient elasticClient,
+             IGenericRepository<JM_Team> teamRepository,
+             IGenericRepository<JM_TeamMember> teamMemberRepository)
             {
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
+                _teamRepository = teamRepository;
+                _teamMemberRepository = teamMemberRepository;
             }
             public async Task<ApiResult<Guid>> Handle(CreateTeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataCheck = await _context.JM_Teams.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
+                var dataCheck = await _teamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
                 if (dataCheck != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -60,8 +69,24 @@ namespace BNS.Application.Features
                     CreatedUser = request.CreatedBy,
                     CompanyIndex=request.CompanyId
                 };
-                await _context.JM_Teams.AddAsync(data);
-                await _context.SaveChangesAsync();
+                if (request.Members != null && request.Members.Count>0)
+                {
+                    foreach (var item in request.Members)
+                    {
+                      await  _teamMemberRepository.AddAsync(new JM_TeamMember
+                        {
+                            CompanyIndex=request.CompanyId,
+                            CreatedDate=DateTime.UtcNow,
+                            CreatedUser=request.CreatedBy,
+                            Id=Guid.NewGuid(),
+                            IsDelete=false,
+                            TeamId=data.Id,
+                            UserId=item
+                        });
+                    }
+                }
+                await _teamRepository.AddAsync(data);
+                await _teamRepository.SaveChangesAsync();
                 //_elasticClient.Index<JM_Team>(data, i => i
                 //       .Index("bns")
                 //       .Id(data.Id)

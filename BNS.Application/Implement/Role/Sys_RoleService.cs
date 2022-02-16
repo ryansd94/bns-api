@@ -121,7 +121,7 @@ namespace BNS.Application.Implement
                     result.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                     return result;
                 }
-                rs = await _genericRepository.AddAsync(new Sys_Role
+                await _genericRepository.AddAsync(new Sys_Role
                 {
                     Name = model.Name,
                     Description = model.Note,
@@ -155,7 +155,7 @@ namespace BNS.Application.Implement
                 dataSave.Description = model.Note;
                 dataSave.UpdatedDate = DateTime.UtcNow;
                 dataSave.UpdatedUser = model.UserIndex;
-                rs = await _genericRepository.UpdateAsync(dataSave);
+                await _genericRepository.UpdateAsync(dataSave);
                 result.type = EType.Edit.ToString();
             }
             if (rs <= 0)
