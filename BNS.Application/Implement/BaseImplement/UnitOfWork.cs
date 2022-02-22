@@ -2,17 +2,21 @@
 using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace BNS.Application.Implement
 {
-   public  class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly BNSDbContext _context;
 
         private IGenericRepository<JM_Account> jM_AccountRepository;
+        private IGenericRepository<JM_AccountCompany> jM_AccountCompanyRepository;
+        private IGenericRepository<JM_Team> jM_TeamRepository;
+        private IGenericRepository<JM_TeamMember> jM_TeamMemberRepository;
 
+
+        #region Repositories
         public IGenericRepository<JM_Account> JM_AccountRepository
         {
             get
@@ -25,10 +29,6 @@ namespace BNS.Application.Implement
                 return jM_AccountRepository;
             }
         }
-
-
-        private IGenericRepository<JM_AccountCompany> jM_AccountCompanyRepository;
-
         public IGenericRepository<JM_AccountCompany> JM_AccountCompanyRepository
         {
             get
@@ -41,13 +41,38 @@ namespace BNS.Application.Implement
                 return jM_AccountCompanyRepository;
             }
         }
+        public IGenericRepository<JM_TeamMember> JM_TeamMemberRepository
+        {
+            get
+            {
+
+                if (this.jM_TeamMemberRepository == null)
+                {
+                    this.jM_TeamMemberRepository = new GenericRepository<JM_TeamMember>(_context);
+                }
+                return jM_TeamMemberRepository;
+            }
+        }
+        public IGenericRepository<JM_Team> JM_TeamRepository
+        {
+            get
+            {
+
+                if (this.jM_TeamRepository == null)
+                {
+                    this.jM_TeamRepository = new GenericRepository<JM_Team>(_context);
+                }
+                return jM_TeamRepository;
+            }
+        }
+        #endregion
         public UnitOfWork(BNSDbContext bNSDbContext)
         {
             this._context = bNSDbContext;
         }
-        public int Complete()
+        public async Task<int> SaveChangesAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
         public void Dispose()

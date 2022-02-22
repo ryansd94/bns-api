@@ -36,20 +36,20 @@ namespace BNS.Application.Features
              IStringLocalizer<SharedResource> sharedLocalizer,
                 IMapper mapper,
              IElasticClient elasticClient,
-             IUnitOfWork teamRepository)
+             IUnitOfWork unitOfWork)
             {
                 _context = context;
                 _mapper = mapper;
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
-                _unitOfWork = teamRepository;
+                _unitOfWork = unitOfWork;
             }
             public async Task<ApiResult<JM_UserResponse>> Handle(GetJM_UserRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<JM_UserResponse>();
                 response.data = new JM_UserResponse();
 
-                var query = (await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete && s.CompanyId == request.CompanyId, s => s.OrderBy(d => d.CreatedDate)));
+                var query = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete && s.CompanyId == request.CompanyId, s => s.OrderBy(d => d.CreatedDate));
                 if (!string.IsNullOrEmpty(request.fieldSort))
                     query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);
                 response.recordsTotal = await query.CountAsync();

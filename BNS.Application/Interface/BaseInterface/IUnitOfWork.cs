@@ -1,7 +1,6 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace BNS.Application.Interface
 {
@@ -9,6 +8,10 @@ namespace BNS.Application.Interface
     {
         IGenericRepository<JM_Account> JM_AccountRepository { get; }
         IGenericRepository<JM_AccountCompany> JM_AccountCompanyRepository { get; }
-        int Complete();
+        IGenericRepository<JM_Team> JM_TeamRepository { get; }
+        IGenericRepository<JM_TeamMember> JM_TeamMemberRepository { get; }
+
+
+        Task<int> SaveChangesAsync();
     }
 }

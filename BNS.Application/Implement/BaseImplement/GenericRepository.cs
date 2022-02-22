@@ -48,7 +48,7 @@ namespace BNS.Application.Implement
 
         public async Task DeleteAsync(T entity)
         {
-             _context.Set<T>().Remove(entity);
+            _context.Set<T>().Remove(entity);
         }
 
         public async Task<T> GetByIdAsync(Guid id)
@@ -208,15 +208,55 @@ namespace BNS.Application.Implement
         {
             return await GetAsync(filter, orderBy, null, null, null);
         }
+        private async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null
+                                                   , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
+                                                   , string sortColumnName = "", bool? isAscending = true
+                                                   , Expression<Func<T, object>>[] includeProperties = null
+                                                   )
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
 
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+
+            }
+            if (!string.IsNullOrEmpty(sortColumnName))
+            {
+                ParameterExpression parameter = Expression.Parameter(query.ElementType, "");
+
+                MemberExpression property = Expression.Property(parameter, sortColumnName);
+                LambdaExpression lambda = Expression.Lambda(property, parameter);
+
+                string methodName = isAscending.Value ? "OrderBy" : "OrderByDescending";
+
+                Expression methodCallExpression = Expression.Call(typeof(Queryable), methodName,
+                                      new Type[] { query.ElementType, property.Type },
+                                      query.Expression, Expression.Quote(lambda));
+
+                query = query.Provider.CreateQuery<T>(methodCallExpression);
+            }
+            return await query.FirstOrDefaultAsync();
+        }
         public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null)
         {
-            return await (await GetAsync(filter, null, null, null, null)).FirstAsync<T>();
+            return await GetDefaultAsync(filter, null, null, null, null);
         }
 
         public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includeProperties)
         {
-            return await (await GetAsync(filter, null, null, null, includeProperties)).FirstAsync<T>();
+            return await GetDefaultAsync(filter, null, null, null, includeProperties);
         }
 
     }
