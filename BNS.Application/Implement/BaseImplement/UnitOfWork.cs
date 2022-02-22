@@ -14,7 +14,7 @@ namespace BNS.Application.Implement
         private IGenericRepository<JM_AccountCompany> jM_AccountCompanyRepository;
         private IGenericRepository<JM_Team> jM_TeamRepository;
         private IGenericRepository<JM_TeamMember> jM_TeamMemberRepository;
-
+        private IGenericRepository<JM_Sprint> jM_SprintRepository;
 
         #region Repositories
         public IGenericRepository<JM_Account> JM_AccountRepository
@@ -63,6 +63,17 @@ namespace BNS.Application.Implement
                     this.jM_TeamRepository = new GenericRepository<JM_Team>(_context);
                 }
                 return jM_TeamRepository;
+            }
+        }
+        public IGenericRepository<JM_Sprint> JM_SprintRepository
+        {
+            get
+            {
+                if (this.jM_SprintRepository == null)
+                {
+                    this.jM_SprintRepository = new GenericRepository<JM_Sprint>(_context);
+                }
+                return jM_SprintRepository;
             }
         }
         #endregion

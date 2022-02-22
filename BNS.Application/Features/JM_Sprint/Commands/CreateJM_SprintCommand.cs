@@ -1,14 +1,12 @@
-﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Data.EntityContext;
+﻿using BNS.Application.Interface;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
@@ -31,19 +29,22 @@ namespace BNS.Application.Features
         }
         public class CreateJM_SprintCommandHandler : IRequestHandler<CreateJM_SprintRequest, ApiResult<Guid>>
         {
-            protected readonly BNSDbContext _context;
+            private readonly IUnitOfWork _unitOfWork;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-            public CreateJM_SprintCommandHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer)
+            public CreateJM_SprintCommandHandler(
+             IStringLocalizer<SharedResource> sharedLocalizer,
+             IUnitOfWork unitOfWork)
             {
-                _context = context;
+                _unitOfWork = unitOfWork;
                 _sharedLocalizer = sharedLocalizer;
             }
             public async Task<ApiResult<Guid>> Handle(CreateJM_SprintRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataCheck = await _context.JM_Sprints.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
+                var dataCheck = await _unitOfWork.JM_SprintRepository.GetDefaultAsync(s => s.Name.Equals(request.Name)
+                && s.CompanyIndex == request.CompanyId
+                && s.JM_ProjectId == request.JM_ProjectId);
                 if (dataCheck != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -61,8 +62,8 @@ namespace BNS.Application.Features
                     CreatedDate = DateTime.UtcNow,
                     CreatedUser = request.CreatedBy,
                 };
-                await _context.JM_Sprints.AddAsync(data);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.JM_SprintRepository.AddAsync(data);
+                await _unitOfWork.SaveChangesAsync();
                 response.data = data.Id;
                 return response;
             }

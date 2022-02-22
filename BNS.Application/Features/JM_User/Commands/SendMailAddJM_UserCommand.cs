@@ -29,7 +29,6 @@ namespace BNS.Application.Features
         {
             [Required]
             public List<string> Emails { get; set; }
-            public Guid TeamId { get; set; }
         }
         public class SendMailAddJM_UserCommandHandler : IRequestHandler<SendMailAddJM_UserCommandRequest, ApiResult<Guid>>
         {
@@ -37,19 +36,19 @@ namespace BNS.Application.Features
             protected readonly IElasticClient _elasticClient;
             protected readonly MyConfiguration _config;
             private readonly ICipherService _cipherService;
-            private readonly IGenericRepository<JM_AccountCompany> _accountCompanyRepository;
+            private readonly IUnitOfWork _unitOfWork;
             public SendMailAddJM_UserCommandHandler(
              IStringLocalizer<SharedResource> sharedLocalizer,
              IOptions<MyConfiguration> config,
             ICipherService CipherService,
              IElasticClient elasticClient,
-             IGenericRepository<JM_AccountCompany> accountRepository)
+             IUnitOfWork unitOfWork)
             {
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
                 _config = config.Value;
                 _cipherService = CipherService;
-                _accountCompanyRepository = accountRepository;
+                _unitOfWork = unitOfWork;
             }
             public async Task<ApiResult<Guid>> Handle(SendMailAddJM_UserCommandRequest request, CancellationToken cancellationToken)
             {
@@ -63,7 +62,7 @@ namespace BNS.Application.Features
                     rootBody = reader.ReadToEnd();
                 }
                 var emails = request.Emails.Distinct();
-                var queryUser = await _accountCompanyRepository.GetAsync(s => !s.IsDelete
+                var queryUser = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
                 && s.Status == EStatus.ACTIVE
                 && s.CompanyId == request.CompanyId, null, s => s.JM_Account);
 

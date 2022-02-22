@@ -1,13 +1,11 @@
-﻿using BNS.Data.EntityContext;
+﻿using BNS.Application.Interface;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
@@ -28,19 +26,19 @@ namespace BNS.Application.Features
         }
         public class UpdateJM_TeamCommandHandler : IRequestHandler<UpdateJM_TeamRequest, ApiResult<Guid>>
         {
-            protected readonly BNSDbContext _context;
+            private readonly IUnitOfWork _unitOfWork;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-            public UpdateJM_TeamCommandHandler(BNSDbContext context,
+            public UpdateJM_TeamCommandHandler(IUnitOfWork unitOfWork,
              IStringLocalizer<SharedResource> sharedLocalizer)
             {
-                _context = context;
+                _unitOfWork = unitOfWork;
                 _sharedLocalizer = sharedLocalizer;
             }
             public async Task<ApiResult<Guid>> Handle(UpdateJM_TeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataCheck = await _context.JM_Teams.Where(s => s.Id == request.Id ).FirstOrDefaultAsync();
+                var dataCheck = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Id == request.Id);
                 if (dataCheck == null)
                 {
                     response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -48,7 +46,7 @@ namespace BNS.Application.Features
                     return response;
                 }
 
-                var checkDuplicate = await _context.JM_Teams.Where(s => s.Name.Equals(request.Name)  && s.Id != request.Id).FirstOrDefaultAsync();
+                var checkDuplicate = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name)  && s.Id != request.Id);
                 if (checkDuplicate != null)
                 {
                     response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -62,8 +60,8 @@ namespace BNS.Application.Features
                 dataCheck.UpdatedDate = DateTime.UtcNow;
                 dataCheck.UpdatedUser = request.CreatedBy;
 
-                _context.JM_Teams.Update(dataCheck);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.JM_TeamRepository.UpdateAsync(dataCheck);
+                await _unitOfWork.SaveChangesAsync();
                 response.data = dataCheck.Id;
                 return response;
             }

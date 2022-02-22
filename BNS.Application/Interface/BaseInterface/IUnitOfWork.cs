@@ -10,6 +10,7 @@ namespace BNS.Application.Interface
         IGenericRepository<JM_AccountCompany> JM_AccountCompanyRepository { get; }
         IGenericRepository<JM_Team> JM_TeamRepository { get; }
         IGenericRepository<JM_TeamMember> JM_TeamMemberRepository { get; }
+        IGenericRepository<JM_Sprint> JM_SprintRepository { get; }
 
 
         Task<int> SaveChangesAsync();

@@ -1,4 +1,7 @@
 ﻿
+using AutoMapper;
+using BNS.Application.Interface;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Utilities;
@@ -10,6 +13,7 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
@@ -28,52 +32,38 @@ namespace BNS.Application.Features
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IMapper _mapper;
 
             public GetJM_SprintRequestHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer)
+             IStringLocalizer<SharedResource> sharedLocalizer,
+             IUnitOfWork unitOfWork,
+                IMapper mapper)
             {
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
+                _unitOfWork = unitOfWork;
+                _mapper = mapper;
             }
             public async Task<ApiResult<JM_SprintResponse>> Handle(GetJM_SprintRequest request, CancellationToken cancellationToken)
             {
+
                 var response = new ApiResult<JM_SprintResponse>();
                 response.data = new JM_SprintResponse();
-                var query = _context.JM_Sprints.Where(s => s.JM_ProjectId == request.JM_ProjectId &&
-                !s.IsDelete);
+                Expression<Func<JM_Sprint, bool>> filter = s => !s.IsDelete && s.CompanyIndex == request.CompanyId;
+
+                var query = (await _unitOfWork.JM_SprintRepository.GetAsync(filter,
+                    s => s.OrderBy(d => d.Name))).Select(s => _mapper.Map<JM_SprintResponseItem>(s));
+
                 if (!string.IsNullOrEmpty(request.fieldSort))
-                {
-                    var columnSort = request.fieldSort;
-                    var sortType = request.sort;
-                    if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
-                    {
-                        columnSort = columnSort[0].ToString().ToUpper() + columnSort.Substring(1, columnSort.Length - 1);
-                        query = Common.OrderBy(query, columnSort, sortType == ESortEnum.desc.ToString() ? false : true);
+                    query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);
 
-                    }
-                }
-                if (request.isAdd)
-                    query = query.OrderByDescending(s => s.CreatedDate);
-                if (request.isEdit)
-                    query = query.OrderByDescending(s => s.UpdatedDate);
-
-                response.recordsTotal = await query.CountAsync();
+                response.recordsTotal = await _unitOfWork.JM_SprintRepository.CountAsync(filter);
                 query = query.Skip(request.start).Take(request.length);
-
-                var rs = await query.Select(s => new JM_SprintResponseItem
-                {
-                    Name = s.Name,
-                    Description = s.Description,
-                    StartDate = s.StartDate,
-                    EndDate = s.EndDate,
-                    Id = s.Id,
-                    UpdatedDate = s.UpdatedDate,
-                    CreatedDate = s.CreatedDate,
-                    CreatedUserId = s.CreatedUser,
-                    UpdatedUserId = s.UpdatedUser
-                }).ToListAsync();
+                var rs = await query.ToListAsync();
                 response.data.Items = rs;
                 return response;
+
             }
 
         }

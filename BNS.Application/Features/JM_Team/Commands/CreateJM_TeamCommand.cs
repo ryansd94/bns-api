@@ -31,16 +31,14 @@ namespace BNS.Application.Features
         }
         public class CreateTeamCommandHandler : IRequestHandler<CreateTeamRequest, ApiResult<Guid>>
         {
-            protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
             protected readonly IElasticClient _elasticClient;
             private readonly IUnitOfWork _unitOfWork;
-            public CreateTeamCommandHandler(BNSDbContext context,
+            public CreateTeamCommandHandler(
              IStringLocalizer<SharedResource> sharedLocalizer,
              IElasticClient elasticClient,
              IUnitOfWork unitOfWork)
             {
-                _context = context;
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
                 _unitOfWork = unitOfWork;

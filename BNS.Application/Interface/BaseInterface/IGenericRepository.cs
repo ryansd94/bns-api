@@ -40,6 +40,7 @@ namespace BNS.Application.Interface
         Task AddAsync(T entity);
         Task DeleteAsync(T entity);
         Task UpdateAsync(T entity);
+        Task<int> CountAsync(Expression<Func<T, bool>> filter = null);
         Task<int> SaveChangesAsync();
     }
 }

@@ -50,15 +50,15 @@ namespace BNS.Application.Features
                 response.data = new JM_UserResponse();
 
                 var query = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete && s.CompanyId == request.CompanyId, s => s.OrderBy(d => d.CreatedDate));
+               
                 if (!string.IsNullOrEmpty(request.fieldSort))
                     query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);
+
                 response.recordsTotal = await query.CountAsync();
                 query = query.Skip(request.start).Take(request.length);
-                var rs = await query.Select(s=>s.JM_Account).ToListAsync();
 
-                
-
-                response.data.Items = rs.Select(d => _mapper.Map<JM_UserResponseItem>(d)).ToList();
+                var rs = await query.Select(d => _mapper.Map<JM_UserResponseItem>(d.JM_Account)).ToListAsync();
+                response.data.Items = rs;
                 return response;
             }
 

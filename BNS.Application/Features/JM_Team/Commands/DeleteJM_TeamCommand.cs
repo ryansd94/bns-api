@@ -1,4 +1,5 @@
-﻿using BNS.Data.EntityContext;
+﻿using BNS.Application.Interface;
+using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
@@ -23,19 +24,19 @@ namespace BNS.Application.Features
         }
         public class DeleteJM_TeamCommandHandler : IRequestHandler<DeleteJM_TeamRequest, ApiResult<Guid>>
         {
-            protected readonly BNSDbContext _context;
+            private readonly IUnitOfWork _unitOfWork;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-            public DeleteJM_TeamCommandHandler(BNSDbContext context,
+            public DeleteJM_TeamCommandHandler(IUnitOfWork unitOfWork,
              IStringLocalizer<SharedResource> sharedLocalizer)
             {
-                _context = context;
+                _unitOfWork = unitOfWork;
                 _sharedLocalizer = sharedLocalizer;
             }
             public async Task<ApiResult<Guid>> Handle(DeleteJM_TeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var dataChecks = await _context.JM_Teams.Where(s => request.ids.Contains(s.Id)).ToListAsync();
+                var dataChecks = await _unitOfWork.JM_TeamRepository.GetAsync(s => request.ids.Contains(s.Id));
                 if (dataChecks == null || dataChecks.Count() ==0)
                 {
                     response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -47,9 +48,9 @@ namespace BNS.Application.Features
                     item.IsDelete = true;
                     item.UpdatedDate = DateTime.UtcNow;
                     item.UpdatedUser = request.CreatedBy;
-                    _context.JM_Teams.Update(item);
+                    await _unitOfWork.JM_TeamRepository.UpdateAsync(item);
                 }
-                await _context.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
                 return response;
             }
 

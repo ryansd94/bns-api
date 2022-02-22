@@ -21,12 +21,11 @@ namespace BNS.Api.Controllers.User
             _mediator = mediator;
             _caller = httpContextAccessor.HttpContext.User;
         }
-        [HttpPut("send-mail-add-user/{teamId}")]
+        [HttpPost("add-user")]
         [Authorize]
-        public async Task<IActionResult> SendMailAddUser(Guid teamId, SendMailAddJM_UserCommand.SendMailAddJM_UserCommandRequest request)
+        public async Task<IActionResult> SendMailAddUser( SendMailAddJM_UserCommand.SendMailAddJM_UserCommandRequest request)
         {
             request.CreatedBy = UserId;
-            request.TeamId = teamId;
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
@@ -40,7 +39,7 @@ namespace BNS.Api.Controllers.User
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Signup(ValidateAddJM_UserCommnad.ValidateAddJM_UserCommnadRequest request)
+        public async Task<IActionResult> Signup(AddJM_UserCommand.AddJM_UserCommandRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -34,22 +34,19 @@ namespace BNS.Application.Features
             protected readonly IElasticClient _elasticClient;
             protected readonly MyConfiguration _config;
             private readonly ICipherService _cipherService;
-            private readonly IGenericRepository<JM_Account> _accountRepository;
-            private readonly IGenericRepository<JM_AccountCompany> _accountCompanyRepository;
+            private readonly IUnitOfWork _unitOfWork;
             public AddJM_UserCommandHandler(
              IStringLocalizer<SharedResource> sharedLocalizer,
              IOptions<MyConfiguration> config,
             ICipherService CipherService,
              IElasticClient elasticClient,
-             IGenericRepository<JM_Account> accountRepository,
-             IGenericRepository<JM_AccountCompany> accountCompanyRepository)
+             IUnitOfWork unitOfWork)
             {
                 _sharedLocalizer = sharedLocalizer;
                 _elasticClient = elasticClient;
                 _config = config.Value;
                 _cipherService = CipherService;
-                _accountRepository = accountRepository;
-                _accountCompanyRepository = accountCompanyRepository;
+                _unitOfWork = unitOfWork;
             }
             public async Task<ApiResult<Guid>> Handle(AddJM_UserCommandRequest request, CancellationToken cancellationToken)
             {
@@ -61,14 +58,14 @@ namespace BNS.Application.Features
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_TokenNotValid];
                     return response;
                 }
-                var userCompanyCheck = await _accountCompanyRepository.GetDefaultAsync(s => s.CompanyId == data.CompanyId && s.JM_Account.Email == data.EmailJoin, s => s.JM_Account);
+                var userCompanyCheck = await _unitOfWork.JM_AccountCompanyRepository.GetDefaultAsync(s => s.CompanyId == data.CompanyId && s.JM_Account.Email == data.EmailJoin, s => s.JM_Account);
                 if (userCompanyCheck != null)
                 {
                     response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
                     return response;
                 }
-                var user = await _accountRepository.GetDefaultAsync(s => s.Email == data.EmailJoin);
+                var user = await _unitOfWork.JM_AccountRepository.GetDefaultAsync(s => s.Email == data.EmailJoin);
                 var userId = Guid.NewGuid();
                 if (user == null)
                 {
@@ -89,7 +86,7 @@ namespace BNS.Application.Features
                         FullName = request.FullName,
                     };
 
-                    await _accountRepository.AddAsync(user);
+                    await _unitOfWork.JM_AccountRepository.AddAsync(user);
                 }
                 else
                     userId = user.Id;
@@ -102,7 +99,7 @@ namespace BNS.Application.Features
                     CreatedDate = DateTime.UtcNow,
                     CreatedUser = data.UserRequest,
                 };
-                await _accountCompanyRepository.AddAsync(userCompany);
+                await _unitOfWork.JM_AccountCompanyRepository.AddAsync(userCompany);
                 return response;
             }
 

@@ -259,5 +259,15 @@ namespace BNS.Application.Implement
             return await GetDefaultAsync(filter, null, null, null, includeProperties);
         }
 
+        public async Task<int> CountAsync(Expression<Func<T, bool>> filter = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            return await query.CountAsync();
+        }
     }
 }
