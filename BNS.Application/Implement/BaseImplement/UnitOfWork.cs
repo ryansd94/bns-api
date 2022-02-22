@@ -1,8 +1,10 @@
 ﻿using BNS.Application.Interface;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
+using BNS.ViewModels;
 using System;
 using System.Threading.Tasks;
+using static BNS.Utilities.Enums;
 
 namespace BNS.Application.Implement
 {
@@ -81,9 +83,21 @@ namespace BNS.Application.Implement
         {
             this._context = bNSDbContext;
         }
-        public async Task<int> SaveChangesAsync()
+        public async Task<ApiResult<Guid>> SaveChangesAsync()
         {
-            return await _context.SaveChangesAsync();
+            var result = new ApiResult<Guid>();
+            result.status=System.Net.HttpStatusCode.OK;
+            try
+            {
+                var rs = await _context.SaveChangesAsync();
+                result.errorCode=EErrorCode.Success.ToString();
+            }
+            catch (Exception ex)
+            {
+                result.errorCode=EErrorCode.Failed.ToString();
+                result.title=ex.Message;
+            }
+            return result;
         }
 
         public void Dispose()

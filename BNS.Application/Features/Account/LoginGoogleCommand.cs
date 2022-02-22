@@ -83,7 +83,7 @@ namespace BNS.Application.Features
                 var email = infoUser.email;
                 var id = infoUser.sub;
                 response.data = new CF_AccountLoginResponseModel();
-                var user = await _context.JM_Accounts.Where(s => s.Email.Equals(email)).Include(s=>s.JM_AccountCompanys).FirstOrDefaultAsync();
+                var user = await _context.JM_Accounts.Where(s => s.Email.Equals(email)).Include(s => s.JM_AccountCompanys).FirstOrDefaultAsync();
                 var companyId = Guid.Empty;
                 if (user == null)
                 {
@@ -119,6 +119,7 @@ namespace BNS.Application.Features
                         IsDelete = false,
                         UserId = userid,
                         CompanyId = company.Id,
+                        Status=EStatus.ACTIVE,
                         CreatedDate = DateTime.UtcNow,
                         CreatedUser = userid
                     };

@@ -312,6 +312,15 @@
   <data name="MSG_PasswordNotEmpty" xml:space="preserve">
     <value>Mật khẩu bắt buộc nhập</value>
   </data>
+  <data name="MSG_PaswordLength" xml:space="preserve">
+    <value>Mật khẩu tối thiểu {0} ký tự</value>
+  </data>
+  <data name="MSG_PaswordShouldContainOneCharacter" xml:space="preserve">
+    <value>Mật khẩu phải chứa ít nhất 1 ký tự</value>
+  </data>
+  <data name="MSG_PaswordShouldContainOneNumber" xml:space="preserve">
+    <value>Mật khẩu phải chứa ít nhất 1 chử số</value>
+  </data>
   <data name="MSG_RegisterSuccess" xml:space="preserve">
     <value>Đăng ký thành công. Bạn có thể đăng nhập phần mềm</value>
   </data>

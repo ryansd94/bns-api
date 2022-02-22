@@ -1,4 +1,5 @@
 ﻿using BNS.Data.Entities.JM_Entities;
+using BNS.ViewModels;
 using System;
 using System.Threading.Tasks;
 
@@ -13,6 +14,6 @@ namespace BNS.Application.Interface
         IGenericRepository<JM_Sprint> JM_SprintRepository { get; }
 
 
-        Task<int> SaveChangesAsync();
+        Task<ApiResult<Guid>> SaveChangesAsync();
     }
 }

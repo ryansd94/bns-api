@@ -68,7 +68,7 @@ namespace BNS.Application.Features
                 {
                     foreach (var item in request.Members)
                     {
-                      await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
+                        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
                         {
                             CompanyIndex=request.CompanyId,
                             CreatedDate=DateTime.UtcNow,
@@ -81,14 +81,13 @@ namespace BNS.Application.Features
                     }
                 }
                 await _unitOfWork.JM_TeamRepository.AddAsync(data);
-                await _unitOfWork.SaveChangesAsync();
+                response= await _unitOfWork.SaveChangesAsync();
                 //_elasticClient.Index<JM_Team>(data, i => i
                 //       .Index("bns")
                 //       .Id(data.Id)
                 //       .Refresh(Elasticsearch.Net.Refresh.True));
                 //var abc = await _elasticClient.IndexDocumentAsync(data);
                 //var abc = await _elasticClient.UpdateAsync<JM_Team>(data, u => u.Doc(data));
-                response.data = data.Id;
                 return response;
             }
 

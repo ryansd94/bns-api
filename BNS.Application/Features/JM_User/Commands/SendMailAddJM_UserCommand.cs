@@ -61,15 +61,15 @@ namespace BNS.Application.Features
                 {
                     rootBody = reader.ReadToEnd();
                 }
-                var emails = request.Emails.Distinct();
-                var queryUser = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
-                && s.Status == EStatus.ACTIVE
-                && s.CompanyId == request.CompanyId, null, s => s.JM_Account);
+                var emails = request.Emails.Distinct().ToList();
+                var userActive =await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
+                 && s.CompanyId == request.CompanyId
+                 && emails.Contains(s.JM_Account.Email), null, s => s.JM_Account);
 
 
-                var users = await queryUser.Select(s => s.JM_Account.Email).ToListAsync();
-                emails = emails.Where(s => !users.Contains(s)).ToList();
+                emails = emails.Where(s => !userActive.Where(s => s.Status == EStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
 
+                var accounts = await _unitOfWork.JM_AccountRepository.GetAsync(s => !s.IsDelete && emails.Contains(s.Email));
 
                 foreach (var email in emails)
                 {
@@ -82,6 +82,39 @@ namespace BNS.Application.Features
                     };
                     var token = _cipherService.EncryptString(JsonConvert.SerializeObject(joinTeam));
                     var body = string.Format(rootBody, $"{_config.Default.WebUserDomain}/signup/jointeam?={token}");
+                    var account = accounts.Where(s => s.Email.Equals(email)).FirstOrDefault();
+                    if (account==null)
+                    {
+                        account = new JM_Account
+                        {
+                            Id=Guid.NewGuid(),
+                            Email=email,
+                            UserName=email,
+                            IsDelete=false,
+                            CreatedDate=DateTime.UtcNow,
+                            CreatedUser=request.CreatedBy,
+                            EmailConfirmed = true,
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            LockoutEnabled = false,
+                            AccessFailedCount = 0,
+                        };
+                        await _unitOfWork.JM_AccountRepository.AddAsync(account);
+                    }
+                    var currentAccount = userActive.Where(s => s.JM_Account.Email.Equals(email)).FirstOrDefault();
+                    if (currentAccount == null)
+                    {
+                        await _unitOfWork.JM_AccountCompanyRepository.AddAsync(new JM_AccountCompany
+                        {
+                            IsDelete=false,
+                            CreatedDate=DateTime.UtcNow,
+                            CreatedUser=request.CreatedBy,
+                            UserId=account.Id,
+                            CompanyId=request.CompanyId,
+                            Status=EStatus.WAILTING_CONFIRM_MAIL
+                        });
+                    }
+                    await _unitOfWork.SaveChangesAsync();
                     await SendMail.SendMailAsync(email, subject, body, _config);
                 }
                 return response;

@@ -4,6 +4,7 @@ using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
 using BNS.ViewModels.Responses;
+using BNS.ViewModels.ValidationModels;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -21,11 +22,13 @@ namespace BNS.Application.Features
     {
         public class AddJM_UserCommandRequest : CommandBase<ApiResult<Guid>>
         {
+
             [Required]
             public string Token { get; set; }
             [Required]
             public string FullName { get; set; }
             [Required]
+            [PasswordValidationAttribute]
             public string Password { get; set; }
         }
         public class AddJM_UserCommandHandler : IRequestHandler<AddJM_UserCommandRequest, ApiResult<Guid>>

@@ -62,6 +62,9 @@ namespace BNS.Resource.LocalizationResources
             public const string MSG_NotExistsUser = "MSG_NotExistsUser";
             public const string MSG_ExistsUser = "MSG_ExistsUser";
             public const string MSG_TokenNotValid = "MSG_TokenNotValid";
+            public const string MSG_PaswordShouldContainOneCharacter = "MSG_PaswordShouldContainOneCharacter";
+            public const string MSG_PaswordShouldContainOneNumber = "MSG_PaswordShouldContainOneNumber";
+            public const string MSG_PaswordLength = "MSG_PaswordLength";
             
         }
         public class Message

@@ -63,8 +63,7 @@ namespace BNS.Application.Features
                     CreatedUser = request.CreatedBy,
                 };
                 await _unitOfWork.JM_SprintRepository.AddAsync(data);
-                await _unitOfWork.SaveChangesAsync();
-                response.data = data.Id;
+                response = await _unitOfWork.SaveChangesAsync();
                 return response;
             }
 

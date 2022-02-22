@@ -61,7 +61,7 @@ namespace BNS.Application.Features
                 dataCheck.UpdatedUser = request.CreatedBy;
 
                 await _unitOfWork.JM_TeamRepository.UpdateAsync(dataCheck);
-                await _unitOfWork.SaveChangesAsync();
+                response =await _unitOfWork.SaveChangesAsync();
                 response.data = dataCheck.Id;
                 return response;
             }
