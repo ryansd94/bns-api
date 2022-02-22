@@ -3,7 +3,7 @@ using AutoMapper;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.ViewModels;
-using BNS.ViewModels.Responses.Category;
+using BNS.ViewModels.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;

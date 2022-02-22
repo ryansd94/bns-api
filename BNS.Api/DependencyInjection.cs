@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MediatR;
-using Microsoft.AspNetCore.Http;
+using GraphQL;
 using static BNS.Application.Features.CreateJM_TeamCommand;
 
 namespace BNS.Api
@@ -43,6 +43,7 @@ namespace BNS.Api
             services.AddMediatR(typeof(CreateTeamCommandHandler));
 
             services.AddScoped<ICipherService, CipherService>();
+
             //services.AddIdentity<CF_Account, Sys_Role>(ops =>
             //{
             //    //--- other code

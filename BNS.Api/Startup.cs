@@ -180,6 +180,7 @@ namespace BNS.Api
             // Services
             services.AddTransient<MyConfiguration>();
             services.AddElasticsearch(appSettings);
+            //services.AddGraphQLServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

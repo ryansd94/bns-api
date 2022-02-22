@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.Responses.Category
+namespace BNS.ViewModels.Responses
 {
     public class JM_TeamResponse
     {

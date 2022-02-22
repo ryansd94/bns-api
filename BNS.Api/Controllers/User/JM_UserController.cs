@@ -44,6 +44,12 @@ namespace BNS.Api.Controllers.User
         {
             return Ok(await _mediator.Send(request));
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllData([FromQuery] GetJM_UserQuery.GetJM_UserRequest request)
+        {
+            request.CompanyId = CompanyId;
+            return Ok(await _mediator.Send(request));
+        }
 
 
     }

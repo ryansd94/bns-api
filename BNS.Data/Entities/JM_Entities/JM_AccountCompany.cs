@@ -15,7 +15,6 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid? UpdatedUser { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedUser { get; set; }
-        public Guid? CompanyIndex { get; set; }
         public bool IsDelete { get; set; }
         public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
