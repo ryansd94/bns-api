@@ -46,11 +46,11 @@ namespace BNS.Api
 
             //// Configure Config
 
-            services.Configure<MyConfiguration>(Configuration.GetSection("DefaultConfig"));
-            var appSettingsSection = Configuration.GetSection("DefaultConfig");
-            var appSettings = appSettingsSection.Get<MyConfiguration>();
+            //services.Configure<MyConfiguration>(Configuration.GetSection("DefaultConfig"));
+            //var appSettingsSection = Configuration.GetSection("DefaultConfig");
+            //var appSettings = appSettingsSection.Get<MyConfiguration>();
 
-            //var appSettings = new MyConfiguration();
+            var appSettings = new MyConfiguration();
             //services.AddCors(options =>
             //{
             //    options.AddPolicy("AllowAll",
