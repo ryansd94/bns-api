@@ -3,6 +3,7 @@ using BNS.Api.AutoMapper;
 using BNS.Application.Extensions;
 using BNS.Application.Middleware;
 using BNS.Data.EntityContext;
+using BNS.Infrastructure.Messaging;
 using BNS.Utilities.Constant;
 using BNS.ViewModels;
 using BNS.ViewModels.ValidationModels;
@@ -46,11 +47,11 @@ namespace BNS.Api
 
             //// Configure Config
 
-            //services.Configure<MyConfiguration>(Configuration.GetSection("DefaultConfig"));
-            //var appSettingsSection = Configuration.GetSection("DefaultConfig");
-            //var appSettings = appSettingsSection.Get<MyConfiguration>();
+            services.Configure<MyConfiguration>(Configuration.GetSection("DefaultConfig"));
+            var appSettingsSection = Configuration.GetSection("DefaultConfig");
+            var appSettings = appSettingsSection.Get<MyConfiguration>();
 
-            var appSettings = new MyConfiguration();
+            //var appSettings = new MyConfiguration();
             //services.AddCors(options =>
             //{
             //    options.AddPolicy("AllowAll",
@@ -180,6 +181,8 @@ namespace BNS.Api
             // Services
             services.AddTransient<MyConfiguration>();
             services.AddElasticsearch(appSettings);
+
+            services.AddRabbitMq(Configuration);
             //services.AddGraphQLServer();
         }
 

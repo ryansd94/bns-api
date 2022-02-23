@@ -12,6 +12,7 @@ namespace BNS.ViewModels
         public FirebaseElement Firebase { get; set; } = new FirebaseElement();
         public Elasticsearch Elasticsearch { get; set; } = new Elasticsearch();
         public MailConfig MailConfig { get; set; } = new MailConfig();
+        public RabbitMQ RabbitMQ { get; set; } = new RabbitMQ();
 
 
     }
@@ -21,7 +22,7 @@ namespace BNS.ViewModels
         public string SmtpPassword { get; set; } = "@y@5@nN0R3p/y";
         public string SmtpHost { get; set; } = "cpanel02wh.bkk1.cloud.z.com";
         public string SmtpPort { get; set; } = "587";
-        public string SmtpEmailAddress { get; set; }="noreply@ayasan-service.com";
+        public string SmtpEmailAddress { get; set; } = "noreply@ayasan-service.com";
 
     }
     public class Elasticsearch
@@ -44,5 +45,12 @@ namespace BNS.ViewModels
 
         public string jmConnection { get; set; } = "Data Source=125.212.226.105,1968;Initial Catalog=test_bidv_3;User ID=sa;Password=TGn<@7qY";
 
+    }
+    public class RabbitMQ
+    {
+        public string VirtualHost { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public List<string> Hostnames { get; set; }
     }
 }
