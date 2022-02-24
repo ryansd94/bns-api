@@ -110,7 +110,6 @@ namespace BNS.Application.Features
                         AccessFailedCount = 0,
                         GoogleId = id,
                         IsMainAccount = true,
-                        FullName = infoUser.name.ToString(),
                     };
 
                     var accountCompany = new JM_AccountCompany
@@ -121,7 +120,9 @@ namespace BNS.Application.Features
                         CompanyId = company.Id,
                         Status=EStatus.ACTIVE,
                         CreatedDate = DateTime.UtcNow,
-                        CreatedUser = userid
+                        CreatedUser = userid,
+                        FullName = infoUser.name.ToString(),
+                        Email = infoUser.email.ToString(),
                     };
                     company.CreatedUser = user.Id;
                     companyId = company.Id;
@@ -137,7 +138,7 @@ namespace BNS.Application.Features
 
                 var roles = new List<string>();
                 if (user.IsMainAccount != null && user.IsMainAccount.Value)
-                    roles.Add(EAccountType.Admin.ToString());
+                    roles.Add(EAccountType.SupperAdmin.ToString());
                 else
                     roles.Add(EAccountType.User.ToString());
                 var claims = new[]

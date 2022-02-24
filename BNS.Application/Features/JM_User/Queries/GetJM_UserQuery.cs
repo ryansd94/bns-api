@@ -23,6 +23,7 @@ namespace BNS.Application.Features
     {
         public class GetJM_UserRequest : CommandRequest<ApiResult<JM_UserResponse>>
         {
+            public string keyword { get; set; }
         }
         public class GetJM_UserRequestHandler : IRequestHandler<GetJM_UserRequest, ApiResult<JM_UserResponse>>
         {
@@ -49,7 +50,10 @@ namespace BNS.Application.Features
                 var response = new ApiResult<JM_UserResponse>();
                 response.data = new JM_UserResponse();
 
-                var query = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete && s.CompanyId == request.CompanyId, s => s.OrderBy(d => d.CreatedDate));
+                var query = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
+                && s.CompanyId == request.CompanyId
+                &&(string.IsNullOrEmpty(request.keyword) || (!string.IsNullOrEmpty(request.keyword) && s.Email.Contains(request.keyword)))
+                , s => s.OrderBy(d => d.CreatedDate));
                
                 if (!string.IsNullOrEmpty(request.fieldSort))
                     query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);

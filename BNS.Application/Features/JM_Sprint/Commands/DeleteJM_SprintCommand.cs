@@ -46,7 +46,7 @@ namespace BNS.Application.Features
                 {
                     item.IsDelete = true;
                     item.UpdatedDate = DateTime.UtcNow;
-                    item.UpdatedUser = request.CreatedBy;
+                    item.UpdatedUser = request.UserId;
                     _context.JM_Sprints.Update(item);
                 }
                 await _context.SaveChangesAsync();

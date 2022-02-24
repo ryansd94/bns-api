@@ -69,10 +69,10 @@ namespace BNS.Application.Features
                     StartDate = request.StartDate,
                     DueDate = request.DueDate,
                     IssueParentId = request.IssueParentId,
-                    ReporterId = request.CreatedBy,
+                    ReporterId = request.UserId,
                     IssueStatus = EIssueStatus.NEW,
                     CreatedDate = DateTime.UtcNow,
-                    CreatedUser = request.CreatedBy,
+                    CreatedUser = request.UserId,
                 };
                 await _context.JM_Issues.AddAsync(data);
                 await _context.SaveChangesAsync();

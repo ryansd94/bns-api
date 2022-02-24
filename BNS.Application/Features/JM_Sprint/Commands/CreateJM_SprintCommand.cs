@@ -60,7 +60,7 @@ namespace BNS.Application.Features
                     StartDate = request.StartDate,
                     EndDate = request.EndDate,
                     CreatedDate = DateTime.UtcNow,
-                    CreatedUser = request.CreatedBy,
+                    CreatedUser = request.UserId,
                 };
                 await _unitOfWork.JM_SprintRepository.AddAsync(data);
                 response = await _unitOfWork.SaveChangesAsync();

@@ -1,7 +1,9 @@
+using AspNetCoreRateLimit;
 using AutoMapper;
 using BNS.Api.AutoMapper;
 using BNS.Application.Extensions;
 using BNS.Application.Middleware;
+using BNS.Application.Subcriber;
 using BNS.Data.EntityContext;
 using BNS.Infrastructure.Messaging;
 using BNS.Utilities.Constant;
@@ -21,6 +23,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -51,6 +54,11 @@ namespace BNS.Api
             var appSettingsSection = Configuration.GetSection("DefaultConfig");
             var appSettings = appSettingsSection.Get<MyConfiguration>();
 
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
             //var appSettings = new MyConfiguration();
             //services.AddCors(options =>
             //{
@@ -184,6 +192,12 @@ namespace BNS.Api
 
             services.AddRabbitMq(Configuration);
             //services.AddGraphQLServer();
+
+
+            #region Middleware
+            services.AddTransient<IStartupFilter, RequestSetOptionsStartupFilter>();
+            #endregion            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -217,6 +231,7 @@ namespace BNS.Api
             app.UseStaticFiles();
 
             // global error handler
+            app.UseMiddleware<RequestCultureMiddleware>();
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseAuthentication();
             app.UseRouting();
@@ -246,5 +261,23 @@ namespace BNS.Api
             });
 
         }
+
+        #region Middleware Filter
+        public class RequestSetOptionsStartupFilter : IStartupFilter
+        {
+            public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+            {
+                return builder =>
+                {
+                    builder.UseStaticFiles();
+                    builder.UseIpRateLimiting();
+
+                    builder.UseRabbitMq().SubscribeEvent<CreateJM_TeamSubcriberMQ>();
+
+                    next(builder);
+                };
+            }
+        }
+        #endregion
     }
 }

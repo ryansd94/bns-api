@@ -43,7 +43,7 @@ namespace BNS.Application.Features
             public async Task<ApiResult<Guid>> Handle(ChangePasswordFirstLoginRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                var user = await _accountRepository.GetDefaultAsync(s => s.Id == request.CreatedBy);
+                var user = await _accountRepository.GetDefaultAsync(s => s.Id == request.UserId);
                 if (user == null)
                 {
                     response.errorCode = EErrorCode.NotExistsData.ToString();

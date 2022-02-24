@@ -48,52 +48,52 @@ namespace BNS.Application.Features
             public async Task<ApiResult<Guid>> Handle(CreateTeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
-                await _busPublisher.PublishAsync(new CreateJM_TeamSubcriberMQ
+                //await _busPublisher.PublishAsync(new CreateJM_TeamSubcriberMQ
+                //{
+                //    Code=request.Code,
+                //    CompanyId=request.CompanyId,
+                //    CreatedBy=request.CreatedBy,
+                //    Description=request.Description,
+                //    Members=request.Members,
+                //    Name=request.Name,
+                //    ParentId=   request.ParentId,
+                //});
+                var dataCheck = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
+                if (dataCheck != null)
                 {
-                    Code=request.Code,
-                    CompanyId=request.CompanyId,
-                    CreatedBy=request.CreatedBy,
-                    Description=request.Description,
-                    Members=request.Members,
-                    Name=request.Name,
-                    ParentId=   request.ParentId,
-                });
-                //var dataCheck = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
-                //if (dataCheck != null)
-                //{
-                //    response.errorCode = EErrorCode.IsExistsData.ToString();
-                //    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
-                //    return response;
-                //}
-                //var data = new JM_Team
-                //{
-                //    Id = Guid.NewGuid(),
-                //    Code = request.Code,
-                //    Name = request.Name,
-                //    Description = request.Description,
-                //    ParentId = request.ParentId,
-                //    CreatedDate = DateTime.UtcNow,
-                //    CreatedUser = request.CreatedBy,
-                //    CompanyIndex=request.CompanyId
-                //};
-                //if (request.Members != null && request.Members.Count>0)
-                //{
-                //    foreach (var item in request.Members)
-                //    {
-                //        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
-                //        {
-                //            CompanyIndex=request.CompanyId,
-                //            CreatedDate=DateTime.UtcNow,
-                //            CreatedUser=request.CreatedBy,
-                //            Id=Guid.NewGuid(),
-                //            IsDelete=false,
-                //            TeamId=data.Id,
-                //            UserId=item
-                //        });
-                //    }
-                //}
-                //await _unitOfWork.JM_TeamRepository.AddAsync(data);
-                //response= await _unitOfWork.SaveChangesAsync();
+                    response.errorCode = EErrorCode.IsExistsData.ToString();
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
+                    return response;
+                }
+                var data = new JM_Team
+                {
+                    Id = Guid.NewGuid(),
+                    Code = request.Code,
+                    Name = request.Name,
+                    Description = request.Description,
+                    ParentId = request.ParentId,
+                    CreatedDate = DateTime.UtcNow,
+                    CreatedUser = request.UserId,
+                    CompanyIndex=request.CompanyId
+                };
+                if (request.Members != null && request.Members.Count>0)
+                {
+                    foreach (var item in request.Members)
+                    {
+                        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
+                        {
+                            CompanyIndex=request.CompanyId,
+                            CreatedDate=DateTime.UtcNow,
+                            CreatedUser=request.UserId,
+                            Id=Guid.NewGuid(),
+                            IsDelete=false,
+                            TeamId=data.Id,
+                            UserId=item
+                        });
+                    }
+                }
+                await _unitOfWork.JM_TeamRepository.AddAsync(data);
+                response= await _unitOfWork.SaveChangesAsync();
 
                 //_elasticClient.Index<JM_Team>(data, i => i
                 //       .Index("bns")

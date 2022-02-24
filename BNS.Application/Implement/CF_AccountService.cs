@@ -159,7 +159,7 @@ namespace BNS.Application.Implement
                 //var roles = _userManager.GetRolesAsync(user);
                 var roles = new List<string>();
                 if (user.IsMainAccount != null && user.IsMainAccount.Value)
-                    roles.Add(EAccountType.Admin.ToString());
+                    roles.Add(EAccountType.SupperAdmin.ToString());
                 else
                     roles.Add(EAccountType.User.ToString());
                 var claims = new[]

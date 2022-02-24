@@ -24,7 +24,7 @@ namespace BNS.Api.Controllers.Project
         [HttpPost]
         public async Task<IActionResult> Save(CreateJM_ProjectCommand.CreateProjectRequest request)
         {
-            request.CreatedBy = UserId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]

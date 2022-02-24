@@ -1,7 +1,7 @@
 ﻿using BNS.Application.Interface;
-using BNS.Data.Entities.JM_Entities;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
+using BNS.Utilities;
 using BNS.ViewModels;
 using BNS.ViewModels.Responses;
 using BNS.ViewModels.ValidationModels;
@@ -61,48 +61,34 @@ namespace BNS.Application.Features
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_TokenNotValid];
                     return response;
                 }
-                var userCompanyCheck = await _unitOfWork.JM_AccountCompanyRepository.GetDefaultAsync(s => s.CompanyId == data.CompanyId && s.JM_Account.Email == data.EmailJoin, s => s.JM_Account);
-                if (userCompanyCheck != null)
+                var userCompany = await _unitOfWork.JM_AccountCompanyRepository.GetDefaultAsync(s => s.CompanyId == data.CompanyId && s.Email == data.EmailJoin);
+                if (userCompany == null)
+                {
+                    response.errorCode = EErrorCode.NotExistsData.ToString();
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
+                    return response;
+                }
+                if (userCompany.Status != EStatus.WAILTING_CONFIRM_MAIL)
                 {
                     response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
                     return response;
                 }
                 var user = await _unitOfWork.JM_AccountRepository.GetDefaultAsync(s => s.Email == data.EmailJoin);
-                var userId = Guid.NewGuid();
+
                 if (user == null)
                 {
-                    user = new JM_Account
-                    {
-                        Id = userId,
-                        UserName = data.EmailJoin,
-                        Email = data.EmailJoin,
-                        CreatedDate = DateTime.UtcNow,
-                        CreatedUser = data.UserRequest,
-                        IsDelete = false,
-                        EmailConfirmed = true,
-                        PhoneNumberConfirmed = false,
-                        TwoFactorEnabled = false,
-                        LockoutEnabled = false,
-                        AccessFailedCount = 0,
-                        IsMainAccount = true,
-                        FullName = request.FullName,
-                    };
+                    response.errorCode = EErrorCode.NotExistsData.ToString();
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
+                    return response;
 
-                    await _unitOfWork.JM_AccountRepository.AddAsync(user);
                 }
-                else
-                    userId = user.Id;
-                var userCompany = new JM_AccountCompany
-                {
-                    Id = Guid.NewGuid(),
-                    IsDelete = false,
-                    UserId = userId,
-                    CompanyId = data.CompanyId,
-                    CreatedDate = DateTime.UtcNow,
-                    CreatedUser = data.UserRequest,
-                };
-                await _unitOfWork.JM_AccountCompanyRepository.AddAsync(userCompany);
+                user.PasswordHash=Ultility.MD5Encrypt(request.Password);
+                userCompany.Status=EStatus.ACTIVE;
+                userCompany.FullName=request.FullName;
+                await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
+                await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);
+                await _unitOfWork.SaveChangesAsync();
                 return response;
             }
 

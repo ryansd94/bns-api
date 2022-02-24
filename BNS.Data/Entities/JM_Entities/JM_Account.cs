@@ -16,7 +16,6 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid CreatedUser { get; set; }
         public bool IsDelete { get; set; }
         public string GoogleId { get; set; }
-        public string FullName { get; set; }
         public virtual ICollection<JM_Team> JM_TeamsCreate { get; set; }
         public virtual ICollection<JM_Team> JM_TeamsUpdate { get; set; }
         public virtual ICollection<JM_Issue> JM_IssueAssign { get; set; }

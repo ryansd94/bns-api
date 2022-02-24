@@ -25,7 +25,7 @@ namespace BNS.Api.Controllers.Project
         [HttpPost]
         public async Task<IActionResult> Save(CreateJM_SprintCommand.CreateJM_SprintRequest request)
         {
-            request.CreatedBy = UserId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
@@ -48,14 +48,14 @@ namespace BNS.Api.Controllers.Project
         {
             var request = new DeleteJM_SprintCommand.DeleteJM_SprintRequest();
             request.ids.Add(id);
-            request.CreatedBy = UserId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateJM_SprintCommand.UpdateJM_SprintRequest request)
         {
-            request.CreatedBy = UserId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 

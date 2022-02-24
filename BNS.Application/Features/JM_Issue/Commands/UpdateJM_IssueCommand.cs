@@ -56,7 +56,7 @@ namespace BNS.Application.Features
                     return response;
                 }
 
-                if (request.UpdatedBy != dataCheck.ReporterId)
+                if (request.UserId != dataCheck.ReporterId)
                 {
                     if (dataCheck.IssueType != request.IssueType)
                     {
@@ -78,7 +78,7 @@ namespace BNS.Application.Features
                 dataCheck.AssignUserId = request.AssignUserId;
                 dataCheck.Summary = request.Summary;
                 dataCheck.UpdatedDate = DateTime.UtcNow;
-                dataCheck.UpdatedUser = request.CreatedBy;
+                dataCheck.UpdatedUser = request.UserId;
 
                 _context.JM_Issues.Update(dataCheck);
                 await _context.SaveChangesAsync();

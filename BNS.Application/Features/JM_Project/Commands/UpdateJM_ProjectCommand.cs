@@ -66,7 +66,7 @@ namespace BNS.Application.Features.JM_Project.Commands
                 dataCheck.EndDate = request.EndDate;
                 dataCheck.Description = request.Description;
                 dataCheck.UpdatedDate = DateTime.UtcNow;
-                dataCheck.UpdatedUser = request.CreatedBy;
+                dataCheck.UpdatedUser = request.UserId;
 
                 if (request.Teams != null && request.Teams.Count > 0)
                 {
@@ -78,7 +78,7 @@ namespace BNS.Application.Features.JM_Project.Commands
                     {
                         team.IsDelete = true;
                         team.UpdatedDate = DateTime.UtcNow;
-                        team.UpdatedUser = request.CreatedBy;
+                        team.UpdatedUser = request.UserId;
                     }
                     _context.JM_ProjectTeams.UpdateRange(projectTeamDelete);
                     foreach (var team in projectTeamAdd)
@@ -89,7 +89,7 @@ namespace BNS.Application.Features.JM_Project.Commands
                             ProjectId = request.Id,
                             TeamId = team,
                             CreatedDate = DateTime.UtcNow,
-                            CreatedUser = request.CreatedBy,
+                            CreatedUser = request.UserId,
                         });
                     }
                 }

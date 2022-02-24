@@ -62,9 +62,9 @@ namespace BNS.Application.Features
                     rootBody = reader.ReadToEnd();
                 }
                 var emails = request.Emails.Distinct().ToList();
-                var userActive =await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
-                 && s.CompanyId == request.CompanyId
-                 && emails.Contains(s.JM_Account.Email), null, s => s.JM_Account);
+                var userActive = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
+                  && s.CompanyId == request.CompanyId
+                  && emails.Contains(s.JM_Account.Email), null, s => s.JM_Account);
 
 
                 emails = emails.Where(s => !userActive.Where(s => s.Status == EStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
@@ -78,7 +78,7 @@ namespace BNS.Application.Features
                         CompanyId = request.CompanyId,
                         EmailJoin = email,
                         Key = _config.Default.CipherKey,
-                        UserRequest = request.CreatedBy
+                        UserRequest = request.UserId
                     };
                     var token = _cipherService.EncryptString(JsonConvert.SerializeObject(joinTeam));
                     var body = string.Format(rootBody, $"{_config.Default.WebUserDomain}/signup/jointeam?={token}");
@@ -92,7 +92,7 @@ namespace BNS.Application.Features
                             UserName=email,
                             IsDelete=false,
                             CreatedDate=DateTime.UtcNow,
-                            CreatedUser=request.CreatedBy,
+                            CreatedUser=request.UserId,
                             EmailConfirmed = true,
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
@@ -108,10 +108,11 @@ namespace BNS.Application.Features
                         {
                             IsDelete=false,
                             CreatedDate=DateTime.UtcNow,
-                            CreatedUser=request.CreatedBy,
+                            CreatedUser=request.UserId,
                             UserId=account.Id,
                             CompanyId=request.CompanyId,
-                            Status=EStatus.WAILTING_CONFIRM_MAIL
+                            Status=EStatus.WAILTING_CONFIRM_MAIL,
+                            Email=email,
                         });
                     }
                     await _unitOfWork.SaveChangesAsync();

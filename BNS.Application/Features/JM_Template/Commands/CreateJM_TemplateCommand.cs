@@ -58,7 +58,7 @@ namespace BNS.Application.Features
                     Name = request.Name,
                     Description = request.Description,
                     CreatedDate = DateTime.UtcNow,
-                    CreatedUser = request.CreatedBy,
+                    CreatedUser = request.UserId,
                     IssueType = request.IssueType,
                     AssigneeIssueStatus = request.AssigneeIssueStatus,
                     ReporterIssueStatus = request.ReporterIssueStatus

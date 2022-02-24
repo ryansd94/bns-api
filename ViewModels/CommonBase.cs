@@ -7,8 +7,7 @@ namespace BNS.ViewModels
 {
     public class CommandBase<T> : IRequest<T> where T : class
     {
-        public Guid CreatedBy { get; set; }
-        public Guid UpdatedBy { get; set; }
+        public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
     }
 }

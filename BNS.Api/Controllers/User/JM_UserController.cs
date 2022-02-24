@@ -25,7 +25,7 @@ namespace BNS.Api.Controllers.User
         [Authorize]
         public async Task<IActionResult> SendMailAddUser( SendMailAddJM_UserCommand.SendMailAddJM_UserCommandRequest request)
         {
-            request.CreatedBy = UserId;
+            request.UserId = UserId;
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
@@ -50,6 +50,14 @@ namespace BNS.Api.Controllers.User
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpPut("status")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateStatus(UpdateStatusJM_UserCommand.UpdateStatusJM_UserRequest request)
+        {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
+            return Ok(await _mediator.Send(request));
+        }
 
     }
 }

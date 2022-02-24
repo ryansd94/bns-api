@@ -47,8 +47,17 @@ namespace BNS.Application.Features
                 {
                     item.IsDelete = true;
                     item.UpdatedDate = DateTime.UtcNow;
-                    item.UpdatedUser = request.CreatedBy;
+                    item.UpdatedUser = request.UserId;
                     await _unitOfWork.JM_TeamRepository.UpdateAsync(item);
+                }
+
+                var teamMembers = await _unitOfWork.JM_TeamMemberRepository.GetAsync(s => request.ids.Contains(s.TeamId));
+                foreach (var item in teamMembers)
+                {
+                    item.IsDelete = true;
+                    item.UpdatedDate = DateTime.UtcNow;
+                    item.UpdatedUser = request.UserId;
+                    await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
                 }
                 response =await _unitOfWork.SaveChangesAsync();
                 return response;

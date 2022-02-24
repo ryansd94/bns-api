@@ -73,7 +73,7 @@ namespace BNS.Api.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePasswordFirst(ChangePasswordFirstLoginCommand.ChangePasswordFirstLoginRequest request)
         {
-            request.CreatedBy=UserId;
+            request.UserId=UserId;
             return Ok(await _mediator.Send(request));
         }
     }

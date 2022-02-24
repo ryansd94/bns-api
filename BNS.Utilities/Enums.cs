@@ -22,7 +22,7 @@ namespace BNS.Utilities
 
         public enum EAccountType
         {
-            Admin = 1,
+            SupperAdmin = 1,
             User = 2
         }
         public enum EIssueType
