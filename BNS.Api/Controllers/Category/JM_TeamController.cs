@@ -1,4 +1,5 @@
-﻿using BNS.Application.Features;
+﻿using BNS.Api.Auth;
+using BNS.Application.Features;
 using BNS.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ namespace BNS.Api.Controllers.Category
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [BNSAuthorization]
     public class JM_TeamController : BaseController
     {
 
@@ -27,14 +28,11 @@ namespace BNS.Api.Controllers.Category
         [HttpPost]
         public async Task<IActionResult> Save(CreateJM_TeamCommand.CreateTeamRequest request)
         {
-            request.UserId = UserId;
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
         public async Task<IActionResult> GetAllData([FromQuery]GetJM_TeamQuery.GetJM_TeamRequest request)
         {
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -52,16 +50,13 @@ namespace BNS.Api.Controllers.Category
         {
             var request = new DeleteJM_TeamCommand.DeleteJM_TeamRequest();
             request.ids.Add(id);
-            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id,UpdateJM_TeamCommand.UpdateJM_TeamRequest request)
         {
-            request.UserId = UserId;
             request.Id = id;
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 

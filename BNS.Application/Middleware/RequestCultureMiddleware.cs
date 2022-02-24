@@ -18,6 +18,7 @@ namespace BNS.Application.Middleware
         // IMyScopedService is injected into InvokeAsync
         public async Task InvokeAsync(HttpContext httpContext)
         {
+            var xx = httpContext.Request.Query;
             await _next(httpContext);
         }
     }

@@ -74,9 +74,11 @@ namespace BNS.Api
             //});
             services.AddDbContext<BNSDbContext>(
             options => options.UseSqlServer(appSettings.ConnectionStrings.bnsConnection)
-
-
             );
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
             //services.AddDbContext<BNSDbContext>((serviceProvider, dbContextBuilder) =>
             //{
             //    var connectionStringPlaceHolder = appSettings.ConnectionStrings.bnsConnection;

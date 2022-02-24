@@ -25,8 +25,6 @@ namespace BNS.Api.Controllers.User
         [Authorize]
         public async Task<IActionResult> SendMailAddUser( SendMailAddJM_UserCommand.SendMailAddJM_UserCommandRequest request)
         {
-            request.UserId = UserId;
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -46,7 +44,6 @@ namespace BNS.Api.Controllers.User
         [HttpGet]
         public async Task<IActionResult> GetAllData([FromQuery] GetJM_UserQuery.GetJM_UserRequest request)
         {
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -54,8 +51,6 @@ namespace BNS.Api.Controllers.User
         [AllowAnonymous]
         public async Task<IActionResult> UpdateStatus(UpdateStatusJM_UserCommand.UpdateStatusJM_UserRequest request)
         {
-            request.CompanyId = CompanyId;
-            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
