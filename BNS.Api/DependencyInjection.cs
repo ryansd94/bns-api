@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using BNS.Domain;
 using BNS.Service.Implement;
+using System.Reflection;
+using BNS.Service.Features;
 
 namespace BNS.Api
 {
@@ -15,6 +17,7 @@ namespace BNS.Api
     {
         public static void AddRepository(this IServiceCollection services)
         {
+            services.AddMediatR(typeof(SendMailAddJM_UserCommandHandler));
             services.AddIdentity<CF_Account, Sys_Role>().AddEntityFrameworkStores<BNSDbContext>()
                 .AddDefaultTokenProviders();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -27,8 +30,6 @@ namespace BNS.Api
             services.AddTransient<UserManager<CF_Account>, UserManager<CF_Account>>();
             services.AddTransient<SignInManager<CF_Account>, SignInManager<CF_Account>>();
             services.AddTransient<RoleManager<Sys_Role>, RoleManager<Sys_Role>>();
-
-
 
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

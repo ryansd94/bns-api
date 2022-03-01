@@ -16,40 +16,36 @@ using BNS.Domain.Commands;
 
 namespace BNS.Service.Features
 {
-    public class ChangePasswordFirstLoginCommand
+    public class ChangePasswordFirstLoginCommand : IRequestHandler<ChangePasswordFirstLoginRequest, ApiResult<Guid>>
     {
-       
-        public class ChangePasswordFirstLoginCommandHandler : IRequestHandler<ChangePasswordFirstLoginRequest, ApiResult<Guid>>
+        protected readonly BNSDbContext _context;
+        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        protected readonly IElasticClient _elasticClient;
+        protected readonly IGenericRepository<JM_Account> _accountRepository;
+        public ChangePasswordFirstLoginCommand(BNSDbContext context,
+         IStringLocalizer<SharedResource> sharedLocalizer,
+         IGenericRepository<JM_Account> accountRepository,
+         IElasticClient elasticClient)
         {
-            protected readonly BNSDbContext _context;
-            protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-            protected readonly IElasticClient _elasticClient;
-            protected readonly IGenericRepository<JM_Account> _accountRepository;
-            public ChangePasswordFirstLoginCommandHandler(BNSDbContext context,
-             IStringLocalizer<SharedResource> sharedLocalizer,
-             IGenericRepository<JM_Account> accountRepository,
-             IElasticClient elasticClient)
+            _context = context;
+            _sharedLocalizer = sharedLocalizer;
+            _elasticClient = elasticClient;
+            _accountRepository = accountRepository;
+        }
+        public async Task<ApiResult<Guid>> Handle(ChangePasswordFirstLoginRequest request, CancellationToken cancellationToken)
+        {
+            var response = new ApiResult<Guid>();
+            var user = await _accountRepository.GetDefaultAsync(s => s.Id == request.UserId);
+            if (user == null)
             {
-                _context = context;
-                _sharedLocalizer = sharedLocalizer;
-                _elasticClient = elasticClient;
-                _accountRepository = accountRepository;
-            }
-            public async Task<ApiResult<Guid>> Handle(ChangePasswordFirstLoginRequest request, CancellationToken cancellationToken)
-            {
-                var response = new ApiResult<Guid>();
-                var user = await _accountRepository.GetDefaultAsync(s => s.Id == request.UserId);
-                if (user == null)
-                {
-                    response.errorCode = EErrorCode.NotExistsData.ToString();
-                    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
-                    return response;
-                }
-                user.PasswordHash=Ultility.MD5Encrypt(request.Password);
-                response.data = user.Id;
+                response.errorCode = EErrorCode.NotExistsData.ToString();
+                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
                 return response;
             }
-
+            user.PasswordHash=Ultility.MD5Encrypt(request.Password);
+            response.data = user.Id;
+            return response;
         }
+
     }
 }

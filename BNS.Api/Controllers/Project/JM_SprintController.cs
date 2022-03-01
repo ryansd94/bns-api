@@ -1,4 +1,5 @@
-﻿using BNS.Domain.Commands;
+﻿using BNS.Api.Auth;
+using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ namespace BNS.Api.Controllers.Project
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [BNSAuthorization]
     public class JM_SprintController : BaseController
     {
 
