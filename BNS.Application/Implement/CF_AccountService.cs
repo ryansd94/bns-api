@@ -1,4 +1,4 @@
-﻿using BNS.Application.Interface;
+﻿using BNS.Service.Interface;
 using BNS.Data.Entities;
 using BNS.Data.EntityContext;
 using System;
@@ -11,24 +11,24 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-using BNS.ViewModels.Requests;
-using BNS.ViewModels.Responses;
-using BNS.ViewModels;
+using BNS.Models.Requests;
+using BNS.Models.Responses;
+using BNS.Models;
 using static BNS.Utilities.Enums;
 using BNS.Utilities;
 using BNS.Utilities.Interface;
-using BNS.Application.Exceptions;
+using BNS.Service.Exceptions;
 using System.Collections.Generic;
 using Microsoft.Extensions.Localization;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
-using BNS.ViewModels.Responses.Menu;
+using BNS.Models.Responses.Menu;
 using Microsoft.AspNetCore.Hosting;
 using BNS.Utilities.Constant;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class CF_AccountService : GenericRepository<CF_Account> 
     {

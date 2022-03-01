@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace BNS.ViewModels.ValidationModels
+namespace BNS.Models.ValidationModels
 {
     public class PasswordValidationAttribute : ValidationAttribute
     {

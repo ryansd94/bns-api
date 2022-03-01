@@ -1,13 +1,10 @@
-﻿using BNS.Application.Features;
-using BNS.ViewModels.Requests;
+﻿using BNS.Domain.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static BNS.Application.Features.LoginGoogleCommand;
 
 namespace BNS.Api.Controllers
 {
@@ -67,7 +64,7 @@ namespace BNS.Api.Controllers
         }
         [HttpPut("password-first")]
         [Authorize]
-        public async Task<IActionResult> ChangePasswordFirst(ChangePasswordFirstLoginCommand.ChangePasswordFirstLoginRequest request)
+        public async Task<IActionResult> ChangePasswordFirst(ChangePasswordFirstLoginRequest request)
         {
             request.UserId=UserId;
             return Ok(await _mediator.Send(request));

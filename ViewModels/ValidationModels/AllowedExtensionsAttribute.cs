@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace BNS.ViewModels.ValidationModels
+namespace BNS.Models.ValidationModels
 {
     public class AllowedExtensionsAttribute : ValidationAttribute
     {

@@ -1,4 +1,6 @@
-﻿using BNS.Application.Features;
+﻿using BNS.Api.Auth;
+using BNS.Domain.Commands;
+using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,7 @@ namespace BNS.Api.Controllers.User
 {
     [Route("api/[controller]")]
     [ApiController]
+    [BNSAuthorization]
     public class JM_UserController : BaseController
     {
         private IMediator _mediator;
@@ -22,34 +25,32 @@ namespace BNS.Api.Controllers.User
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost("add-user")]
-        [Authorize]
-        public async Task<IActionResult> SendMailAddUser( SendMailAddJM_UserCommand.SendMailAddJM_UserCommandRequest request)
+        public async Task<IActionResult> SendMailAddUser(  SendMailAddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost("validate-signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> ValidateSignup(ValidateAddJM_UserCommnad.ValidateAddJM_UserCommnadRequest request)
+        public async Task<IActionResult> ValidateSignup( ValidateAddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Signup(AddJM_UserCommand.AddJM_UserCommandRequest request)
+        public async Task<IActionResult> Signup( AddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData([FromQuery] GetJM_UserQuery.GetJM_UserRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery]  GetJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut("status")]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdateStatus(UpdateStatusJM_UserCommand.UpdateStatusJM_UserRequest request)
+        public async Task<IActionResult> UpdateStatus( UpdateStatusJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

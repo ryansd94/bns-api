@@ -1,12 +1,12 @@
 ﻿using BNS.Resource.LocalizationResources;
-using BNS.ViewModels.Responses.Category;
-using BNS.ViewModels.ValidationModels;
+using BNS.Models.Responses.Category;
+using BNS.Models.ValidationModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class CF_EmployeeModel : BaseRequestModel
     {

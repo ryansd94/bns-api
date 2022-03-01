@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class CF_AccountModel
     {

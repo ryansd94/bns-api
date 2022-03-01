@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BNS.ViewModels.ValidationModels
+namespace BNS.Models.ValidationModels
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class IntegerAttribute : DataTypeAttribute

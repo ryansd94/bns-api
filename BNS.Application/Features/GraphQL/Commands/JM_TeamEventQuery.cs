@@ -1,11 +1,11 @@
-﻿using BNS.Application.Features.GraphqlCore;
+﻿using BNS.Service.Features.GraphqlCore;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using GraphQL;
 using GraphQL.Types;
 using System;
 
-namespace BNS.Application.Features.GraphQL.Commands
+namespace BNS.Service.Features.GraphQL.Commands
 {
    public class JM_TeamEventQuery : ObjectGraphType<object>
     {

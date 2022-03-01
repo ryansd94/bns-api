@@ -1,5 +1,5 @@
 ﻿using BNS.Data.Entities.JM_Entities;
-using BNS.ViewModels;
+using BNS.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.Application.Extensions
+namespace BNS.Service.Extensions
 {
     public static class ElasticsearchExtensions
     {

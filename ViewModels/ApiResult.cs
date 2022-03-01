@@ -2,7 +2,7 @@
 using System.Net;
 using static BNS.Utilities.Enums;
 
-namespace BNS.ViewModels
+namespace BNS.Models
 {
     public class ApiResult<T>
     {

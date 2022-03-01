@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.Responses.Project
+namespace BNS.Models.Responses.Project
 { 
     public class JM_SprintResponse
     {

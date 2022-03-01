@@ -1,7 +1,7 @@
-﻿using BNS.Application.Interface;
+﻿using BNS.Service.Interface;
 using BNS.Data.Entities;
-using BNS.ViewModels;
-using BNS.ViewModels.Requests;
+using BNS.Models;
+using BNS.Models.Requests;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,9 +17,9 @@ using BNS.Resource;
 using Microsoft.Extensions.Localization;
 using BNS.Resource.LocalizationResources;
 using Newtonsoft.Json;
-using BNS.ViewModels.Responses;
+using BNS.Models.Responses;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class Sys_RoleClaimService : GenericRepository<Sys_RoleClaim>,
         ISys_RoleClaimService

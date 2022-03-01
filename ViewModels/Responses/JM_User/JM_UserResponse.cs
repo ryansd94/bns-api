@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using static BNS.Utilities.Enums;
 
-namespace BNS.ViewModels.Responses
+namespace BNS.Models.Responses
 {
     public class JM_UserResponse
     {

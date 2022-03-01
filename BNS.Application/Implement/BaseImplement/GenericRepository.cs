@@ -10,7 +10,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

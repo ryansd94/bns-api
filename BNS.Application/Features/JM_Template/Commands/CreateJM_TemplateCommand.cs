@@ -1,33 +1,22 @@
-﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Data.EntityContext;
+﻿using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Nest;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Commands;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class CreateJM_TemplateCommand
     {
-        public class CreateJM_TemplateRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string IssueType { get; set; }
-            public string ReporterIssueStatus { get; set; }
-            public string AssigneeIssueStatus { get; set; }
-        }
         public class CreateJM_TemplateCommandHandler : IRequestHandler<CreateJM_TemplateRequest, ApiResult<Guid>>
         {
             protected readonly BNSDbContext _context;

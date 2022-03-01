@@ -1,5 +1,4 @@
-﻿using BNS.Application.Implement;
-using BNS.Data.Entities;
+﻿using BNS.Data.Entities;
 using BNS.Data.EntityContext;
 using BNS.Utilities.Implement;
 using BNS.Utilities.Interface;
@@ -7,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using static BNS.Application.Features.CreateJM_TeamCommand;
 using BNS.Domain;
+using BNS.Service.Implement;
 
 namespace BNS.Api
 {
@@ -33,8 +32,6 @@ namespace BNS.Api
 
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddMediatR(typeof(CreateTeamCommandHandler));
-
             services.AddScoped<ICipherService, CipherService>();
 
             //services.AddIdentity<CF_Account, Sys_Role>(ops =>

@@ -1,10 +1,10 @@
-﻿using BNS.Application.Interface;
+﻿using BNS.Service.Interface;
 using BNS.Utilities;
 using BNS.Utilities.Constant;
 using BNS.Utilities.Interface;
-using BNS.ViewModels;
-using BNS.ViewModels.Requests;
-using BNS.ViewModels.Responses;
+using BNS.Models;
+using BNS.Models.Requests;
+using BNS.Models.Responses;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,7 @@ using static BNS.Utilities.Enums;
 using Microsoft.Extensions.Hosting;
 using System;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class SYS_ControlService : ISYS_ControlService
     {

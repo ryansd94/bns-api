@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BNS.ViewModels.ValidationModels
+namespace BNS.Models.ValidationModels
 {
     public class MaxFileSizeAttribute : ValidationAttribute
     {

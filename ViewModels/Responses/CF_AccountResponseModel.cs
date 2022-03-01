@@ -1,9 +1,9 @@
-﻿using BNS.ViewModels.Responses.Menu;
+﻿using BNS.Models.Responses.Menu;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.Responses
+namespace BNS.Models.Responses
 {
     public class CF_AccountLoginResponseModel
     {

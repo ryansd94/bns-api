@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class SYS_ControlModel: BaseRequestModel
     {

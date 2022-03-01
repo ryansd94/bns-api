@@ -1,9 +1,9 @@
 ﻿using BNS.Resource.LocalizationResources;
-using BNS.ViewModels.ValidationModels;
+using BNS.Models.ValidationModels;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class CategoryModel : BaseRequestModel
     {

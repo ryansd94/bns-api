@@ -1,4 +1,4 @@
-﻿using BNS.ViewModels;
+﻿using BNS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

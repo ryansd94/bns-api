@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using static BNS.Utilities.Enums;
 
-namespace BNS.ViewModels
+namespace BNS.Models
 {
     public class BaseRequestModel
     {

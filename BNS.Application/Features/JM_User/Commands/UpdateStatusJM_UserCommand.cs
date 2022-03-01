@@ -1,29 +1,21 @@
 ﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Nest;
-using Newtonsoft.Json;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Commands;
 
-namespace BNS.Application.Features 
+namespace BNS.Service.Features 
 {
     public class UpdateStatusJM_UserCommand : CommandBase<ApiResult<Guid>>
     {
-        public class UpdateStatusJM_UserRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public Guid Id { get; set; }
-            [Required]
-            public EStatus Status { get; set; }
-        }
         public class UpdateStatusJM_UserCommnadHandler : IRequestHandler<UpdateStatusJM_UserRequest, ApiResult<Guid>>
         {
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;

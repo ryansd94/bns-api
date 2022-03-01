@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BNS.Data.Entities;
 using BNS.Data.Entities.JM_Entities;
-using BNS.ViewModels.Requests;
-using BNS.ViewModels.Responses;
-using BNS.ViewModels.Responses.Category;
-using BNS.ViewModels.Responses.Project;
+using BNS.Models.Requests;
+using BNS.Models.Responses;
+using BNS.Models.Responses.Category;
+using BNS.Models.Responses.Project;
 using System;
 using System.Reflection;
 

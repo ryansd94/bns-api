@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.Responses
+namespace BNS.Models.Responses
 {
     public class SYS_FieldControlResponseModel
     {

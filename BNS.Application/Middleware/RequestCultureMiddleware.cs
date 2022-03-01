@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BNS.Application.Middleware
+namespace BNS.Service.Middleware
 {
     public class RequestCultureMiddleware
     {

@@ -1,7 +1,7 @@
 ﻿using BNS.Resource.LocalizationResources;
 using System.ComponentModel.DataAnnotations;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class CF_BranchModel : CategoryModel
     {

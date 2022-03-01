@@ -1,28 +1,24 @@
 ﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses;
+using BNS.Models;
+using BNS.Models.Responses;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Nest;
 using Newtonsoft.Json;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-namespace BNS.Application.Features
+using BNS.Domain.Commands;
+
+namespace BNS.Service.Features
 {
     public class ValidateAddJM_UserCommnad : CommandBase<ApiResult<Guid>>
     {
-        public class ValidateAddJM_UserCommnadRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Token { get; set; }
-        }
-        public class ValidateAddJM_UserCommnadHandler : IRequestHandler<ValidateAddJM_UserCommnadRequest, ApiResult<Guid>>
+        public class ValidateAddJM_UserCommnadHandler : IRequestHandler<ValidateAddJM_UserRequest, ApiResult<Guid>>
         {
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
             protected readonly IElasticClient _elasticClient;
@@ -42,7 +38,7 @@ namespace BNS.Application.Features
                 _cipherService = CipherService;
                 _unitOfWork = unitOfWork;
             }
-            public async Task<ApiResult<Guid>> Handle(ValidateAddJM_UserCommnadRequest request, CancellationToken cancellationToken)
+            public async Task<ApiResult<Guid>> Handle(ValidateAddJM_UserRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
                 var data = JsonConvert.DeserializeObject<JoinTeamResponse>(_cipherService.DecryptString(request.Token));

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels
+namespace BNS.Models
 {
     public class PagedResult<T> : PagedResultBase
     {

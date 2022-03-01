@@ -1,6 +1,6 @@
 ﻿using BNS.Data.Entities;
-using BNS.ViewModels;
-using BNS.ViewModels.Requests;
+using BNS.Models;
+using BNS.Models.Requests;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,10 +16,10 @@ using BNS.Resource;
 using Microsoft.Extensions.Localization;
 using BNS.Resource.LocalizationResources;
 using Newtonsoft.Json;
-using BNS.ViewModels.Responses;
+using BNS.Models.Responses;
 using BNS.Domain;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class Sys_RoleService : GenericRepository<Sys_Role> 
     {

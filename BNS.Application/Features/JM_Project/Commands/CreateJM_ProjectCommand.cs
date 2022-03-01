@@ -2,35 +2,22 @@
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Commands;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class CreateJM_ProjectCommand
-    {
-        public class CreateProjectRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Name { get; set; }
-            public string Code { get; set; }
-            public string Description { get; set; }
-            public Guid TemplateId { get; set; }
-            public DateTime? StartDate { get; set; }
-            public DateTime? EndDate { get; set; }
-            public List<Guid> Teams { get; set; }
-            public List<Guid> Members { get; set; }
-        }
-        public class CreateJM_ProjectCommandHandler : IRequestHandler<CreateProjectRequest, ApiResult<Guid>>
+    { 
+        public class CreateJM_ProjectCommandHandler : IRequestHandler<CreateJM_ProjectRequest, ApiResult<Guid>>
         {
             protected readonly BNSDbContext _context;
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -41,7 +28,7 @@ namespace BNS.Application.Features
                 _context = context;
                 _sharedLocalizer = sharedLocalizer;
             }
-            public async Task<ApiResult<Guid>> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+            public async Task<ApiResult<Guid>> Handle(CreateJM_ProjectRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
                 var dataCheck = await _context.JM_Projects.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();

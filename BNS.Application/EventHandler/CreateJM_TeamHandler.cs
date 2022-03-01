@@ -1,9 +1,9 @@
-﻿using BNS.Application.Subcriber;
+﻿using BNS.Service.Subcriber;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
@@ -11,7 +11,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-namespace BNS.Application.EventHandler
+namespace BNS.Service.EventHandler
 {
     public class CreateJM_TeamHandler : IRequestHandler<CreateJM_TeamSubcriberMQ>
     {

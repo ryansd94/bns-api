@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using static BNS.Utilities.Enums;
 
-namespace BNS.ViewModels
+namespace BNS.Models
 {
    public class RequestPageModel<T> : BaseRequestModel
     {

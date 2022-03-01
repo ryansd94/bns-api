@@ -1,9 +1,9 @@
 ﻿using BNS.Resource.LocalizationResources;
-using BNS.ViewModels.Responses.Category;
+using BNS.Models.Responses.Category;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class CF_AreaModel: CategoryModel
     {

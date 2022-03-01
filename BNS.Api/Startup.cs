@@ -1,14 +1,14 @@
 using AspNetCoreRateLimit;
 using AutoMapper;
 using BNS.Api.AutoMapper;
-using BNS.Application.Extensions;
-using BNS.Application.Middleware;
-using BNS.Application.Subcriber;
+using BNS.Service.Extensions;
+using BNS.Service.Middleware;
+using BNS.Service.Subcriber;
 using BNS.Data.EntityContext;
 using BNS.Infrastructure.Messaging;
 using BNS.Utilities.Constant;
-using BNS.ViewModels;
-using BNS.ViewModels.ValidationModels;
+using BNS.Models;
+using BNS.Models.ValidationModels;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -275,6 +275,7 @@ namespace BNS.Api
                     builder.UseIpRateLimiting();
 
                     builder.UseRabbitMq().SubscribeEvent<CreateJM_TeamSubcriberMQ>();
+                    builder.UseRabbitMq().SubscribeEvent<SendMailSubcriberMQ>();
 
                     next(builder);
                 };

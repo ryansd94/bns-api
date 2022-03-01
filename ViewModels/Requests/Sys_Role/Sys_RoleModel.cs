@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using static BNS.Utilities.Enums;
 
-namespace BNS.ViewModels.Requests
+namespace BNS.Models.Requests
 {
     public class Sys_RoleModel : CategoryModel
     {

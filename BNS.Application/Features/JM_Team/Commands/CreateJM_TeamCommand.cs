@@ -3,31 +3,21 @@ using BNS.Domain;
 using BNS.Domain.Messaging;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Commands;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class CreateJM_TeamCommand
     {
-        public class CreateTeamRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Name { get; set; }
-            public string Code { get; set; }
-            public string Description { get; set; }
-            public Guid? ParentId { get; set; }
-            public List<Guid> Members { get; set; }
-        }
-        public class CreateTeamCommandHandler : IRequestHandler<CreateTeamRequest, ApiResult<Guid>>
+        public class CreateTeamCommandHandler : IRequestHandler<CreateJM_TeamRequest, ApiResult<Guid>>
         {
             protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
             protected readonly IElasticClient _elasticClient;
@@ -44,7 +34,7 @@ namespace BNS.Application.Features
                 _unitOfWork = unitOfWork;
                 _busPublisher = busPublisher;
             }
-            public async Task<ApiResult<Guid>> Handle(CreateTeamRequest request, CancellationToken cancellationToken)
+            public async Task<ApiResult<Guid>> Handle(CreateJM_TeamRequest request, CancellationToken cancellationToken)
             {
                 var response = new ApiResult<Guid>();
                 //await _busPublisher.PublishAsync(new CreateJM_TeamSubcriberMQ

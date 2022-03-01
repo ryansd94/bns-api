@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using static BNS.Utilities.Enums;
 
-namespace BNS.ViewModels.Responses.Project
+namespace BNS.Models.Responses.Project
 {
    public class JM_IssueResponse
     {

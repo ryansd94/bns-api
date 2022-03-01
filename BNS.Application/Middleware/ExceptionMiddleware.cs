@@ -1,6 +1,6 @@
 ﻿
-using BNS.Application.Exceptions;
-using BNS.ViewModels;
+using BNS.Service.Exceptions;
+using BNS.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 
-namespace BNS.Application.Middleware
+namespace BNS.Service.Middleware
 {
     public class ErrorHandlerMiddleware
     {

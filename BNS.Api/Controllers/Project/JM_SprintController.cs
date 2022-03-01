@@ -1,4 +1,5 @@
-﻿using BNS.Application.Features;
+﻿using BNS.Domain.Commands;
+using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,12 +24,12 @@ namespace BNS.Api.Controllers.Project
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost]
-        public async Task<IActionResult> Save(CreateJM_SprintCommand.CreateJM_SprintRequest request)
+        public async Task<IActionResult> Save(CreateJM_SprintRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData([FromQuery] GetJM_SprintQuery.GetJM_SprintRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery] GetJM_SprintRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -36,7 +37,7 @@ namespace BNS.Api.Controllers.Project
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIndex(Guid id)
         {
-            var request = new GetJM_TeamByIdQuery.GetJM_TeamByIdRequest();
+            var request = new GetJM_TeamByIdRequest();
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }
@@ -45,13 +46,13 @@ namespace BNS.Api.Controllers.Project
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var request = new DeleteJM_SprintCommand.DeleteJM_SprintRequest();
+            var request = new DeleteJM_SprintRequest();
             request.ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateJM_SprintCommand.UpdateJM_SprintRequest request)
+        public async Task<IActionResult> Update(UpdateJM_SprintRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

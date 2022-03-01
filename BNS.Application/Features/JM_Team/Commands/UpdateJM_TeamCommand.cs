@@ -2,33 +2,22 @@
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Commands;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class UpdateJM_TeamCommand
     {
-        public class UpdateJM_TeamRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Name { get; set; }
-            [Required]
-            public Guid Id { get; set; }
-            public string Code { get; set; }
-            public string Description { get; set; }
-            public Guid? ParentId { get; set; }
-            public List<Guid> Members { get; set; }
-        }
+       
         public class UpdateJM_TeamCommandHandler : IRequestHandler<UpdateJM_TeamRequest, ApiResult<Guid>>
         {
             private readonly IUnitOfWork _unitOfWork;

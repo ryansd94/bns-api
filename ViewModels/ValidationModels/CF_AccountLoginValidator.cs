@@ -1,10 +1,10 @@
-﻿using BNS.ViewModels.Requests;
+﻿using BNS.Models.Requests;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.ValidationModels
+namespace BNS.Models.ValidationModels
 {
    public class CF_AccountLoginValidator: AbstractValidator<CF_AccountLoginModel>
     {

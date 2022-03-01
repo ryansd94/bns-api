@@ -1,5 +1,5 @@
 ﻿using BNS.Domain;
-using BNS.ViewModels;
+using BNS.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using System;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class CipherService : ICipherService
     {
@@ -34,7 +34,7 @@ namespace BNS.Application.Implement
             {
                 return _protector.Unprotect(cipherText);
             }
-            catch (Exception ex)
+            catch
             {
                 return string.Empty;
             }

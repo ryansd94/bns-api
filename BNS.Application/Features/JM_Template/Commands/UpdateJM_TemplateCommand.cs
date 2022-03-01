@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class UpdateJM_TemplateCommand
     {

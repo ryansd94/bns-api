@@ -2,31 +2,20 @@
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Commands;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class CreateJM_SprintCommand
     {
-        public class CreateJM_SprintRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Name { get; set; }
-            public string Description { get; set; }
-            [Required]
-            public DateTime StartDate { get; set; }
-            [Required]
-            public DateTime EndDate { get; set; }
-            [Required]
-            public Guid JM_ProjectId { get; set; }
-        }
+       
         public class CreateJM_SprintCommandHandler : IRequestHandler<CreateJM_SprintRequest, ApiResult<Guid>>
         {
             private readonly IUnitOfWork _unitOfWork;

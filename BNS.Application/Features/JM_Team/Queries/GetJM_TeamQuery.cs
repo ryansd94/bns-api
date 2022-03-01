@@ -5,8 +5,8 @@ using BNS.Data.EntityContext;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Utilities;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses;
+using BNS.Models;
+using BNS.Models.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -17,15 +17,13 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Queries;
 
-
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class GetJM_TeamQuery
     {
-        public class GetJM_TeamRequest : CommandRequest<ApiResult<JM_TeamResponse>>
-        {
-        }
+     
         public class GetJM_TeamRequestHandler : IRequestHandler<GetJM_TeamRequest, ApiResult<JM_TeamResponse>>
         {
             protected readonly BNSDbContext _context;

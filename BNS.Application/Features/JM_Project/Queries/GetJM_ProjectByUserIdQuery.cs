@@ -1,22 +1,21 @@
 ﻿using AutoMapper;
 using BNS.Data.EntityContext;
 using BNS.Resource;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses.Category;
-using BNS.ViewModels.Responses.Project;
+using BNS.Models;
+using BNS.Models.Responses.Category;
+using BNS.Models.Responses.Project;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-namespace BNS.Application.Features
+using BNS.Domain.Queries;
+
+namespace BNS.Service.Features
 {
     public class GetJM_ProjectByUserIdQuery
     {
-        public class GetJM_ProjectByUserIdRequest : CommandByIdRequest<ApiResult<JM_ProjectResponseItem>>
-        {
-        }
         public class GetJM_ProjectByUserIdHandler : IRequestHandler<GetJM_ProjectByUserIdRequest, ApiResult<JM_ProjectResponseItem>>
         {
             protected readonly BNSDbContext _context;

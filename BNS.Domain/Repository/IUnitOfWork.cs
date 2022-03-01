@@ -1,5 +1,5 @@
 ﻿using BNS.Data.Entities.JM_Entities;
-using BNS.ViewModels;
+using BNS.Models;
 using System;
 using System.Threading.Tasks;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BNS.ViewModels.Responses.Category
+namespace BNS.Models.Responses.Category
 {
    public class CategoryResponseModel : BaseResultModel
     {

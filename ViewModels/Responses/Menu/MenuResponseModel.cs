@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.ViewModels.Responses.Menu
+namespace BNS.Models.Responses.Menu
 {
    public class MenuResponseModel
     {

@@ -1,38 +1,31 @@
-﻿using BNS.Data.Entities;
-using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses;
+using BNS.Models;
+using BNS.Models.Responses;
 using FirebaseAdmin.Auth;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-namespace BNS.Application.Features
+using BNS.Domain.Commands;
+
+namespace BNS.Service.Features
 {
     public class LoginGoogleCommand
     {
-        public class LoginGoogleRequest : CommandBase<ApiResult<CF_AccountLoginResponseModel>>
-        {
-            [Required]
-            public string Token { get; set; }
-        }
+       
         public class LoginGoogleCommandHandler : IRequestHandler<LoginGoogleRequest, ApiResult<CF_AccountLoginResponseModel>>
         {
             protected readonly BNSDbContext _context;

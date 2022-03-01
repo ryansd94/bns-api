@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BNS.Application.Exceptions
+namespace BNS.Service.Exceptions
 {
     public class AppException : Exception
     {

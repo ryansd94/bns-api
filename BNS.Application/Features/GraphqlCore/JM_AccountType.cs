@@ -2,7 +2,7 @@
 using BNS.Domain;
 using GraphQL.Types;
 
-namespace BNS.Application.Features.GraphqlCore
+namespace BNS.Service.Features.GraphqlCore
 {
     public class JM_AccountType : ObjectGraphType<JM_Account>
     {

@@ -1,23 +1,20 @@
 ﻿
 using BNS.Data.EntityContext;
 using BNS.Resource;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses.Category;
-using BNS.ViewModels.Responses.Project;
+using BNS.Models;
+using BNS.Models.Responses.Project;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BNS.Domain.Queries;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class GetJM_TemplateByIdQuery
     {
-        public class GetJM_TemplateByIdRequest : CommandByIdRequest<ApiResult<JM_TemplateResponseItem>>
-        {
-        }
         public class GetJM_TemplateByIdRequestHandler : IRequestHandler<GetJM_TemplateByIdRequest, ApiResult<JM_TemplateResponseItem>>
         {
             protected readonly BNSDbContext _context;

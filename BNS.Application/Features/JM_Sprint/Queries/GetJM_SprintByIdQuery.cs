@@ -3,21 +3,20 @@ using AutoMapper;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses.Project;
+using BNS.Models;
+using BNS.Models.Responses.Project;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Queries;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class GetJM_SprintByIdQuery
     {
-        public class GetJM_SprintByIdRequest : CommandByIdRequest<ApiResult<JM_SprintResponseItem>>
-        {
-        }
+      
         public class GetJM_SprintByIdRequestHandler : IRequestHandler<GetJM_SprintByIdRequest, ApiResult<JM_SprintResponseItem>>
         {
             private readonly IUnitOfWork _unitOfWork;

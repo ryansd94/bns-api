@@ -3,7 +3,7 @@ using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace BNS.Application.Features.GraphQL.Commands
+namespace BNS.Service.Features.GraphQL.Commands
 {
   public  class JM_TeamEventSchema : Schema
     {

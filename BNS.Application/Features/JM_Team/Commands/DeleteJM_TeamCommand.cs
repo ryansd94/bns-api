@@ -1,26 +1,22 @@
 ﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-namespace BNS.Application.Features
+using BNS.Domain.Commands;
+
+namespace BNS.Service.Features
 {
     public class DeleteJM_TeamCommand
     {
-        public class DeleteJM_TeamRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public List<Guid> ids { get; set; } = new List<Guid>();
-        }
+     
         public class DeleteJM_TeamCommandHandler : IRequestHandler<DeleteJM_TeamRequest, ApiResult<Guid>>
         {
             private readonly IUnitOfWork _unitOfWork;

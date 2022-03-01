@@ -4,25 +4,21 @@ using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.Utilities;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-namespace BNS.Application.Features
+using BNS.Domain.Commands;
+
+namespace BNS.Service.Features
 {
     public class ChangePasswordFirstLoginCommand
     {
-        public class ChangePasswordFirstLoginRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public string Password { get; set; }
-        }
+       
         public class ChangePasswordFirstLoginCommandHandler : IRequestHandler<ChangePasswordFirstLoginRequest, ApiResult<Guid>>
         {
             protected readonly BNSDbContext _context;

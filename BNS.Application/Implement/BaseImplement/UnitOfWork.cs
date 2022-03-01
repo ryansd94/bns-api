@@ -1,12 +1,12 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Domain;
-using BNS.ViewModels;
+using BNS.Models;
 using System;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 
-namespace BNS.Application.Implement
+namespace BNS.Service.Implement
 {
     public class UnitOfWork : IUnitOfWork
     {

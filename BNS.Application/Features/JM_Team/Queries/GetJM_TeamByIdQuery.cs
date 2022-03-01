@@ -3,21 +3,20 @@ using AutoMapper;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses;
+using BNS.Models;
+using BNS.Models.Responses;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Queries;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class GetJM_TeamByIdQuery
     {
-        public class GetJM_TeamByIdRequest : CommandByIdRequest<ApiResult<JM_TeamResponseItem>>
-        {
-        }
+       
         public class GetJM_TeamByIdRequestHandler : IRequestHandler<GetJM_TeamByIdRequest, ApiResult<JM_TeamResponseItem>>
         {
             private readonly IUnitOfWork _unitOfWork;

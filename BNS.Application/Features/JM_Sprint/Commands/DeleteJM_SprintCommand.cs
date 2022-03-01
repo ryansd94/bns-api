@@ -1,26 +1,22 @@
 ﻿using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.ViewModels;
+using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-namespace BNS.Application.Features
+using BNS.Domain.Commands;
+
+namespace BNS.Service.Features
 {
     public class DeleteJM_SprintCommand
     {
-        public class DeleteJM_SprintRequest : CommandBase<ApiResult<Guid>>
-        {
-            [Required]
-            public List<Guid> ids { get; set; } = new List<Guid>();
-        }
+        
         public class DeleteJM_SprintCommandHandler : IRequestHandler<DeleteJM_SprintRequest, ApiResult<Guid>>
         {
             protected readonly BNSDbContext _context;

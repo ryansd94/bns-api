@@ -2,9 +2,8 @@
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Utilities;
-using BNS.ViewModels;
-using BNS.ViewModels.Responses.Category;
-using BNS.ViewModels.Responses.Project;
+using BNS.Models;
+using BNS.Models.Responses.Project;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -12,14 +11,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
+using BNS.Domain.Queries;
 
-namespace BNS.Application.Features
+namespace BNS.Service.Features
 {
     public class GetJM_TemplateQuery
     {
-        public class GetJM_TemplateRequest : CommandRequest<ApiResult<JM_TemplateResponse>>
-        {
-        }
+       
         public class GetJM_TemplateRequestHandler : IRequestHandler<GetJM_TemplateRequest, ApiResult<JM_TemplateResponse>>
         {
             protected readonly BNSDbContext _context;

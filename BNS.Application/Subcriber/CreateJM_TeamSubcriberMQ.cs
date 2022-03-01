@@ -1,9 +1,8 @@
 ﻿using BNS.Domain.Events;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace BNS.Application.Subcriber
+namespace BNS.Service.Subcriber
 {
     public class CreateJM_TeamSubcriberMQ : BaseCompletedEvent
     {
