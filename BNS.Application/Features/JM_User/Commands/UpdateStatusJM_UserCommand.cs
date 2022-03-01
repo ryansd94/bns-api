@@ -1,4 +1,4 @@
-﻿using BNS.Application.Interface;
+﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;

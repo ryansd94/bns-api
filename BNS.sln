@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Data", "BNS.Data\BNS.Data.csproj", "{262E330C-0260-4A3C-85F8-7BAB684D1121}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Application", "BNS.Application\BNS.Application.csproj", "{9E3DE3CC-8DDC-461D-AE73-9E7F982B244B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Service", "BNS.Application\BNS.Service.csproj", "{9E3DE3CC-8DDC-461D-AE73-9E7F982B244B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Utilities", "BNS.Utilities\BNS.Utilities.csproj", "{797C7284-355A-48EF-B934-76219D42A96B}"
 EndProject
@@ -17,13 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Application", "2. Applic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Data", "3. Data", "{38A89DFB-726F-4045-8EEE-AC6EA9C22CC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.ViewModels", "ViewModels\BNS.ViewModels.csproj", "{F70E6DF0-A630-450A-A4D5-06507835EDD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Models", "ViewModels\BNS.Models.csproj", "{F70E6DF0-A630-450A-A4D5-06507835EDD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Resource", "BNS.Resource\BNS.Resource.csproj", "{1E5EE76F-633E-4684-9FFB-E7F575A02275}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BNS.Infrastructure", "BNS.Infrastructure\BNS.Infrastructure.csproj", "{7A0ECC09-0A0D-45B9-87BC-0E5DDABB53F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Infrastructure", "BNS.Infrastructure\BNS.Infrastructure.csproj", "{7A0ECC09-0A0D-45B9-87BC-0E5DDABB53F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BNS.Domain", "BNS.Domain\BNS.Domain.csproj", "{E4911FA3-5AD0-4CE1-95AD-D2C287EE34D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BNS.Domain", "BNS.Domain\BNS.Domain.csproj", "{E4911FA3-5AD0-4CE1-95AD-D2C287EE34D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

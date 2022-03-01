@@ -1,5 +1,5 @@
-﻿using BNS.Application.Interface;
-using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Data.Entities.JM_Entities;
+using BNS.Domain;
 using GraphQL.Types;
 
 namespace BNS.Application.Features.GraphqlCore

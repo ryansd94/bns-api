@@ -1,6 +1,6 @@
-﻿using BNS.Application.Interface;
-using BNS.Data.Entities;
+﻿using BNS.Data.Entities;
 using BNS.Data.EntityContext;
+using BNS.Domain;
 using BNS.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;

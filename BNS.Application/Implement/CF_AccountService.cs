@@ -30,7 +30,7 @@ using BNS.Utilities.Constant;
 
 namespace BNS.Application.Implement
 {
-    public class CF_AccountService : GenericRepository<CF_Account>, ICF_AccountService
+    public class CF_AccountService : GenericRepository<CF_Account> 
     {
         private readonly UserManager<CF_Account> _userManager;
         private readonly SignInManager<CF_Account> _signInManager;

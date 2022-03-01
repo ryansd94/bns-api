@@ -1,8 +1,7 @@
 ﻿using BNS.Application.Extensions;
-using BNS.Application.Interface;
 using BNS.Data.Entities.JM_Entities;
+using BNS.Domain;
 using BNS.Resource;
-using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
 using BNS.ViewModels.Responses;
 using MediatR;
@@ -101,7 +100,7 @@ namespace BNS.Application.Features
                         };
                         await _unitOfWork.JM_AccountRepository.AddAsync(account);
                     }
-                    var currentAccount = userActive.Where(s => s.JM_Account.Email.Equals(email)).FirstOrDefault();
+                    var currentAccount =await userActive.Where(s => s.JM_Account.Email.Equals(email)).FirstOrDefaultAsync();
                     if (currentAccount == null)
                     {
                         await _unitOfWork.JM_AccountCompanyRepository.AddAsync(new JM_AccountCompany

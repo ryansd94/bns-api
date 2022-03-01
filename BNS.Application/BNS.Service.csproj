@@ -6,6 +6,10 @@
 
   <ItemGroup>
     <Compile Remove="AppUserValidator.cs" />
+    <Compile Remove="Implement\CF_AccountService.cs" />
+    <Compile Remove="Implement\Role\Sys_RoleClaimService.cs" />
+    <Compile Remove="Implement\Role\Sys_RoleService.cs" />
+    <Compile Remove="Implement\SYS_ControlService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,9 +29,14 @@
   <ItemGroup>
     <ProjectReference Include="..\BNS.Data\BNS.Data.csproj" />
     <ProjectReference Include="..\BNS.Domain\BNS.Domain.csproj" />
+    <ProjectReference Include="..\BNS.Infrastructure\BNS.Infrastructure.csproj" />
     <ProjectReference Include="..\BNS.Resource\BNS.Resource.csproj" />
     <ProjectReference Include="..\BNS.Utilities\BNS.Utilities.csproj" />
-    <ProjectReference Include="..\ViewModels\BNS.ViewModels.csproj" />
+    <ProjectReference Include="..\ViewModels\BNS.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Implement\Role\" />
   </ItemGroup>
 
 </Project>

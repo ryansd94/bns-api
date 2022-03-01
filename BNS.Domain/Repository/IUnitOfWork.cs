@@ -3,7 +3,7 @@ using BNS.ViewModels;
 using System;
 using System.Threading.Tasks;
 
-namespace BNS.Application.Interface
+namespace BNS.Domain
 {
     public interface IUnitOfWork : IDisposable
     {

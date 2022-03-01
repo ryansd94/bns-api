@@ -1,9 +1,8 @@
-﻿using BNS.Application.Interface;
+﻿using BNS.Domain;
 using BNS.ViewModels;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;

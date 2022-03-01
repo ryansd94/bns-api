@@ -1,5 +1,4 @@
-﻿using BNS.Application.Interface;
-using BNS.Data.EntityContext;
+﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;

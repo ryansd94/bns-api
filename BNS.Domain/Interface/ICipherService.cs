@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BNS.Application.Interface
+namespace BNS.Domain
 {
     public interface ICipherService
     { 

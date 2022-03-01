@@ -1,13 +1,11 @@
 ﻿
 using AutoMapper;
-using BNS.Application.Interface;
-using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
+using BNS.Domain;
 using BNS.Resource;
 using BNS.Utilities;
 using BNS.ViewModels;
 using BNS.ViewModels.Responses;
-using BNS.ViewModels.Responses.Category;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;

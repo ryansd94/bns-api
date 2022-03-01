@@ -1,5 +1,4 @@
-﻿using BNS.Application.Interface;
-using BNS.Data.Entities;
+﻿using BNS.Data.Entities;
 using BNS.ViewModels;
 using BNS.ViewModels.Requests;
 using System;
@@ -18,11 +17,11 @@ using Microsoft.Extensions.Localization;
 using BNS.Resource.LocalizationResources;
 using Newtonsoft.Json;
 using BNS.ViewModels.Responses;
+using BNS.Domain;
 
 namespace BNS.Application.Implement
 {
-    public class Sys_RoleService : GenericRepository<Sys_Role>,
-        ISys_RoleService
+    public class Sys_RoleService : GenericRepository<Sys_Role> 
     {
         private readonly IGenericRepository<Sys_Role> _genericRepository;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;

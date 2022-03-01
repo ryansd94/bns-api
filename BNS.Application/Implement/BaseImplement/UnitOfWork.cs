@@ -1,6 +1,6 @@
-﻿using BNS.Application.Interface;
-using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
+using BNS.Domain;
 using BNS.ViewModels;
 using System;
 using System.Threading.Tasks;

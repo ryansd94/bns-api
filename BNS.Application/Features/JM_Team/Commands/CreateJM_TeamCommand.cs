@@ -1,6 +1,5 @@
-﻿using BNS.Application.Interface;
-using BNS.Application.Subcriber;
-using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Data.Entities.JM_Entities;
+using BNS.Domain;
 using BNS.Domain.Messaging;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;

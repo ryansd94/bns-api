@@ -1,15 +1,12 @@
 ﻿
 using AutoMapper;
-using BNS.Application.Interface;
-using BNS.Data.EntityContext;
+using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
 using BNS.ViewModels.Responses;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;

@@ -1,11 +1,9 @@
 ﻿using BNS.Application.Features.GraphqlCore;
-using BNS.Application.Interface;
 using BNS.Data.Entities.JM_Entities;
+using BNS.Domain;
 using GraphQL;
 using GraphQL.Types;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BNS.Application.Features.GraphQL.Commands
 {

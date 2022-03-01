@@ -1,5 +1,4 @@
-﻿using BNS.Application.Interface;
-using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.ViewModels;
