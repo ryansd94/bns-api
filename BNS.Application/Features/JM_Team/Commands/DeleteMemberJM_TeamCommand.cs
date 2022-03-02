@@ -38,7 +38,7 @@ namespace BNS.Service.Features
             var teamMembers = team.JM_TeamMembers;
             if (teamMembers != null || teamMembers.Count >0)
             {
-                var teamMemberDelete = teamMembers.Where(s => request.Members.Contains(s.TeamId) && !s.IsDelete).ToList();
+                var teamMemberDelete = teamMembers.Where(s => request.Members.Contains(s.UserId) && !s.IsDelete).ToList();
                 foreach (var item in teamMemberDelete)
                 {
                     item.IsDelete=true;

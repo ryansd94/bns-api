@@ -46,56 +46,71 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                 return response;
             }
-
-            var teamMembers = await (await _unitOfWork.JM_TeamMemberRepository.GetAsync(s => s.TeamId==request.Id)).ToListAsync();
-
-            if (teamMembers == null || teamMembers.Count ==0)
+            if (request.Members ==null || request.Members.Count ==0)
             {
-                foreach (var item in request.Members)
-                {
-                    await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
-                    {
-                        CompanyIndex=request.CompanyId,
-                        CreatedDate=DateTime.UtcNow,
-                        CreatedUser=request.UserId,
-                        Id=Guid.NewGuid(),
-                        IsDelete=false,
-                        TeamId=request.Id,
-                        UserId=item
-                    });
-                }
-            }
-            else
-            {
-                var teamMemberDelete = teamMembers.Where(s => !request.Members.Contains(s.TeamId) && !s.IsDelete).ToList();
-                foreach (var item in teamMemberDelete)
+                var teamMembers = await (await _unitOfWork.JM_TeamMemberRepository.GetAsync(s => s.TeamId==request.Id && !s.IsDelete)).ToListAsync();
+                foreach (var item in teamMembers)
                 {
                     item.IsDelete=true;
                     item.UpdatedDate=DateTime.UtcNow;
                     item.UpdatedUser=request.UserId;
                     await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
                 }
-                var teamMemberUpdate = teamMembers.Where(s => request.Members.Contains(s.TeamId) &&  s.IsDelete).ToList();
-                foreach (var item in teamMemberUpdate)
+            }
+            else
+            {
+                var userContain = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => request.Members.Contains(s.UserId));
+                var memberAdd = request.Members.Where(s => userContain.Select(d => d.UserId).Contains(s)).ToList();
+                var teamMembers = await (await _unitOfWork.JM_TeamMemberRepository.GetAsync(s => s.TeamId==request.Id)).ToListAsync();
+
+                if (teamMembers == null || teamMembers.Count ==0)
                 {
-                    item.IsDelete=false;
-                    item.UpdatedDate=DateTime.UtcNow;
-                    item.UpdatedUser=request.UserId;
-                    await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
-                }
-                var teamMemberAdd = request.Members.Where(d => !teamMembers.Select(s => s.TeamId).Contains(d));
-                foreach (var item in teamMemberAdd)
-                {
-                    await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
+                    foreach (var item in memberAdd)
                     {
-                        CompanyIndex=request.CompanyId,
-                        CreatedDate=DateTime.UtcNow,
-                        CreatedUser=request.UserId,
-                        Id=Guid.NewGuid(),
-                        IsDelete=false,
-                        TeamId=request.Id,
-                        UserId=item
-                    });
+                        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
+                        {
+                            CompanyIndex=request.CompanyId,
+                            CreatedDate=DateTime.UtcNow,
+                            CreatedUser=request.UserId,
+                            Id=Guid.NewGuid(),
+                            IsDelete=false,
+                            TeamId=request.Id,
+                            UserId=item
+                        });
+                    }
+                }
+                else
+                {
+                    var teamMemberDelete = teamMembers.Where(s => !memberAdd.Contains(s.UserId) && !s.IsDelete).ToList();
+                    foreach (var item in teamMemberDelete)
+                    {
+                        item.IsDelete=true;
+                        item.UpdatedDate=DateTime.UtcNow;
+                        item.UpdatedUser=request.UserId;
+                        await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
+                    }
+                    var teamMemberUpdate = teamMembers.Where(s => memberAdd.Contains(s.UserId) &&  s.IsDelete).ToList();
+                    foreach (var item in teamMemberUpdate)
+                    {
+                        item.IsDelete=false;
+                        item.UpdatedDate=DateTime.UtcNow;
+                        item.UpdatedUser=request.UserId;
+                        await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
+                    }
+                    var teamMemberAdd = memberAdd.Where(d => !teamMembers.Select(s => s.UserId).Contains(d));
+                    foreach (var item in teamMemberAdd)
+                    {
+                        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
+                        {
+                            CompanyIndex=request.CompanyId,
+                            CreatedDate=DateTime.UtcNow,
+                            CreatedUser=request.UserId,
+                            Id=Guid.NewGuid(),
+                            IsDelete=false,
+                            TeamId=request.Id,
+                            UserId=item
+                        });
+                    }
                 }
             }
             dataCheck.Code = request.Code;

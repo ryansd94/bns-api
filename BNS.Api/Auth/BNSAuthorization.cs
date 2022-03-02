@@ -26,7 +26,7 @@ namespace BNS.Api.Auth
                     query= query.Add("UserId", userId.Value);
                     context.HttpContext.Request.QueryString=query;
                 }
-                else if (method == "POST" ||    method=="PUT")
+                else if (method == "POST" ||    method=="PUT"||    method=="DELETE")
                 {
                     var bodyStr = "";
                     var req = context.HttpContext.Request;
