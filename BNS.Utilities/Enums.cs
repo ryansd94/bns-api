@@ -81,7 +81,8 @@ namespace BNS.Utilities
             RESLOVED = 3,
             DONE = 4,
             FEEDBACK = 5,
-            CANCELED = 6
+            CANCELED = 6,
+            CONFIRM = 7
         }
         public enum EVersionType
         {
