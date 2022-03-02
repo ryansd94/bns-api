@@ -13,7 +13,6 @@ namespace BNS.Api.Controllers.User
 {
     [Route("api/[controller]")]
     [ApiController]
-    [BNSAuthorization]
     public class JM_UserController : BaseController
     {
         private IMediator _mediator;
@@ -25,6 +24,7 @@ namespace BNS.Api.Controllers.User
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost("add-user")]
+        [BNSAuthorization]
         public async Task<IActionResult> SendMailAddUser(  SendMailAddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
@@ -44,12 +44,14 @@ namespace BNS.Api.Controllers.User
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
+        [BNSAuthorization]
         public async Task<IActionResult> GetAllData([FromQuery]  GetJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut("status")]
+        [BNSAuthorization]
         public async Task<IActionResult> UpdateStatus( UpdateStatusJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));

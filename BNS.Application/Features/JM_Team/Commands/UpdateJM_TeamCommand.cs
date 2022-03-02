@@ -2,7 +2,6 @@
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -29,7 +28,8 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(UpdateJM_TeamRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Id == request.Id);
+            var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
+            s.CompanyIndex == request.CompanyId);
             if (dataCheck == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -37,7 +37,7 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            var checkDuplicate = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name)
+            var checkDuplicate = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name)
             && s.Id != request.Id
             && s.CompanyIndex == request.CompanyId);
             if (checkDuplicate != null)

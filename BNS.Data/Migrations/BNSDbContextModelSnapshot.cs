@@ -2737,9 +2737,6 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsMainAccount")
-                        .HasColumnType("bit");
-
                     b.Property<Guid?>("JM_CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -2809,7 +2806,13 @@ namespace BNS.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainAccount")
                         .HasColumnType("bit");
 
                     b.Property<int>("Status")

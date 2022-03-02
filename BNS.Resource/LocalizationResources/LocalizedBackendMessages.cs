@@ -65,7 +65,11 @@ namespace BNS.Resource.LocalizationResources
             public const string MSG_PaswordShouldContainOneCharacter = "MSG_PaswordShouldContainOneCharacter";
             public const string MSG_PaswordShouldContainOneNumber = "MSG_PaswordShouldContainOneNumber";
             public const string MSG_PaswordLength = "MSG_PaswordLength";
-            
+            public const string MSG_UserOrPasswordNotCorrect = "MSG_UserOrPasswordNotCorrect";
+            public const string MSG_UserNotActiveOrBlock = "MSG_UserNotActiveOrBlock";
+            public const string MSG_UserHasRegister = "MSG_UserHasRegister";
+            public const string MSG_UserNotRegister = "MSG_UserNotRegister";
+
         }
         public class Message
         {

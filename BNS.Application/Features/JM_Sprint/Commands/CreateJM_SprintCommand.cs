@@ -2,7 +2,6 @@
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System;
@@ -28,7 +27,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(CreateJM_SprintRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_SprintRepository.GetDefaultAsync(s => s.Name.Equals(request.Name)
+            var dataCheck = await _unitOfWork.JM_SprintRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name)
             && s.CompanyIndex == request.CompanyId
             && s.JM_ProjectId == request.JM_ProjectId);
             if (dataCheck != null)

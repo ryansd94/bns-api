@@ -2,9 +2,6 @@
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
-using BNS.Models.Responses;
-using FirebaseAdmin.Auth;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -20,21 +17,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using BNS.Domain;
+using BNS.Domain.Responses;
+using BNS.Infrastructure;
 
 namespace BNS.Service.Features
 {
-    public class LoginGoogleCommand : IRequestHandler<LoginGoogleRequest, ApiResult<CF_AccountLoginResponseModel>>
+    public class LoginGoogleCommand : IRequestHandler<LoginGoogleRequest, ApiResult<LoginResponse>>
     {
-        protected readonly BNSDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly MyConfiguration _config;
         private static FirebaseAdmin.FirebaseApp _firebaseApp = null;
 
-        public LoginGoogleCommand(BNSDbContext context,
+        public LoginGoogleCommand(
+         IUnitOfWork unitOfWork,
          IOptions<MyConfiguration> config,
          IStringLocalizer<SharedResource> sharedLocalizer)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _config = config.Value;
             _sharedLocalizer = sharedLocalizer;
         }
@@ -59,11 +60,11 @@ namespace BNS.Service.Features
                 return _firebaseApp;
             }
         }
-        public async Task<ApiResult<CF_AccountLoginResponseModel>> Handle(LoginGoogleRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<LoginResponse>> Handle(LoginGoogleRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<CF_AccountLoginResponseModel>();
+            var response = new ApiResult<LoginResponse>();
 
-            var infoUser = await CheckTokenGoogle(request.Token);
+            var infoUser = await Firebase.CheckTokenGoogle(request.Token, DefaultFirebaseApp);
             if (infoUser == null)
             {
                 response.errorCode = EErrorCode.Failed.ToString();
@@ -72,54 +73,13 @@ namespace BNS.Service.Features
             }
             var email = infoUser.email;
             var id = infoUser.sub;
-            response.data = new CF_AccountLoginResponseModel();
-            var user = await _context.JM_Accounts.Where(s => s.Email.Equals(email)).Include(s => s.JM_AccountCompanys).FirstOrDefaultAsync();
+            var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.Email.Equals(email),x=>x.JM_AccountCompanys);
             var companyId = Guid.Empty;
             if (user == null)
             {
-                var userid = Guid.NewGuid();
-                var company = new JM_Company
-                {
-                    Id = Guid.NewGuid(),
-                    IsDelete = false,
-                    CreatedDate = DateTime.UtcNow,
-                };
-
-                user = new JM_Account
-                {
-                    Id = userid,
-                    UserName = infoUser.email.ToString(),
-                    Email = infoUser.email.ToString(),
-                    CreatedDate = DateTime.UtcNow,
-                    CreatedUser = userid,
-                    IsDelete = false,
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = false,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    GoogleId = id,
-                    IsMainAccount = true,
-                };
-
-                var accountCompany = new JM_AccountCompany
-                {
-                    Id = Guid.NewGuid(),
-                    IsDelete = false,
-                    UserId = userid,
-                    CompanyId = company.Id,
-                    Status=EStatus.ACTIVE,
-                    CreatedDate = DateTime.UtcNow,
-                    CreatedUser = userid,
-                    FullName = infoUser.name.ToString(),
-                    Email = infoUser.email.ToString(),
-                };
-                company.CreatedUser = user.Id;
-                companyId = company.Id;
-                await _context.JM_Companys.AddAsync(company);
-                await _context.JM_Accounts.AddAsync(user);
-                await _context.JM_AccountCompanys.AddAsync(accountCompany);
-                await _context.SaveChangesAsync();
+                response.errorCode = EErrorCode.UserNotRegister.ToString();
+                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserNotRegister];
+                return response;
             }
             else
             {
@@ -127,10 +87,6 @@ namespace BNS.Service.Features
             }
 
             var roles = new List<string>();
-            if (user.IsMainAccount != null && user.IsMainAccount.Value)
-                roles.Add(EAccountType.SupperAdmin.ToString());
-            else
-                roles.Add(EAccountType.User.ToString());
             var claims = new[]
             {
                 new Claim(ClaimTypes.GivenName, user.UserName),
@@ -150,50 +106,6 @@ namespace BNS.Service.Features
                 );
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
             return response;
-        }
-        private async Task<GoogleApiTokenInfo> CheckTokenGoogle(string token)
-        {
-            var result = new GoogleApiTokenInfo();
-            FirebaseToken decodedToken = await FirebaseAuth.GetAuth(DefaultFirebaseApp)
-.VerifyIdTokenAsync(token);
-            if (decodedToken == null)
-                return null;
-            result.sub = decodedToken.Uid;
-            result.email = decodedToken.Claims.Where(s => s.Key == "email").FirstOrDefault().Value;
-            result.name = decodedToken.Claims.Where(s => s.Key == "name").FirstOrDefault().Value;
-            return result;
-
-
-        }
-        private class GoogleApiTokenInfo
-        {
-
-            public string sub { get; set; }
-
-            /// <summary>
-            /// The user's email address. This may not be unique and is not suitable for use as a primary key. Provided only if your scope included the string "email".
-            /// </summary>
-            public object email { get; set; }
-
-            public object name { get; set; }
-
-            /// <summary>
-            /// The URL of the user's profile picture. Might be provided when:
-            /// The request scope included the string "profile"
-            /// The ID token is returned from a token refresh
-            /// When picture claims are present, you can use them to update your app's user records. Note that this claim is never guaranteed to be present.
-            /// </summary>
-            public string picture { get; set; }
-
-            public string given_name { get; set; }
-
-            public string family_name { get; set; }
-
-            public string locale { get; set; }
-
-            public string alg { get; set; }
-
-            public string kid { get; set; }
         }
 
     }

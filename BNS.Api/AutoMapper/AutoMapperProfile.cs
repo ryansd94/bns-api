@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using BNS.Data.Entities;
 using BNS.Data.Entities.JM_Entities;
-using BNS.Models.Requests;
-using BNS.Models.Responses;
-using BNS.Models.Responses.Category;
-using BNS.Models.Responses.Project;
+using BNS.Domain.Responses;
 using System;
 using System.Reflection;
 
@@ -14,14 +10,6 @@ namespace BNS.Api.AutoMapper
     {
         public AutoMapperProfile()
         {
-
-            CreateMap<CF_AreaModel, CF_Area>().ForMember(x => x.CreatedUser, opt => opt.Ignore());
-            CreateMap<CF_DepartmentModel, CF_Department>();
-
-            CreateMap<CF_Employee, CF_EmployeeModel>();
-            CreateMap<CF_EmployeeModel, CF_Employee>();
-            CreateMap<CF_BranchModel, CF_Branch>();
-            CreateMap<CF_BranchModel, CF_Branch>();
             CreateMap<JM_Issue, JM_IssueResponseItem>();
             CreateMap<JM_Project, JM_ProjectResponseItem>();
             CreateMap<JM_Team, JM_TeamResponseItem>();

@@ -14,7 +14,7 @@ namespace BNS.Service.Features.GraphqlCore
             Field<ListGraphType<JM_AccountType>>(
               "accounts",
               arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "email" }),
-              resolve: context => repository.GetDefaultAsync()
+              resolve: context => repository.FirstOrDefaultAsync()
            );
         }
     }

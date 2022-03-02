@@ -9,9 +9,9 @@ namespace BNS.Domain
     {
         Task<T> GetByIdAsync(Guid id);
 
-        Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null
                                                   );
-        Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null
                                 , params Expression<Func<T, object>>[] includeProperties
                                                   );
         Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> filter = null

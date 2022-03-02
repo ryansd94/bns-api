@@ -58,7 +58,19 @@ namespace BNS.Api.Controllers
         //}
         [HttpPost("login-google")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginGoogle(LoginGoogleRequest request)
+        public async Task<IActionResult> LoginWithGoogle(LoginGoogleRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost("register-google")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterWithGoogle(RegisterGoogleRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

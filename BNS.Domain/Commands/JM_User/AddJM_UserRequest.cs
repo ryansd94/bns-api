@@ -1,5 +1,4 @@
-﻿using BNS.Models;
-using BNS.Models.ValidationModels;
+﻿
 using System;
 using System.ComponentModel.DataAnnotations;
 

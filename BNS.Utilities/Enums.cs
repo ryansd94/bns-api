@@ -17,7 +17,8 @@ namespace BNS.Utilities
             IsExistsData,
             SystemError,
             UserHasJoinTeam,
-            TokenNotValid
+            TokenNotValid,
+            UserNotRegister
         }
 
         public enum EAccountType
@@ -98,7 +99,8 @@ namespace BNS.Utilities
         {
             ACTIVE = 1,
             IN_ACTIVE = 2,
-            WAILTING_CONFIRM_MAIL = 3
+            WAILTING_CONFIRM_MAIL = 3,
+            BLOCK = 4
         }
     }
 }

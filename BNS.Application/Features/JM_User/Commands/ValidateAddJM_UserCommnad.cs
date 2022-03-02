@@ -1,8 +1,7 @@
 ﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
-using BNS.Models.Responses;
+using BNS.Domain.Responses;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;

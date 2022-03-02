@@ -1,7 +1,6 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Domain;
-using BNS.Models;
 using System;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
@@ -17,8 +16,61 @@ namespace BNS.Service.Implement
         private IGenericRepository<JM_Team> jM_TeamRepository;
         private IGenericRepository<JM_TeamMember> jM_TeamMemberRepository;
         private IGenericRepository<JM_Sprint> jM_SprintRepository;
+        private IGenericRepository<JM_Company> jM_CompanyRepository;
+        private IGenericRepository<JM_Project> jM_ProjectRepository;
+        private IGenericRepository<JM_ProjectMember> jM_ProjectMemberRepository;
+        private IGenericRepository<JM_ProjectTeam> jM_ProjectTeamRepository;
+
 
         #region Repositories
+        public IGenericRepository<JM_ProjectMember> JM_ProjectMemberRepository
+        {
+            get
+            {
+
+                if (this.jM_ProjectMemberRepository == null)
+                {
+                    this.jM_ProjectMemberRepository = new GenericRepository<JM_ProjectMember>(_context);
+                }
+                return jM_ProjectMemberRepository;
+            }
+        }
+        public IGenericRepository<JM_ProjectTeam> JM_ProjectTeamRepository
+        {
+            get
+            {
+
+                if (this.jM_ProjectTeamRepository == null)
+                {
+                    this.jM_ProjectTeamRepository = new GenericRepository<JM_ProjectTeam>(_context);
+                }
+                return jM_ProjectTeamRepository;
+            }
+        }
+        public IGenericRepository<JM_Project> JM_ProjectRepository
+        {
+            get
+            {
+
+                if (this.jM_ProjectRepository == null)
+                {
+                    this.jM_ProjectRepository = new GenericRepository<JM_Project>(_context);
+                }
+                return jM_ProjectRepository;
+            }
+        }
+        public IGenericRepository<JM_Company> JM_CompanyRepository
+        {
+            get
+            {
+
+                if (this.jM_CompanyRepository == null)
+                {
+                    this.jM_CompanyRepository = new GenericRepository<JM_Company>(_context);
+                }
+                return jM_CompanyRepository;
+            }
+        }
         public IGenericRepository<JM_Account> JM_AccountRepository
         {
             get

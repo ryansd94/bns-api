@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BNS.Data\BNS.Data.csproj" />
-    <ProjectReference Include="..\ViewModels\BNS.Models.csproj" />
   </ItemGroup>
 
 </Project>

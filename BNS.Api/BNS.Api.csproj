@@ -26,7 +26,6 @@
     <ProjectReference Include="..\BNS.Infrastructure\BNS.Infrastructure.csproj" />
     <ProjectReference Include="..\BNS.Resource\BNS.Resource.csproj" />
     <ProjectReference Include="..\BNS.Utilities\BNS.Utilities.csproj" />
-    <ProjectReference Include="..\ViewModels\BNS.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

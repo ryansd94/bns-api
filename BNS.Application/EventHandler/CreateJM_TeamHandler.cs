@@ -3,7 +3,6 @@ using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
@@ -30,7 +29,7 @@ namespace BNS.Service.EventHandler
         public async Task<Unit> Handle(CreateJM_TeamSubcriberMQ request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
+            var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();

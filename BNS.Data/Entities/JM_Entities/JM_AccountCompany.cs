@@ -19,6 +19,8 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
         public EStatus Status { get; set; }
+        public bool IsDefault { get; set; }
+        public bool IsMainAccount { get; set; }
         [MaxLength(100)]
         public string Email { get; set; }
         [MaxLength(200)]

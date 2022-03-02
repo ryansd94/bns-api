@@ -2,7 +2,6 @@
 using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -12,24 +11,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using BNS.Domain;
 
 namespace BNS.Service.Features
 {
     public class CreateJM_ProjectCommand : IRequestHandler<CreateJM_ProjectRequest, ApiResult<Guid>>
     {
-        protected readonly BNSDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public CreateJM_ProjectCommand(BNSDbContext context,
+        public CreateJM_ProjectCommand(IUnitOfWork unitOfWork,
          IStringLocalizer<SharedResource> sharedLocalizer)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _sharedLocalizer = sharedLocalizer;
         }
         public async Task<ApiResult<Guid>> Handle(CreateJM_ProjectRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _context.JM_Projects.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
+            var dataCheck = await _unitOfWork.JM_ProjectRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name));
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -52,7 +52,7 @@ namespace BNS.Service.Features
             {
                 foreach (var team in request.Teams)
                 {
-                    await _context.JM_ProjectTeams.AddAsync(new JM_ProjectTeam
+                    await _unitOfWork.JM_ProjectTeamRepository.AddAsync(new JM_ProjectTeam
                     {
                         Id = Guid.NewGuid(),
                         ProjectId = data.Id,
@@ -66,7 +66,7 @@ namespace BNS.Service.Features
             {
                 foreach (var team in request.Members)
                 {
-                    await _context.JM_ProjectMembers.AddAsync(new JM_ProjectMember
+                    await _unitOfWork.JM_ProjectMemberRepository.AddAsync(new JM_ProjectMember
                     {
                         Id = Guid.NewGuid(),
                         ProjectId = data.Id,
@@ -76,8 +76,8 @@ namespace BNS.Service.Features
                     });
                 }
             }
-            await _context.JM_Projects.AddAsync(data);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.JM_ProjectRepository.AddAsync(data);
+            await _unitOfWork.SaveChangesAsync();
             response.data = data.Id;
             return response;
         }

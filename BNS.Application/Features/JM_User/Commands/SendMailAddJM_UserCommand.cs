@@ -1,9 +1,8 @@
-﻿using BNS.Service.Extensions;
+﻿
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Resource;
-using BNS.Models;
-using BNS.Models.Responses;
+using BNS.Domain.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -109,9 +108,10 @@ namespace BNS.Service.Features
                         CompanyId=request.CompanyId,
                         Status=EStatus.WAILTING_CONFIRM_MAIL,
                         Email=email,
+                        IsMainAccount=false,
+                        IsDefault=true
                     });
                 }
-                await _unitOfWork.SaveChangesAsync();
                 sendMailItems.Add(new SendMailSubcriberMQItem
                 {
                     Body=body,
@@ -119,6 +119,7 @@ namespace BNS.Service.Features
                     Subject=subject
                 });
             }
+            await _unitOfWork.SaveChangesAsync();
             await _busPublisher.PublishAsync(new SendMailSubcriberMQ
             {
                 Items=sendMailItems

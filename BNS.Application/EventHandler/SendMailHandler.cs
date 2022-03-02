@@ -1,16 +1,11 @@
 ﻿using BNS.Service.Subcriber;
-using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Resource;
-using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static BNS.Utilities.Enums;
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
 using System.Net;

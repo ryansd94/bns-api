@@ -17,7 +17,7 @@ namespace BNS.Api
     {
         public static void AddRepository(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(SendMailAddJM_UserCommandHandler));
+            services.AddMediatR(typeof(SendMailAddJM_UserCommand));
             services.AddIdentity<CF_Account, Sys_Role>().AddEntityFrameworkStores<BNSDbContext>()
                 .AddDefaultTokenProviders();
             services.AddTransient<IUnitOfWork, UnitOfWork>();

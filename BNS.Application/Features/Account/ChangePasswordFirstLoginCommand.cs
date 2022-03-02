@@ -4,7 +4,6 @@ using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.Utilities;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
@@ -35,7 +34,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(ChangePasswordFirstLoginRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var user = await _accountRepository.GetDefaultAsync(s => s.Id == request.UserId);
+            var user = await _accountRepository.FirstOrDefaultAsync(s => s.Id == request.UserId);
             if (user == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

@@ -1,5 +1,4 @@
-﻿using BNS.Models;
-using BNS.Models.Responses.Project;
+﻿using BNS.Domain.Responses;
 using System;
 using System.ComponentModel.DataAnnotations;
 

@@ -6,15 +6,10 @@ using BNS.Service.Middleware;
 using BNS.Service.Subcriber;
 using BNS.Data.EntityContext;
 using BNS.Infrastructure.Messaging;
-using BNS.Utilities.Constant;
-using BNS.Models;
-using BNS.Models.ValidationModels;
-using FluentValidation.AspNetCore;
-using MediatR;
+using BNS.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +21,6 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace BNS.Api
 {
@@ -90,7 +84,6 @@ namespace BNS.Api
 
             services.AddDataProtection();
 
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CF_AccountLoginValidator>());
             services.AddRepository();
             services.Configure<RequestLocalizationOptions>(
                 options =>

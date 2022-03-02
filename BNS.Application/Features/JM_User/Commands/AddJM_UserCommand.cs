@@ -2,9 +2,6 @@
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.Utilities;
-using BNS.Models;
-using BNS.Models.Responses;
-using BNS.Models.ValidationModels;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -15,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using BNS.Domain.Responses;
 
 namespace BNS.Service.Features
 {
@@ -49,7 +47,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_TokenNotValid];
                 return response;
             }
-            var userCompany = await _unitOfWork.JM_AccountCompanyRepository.GetDefaultAsync(s => s.CompanyId == data.CompanyId && s.Email == data.EmailJoin);
+            var userCompany = await _unitOfWork.JM_AccountCompanyRepository.FirstOrDefaultAsync(s => s.CompanyId == data.CompanyId && s.Email == data.EmailJoin);
             if (userCompany == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -62,7 +60,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
                 return response;
             }
-            var user = await _unitOfWork.JM_AccountRepository.GetDefaultAsync(s => s.Email == data.EmailJoin);
+            var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.Email == data.EmailJoin);
 
             if (user == null)
             {

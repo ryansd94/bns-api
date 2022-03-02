@@ -1,5 +1,4 @@
-﻿using BNS.Models;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using static BNS.Utilities.Enums;
 

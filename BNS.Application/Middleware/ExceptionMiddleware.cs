@@ -1,6 +1,6 @@
 ﻿
+using BNS.Domain;
 using BNS.Service.Exceptions;
-using BNS.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

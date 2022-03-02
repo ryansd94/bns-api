@@ -339,11 +339,20 @@
   <data name="MSG_TokenNotValid" xml:space="preserve">
     <value>Token không hợp lệ</value>
   </data>
+  <data name="MSG_UserHasRegister" xml:space="preserve">
+    <value>Tài khoản đã được đăng ký</value>
+  </data>
   <data name="MSG_UserNameExistsData" xml:space="preserve">
     <value>Tên đăng nhập đã tồn tại</value>
   </data>
   <data name="MSG_UsernameOrPasswordNotCorrect" xml:space="preserve">
     <value>Tên đăng nhập hoặc mật khẩu không đúng</value>
+  </data>
+  <data name="MSG_UserNotActiveOrBlock" xml:space="preserve">
+    <value>Tài khoản chưa kích hoạt hoặc bị khóa</value>
+  </data>
+  <data name="MSG_UserOrPasswordNotCorrect" xml:space="preserve">
+    <value>Tài khoản hoặc mật khẩu không chính xác</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Tên</value>

@@ -208,7 +208,7 @@ namespace BNS.Service.Implement
         {
             return await GetAsync(filter, orderBy, null, null, null);
         }
-        private async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null
+        private async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null
                                                    , Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null
                                                    , string sortColumnName = "", bool? isAscending = true
                                                    , Expression<Func<T, object>>[] includeProperties = null
@@ -249,14 +249,14 @@ namespace BNS.Service.Implement
             }
             return await query.FirstOrDefaultAsync();
         }
-        public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null)
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null)
         {
-            return await GetDefaultAsync(filter, null, null, null, null);
+            return await FirstOrDefaultAsync(filter, null, null, null, null);
         }
 
-        public async Task<T> GetDefaultAsync(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, params Expression<Func<T, object>>[] includeProperties)
         {
-            return await GetDefaultAsync(filter, null, null, null, includeProperties);
+            return await FirstOrDefaultAsync(filter, null, null, null, includeProperties);
         }
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> filter = null)

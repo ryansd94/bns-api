@@ -1,7 +1,7 @@
 ﻿using BNS.Api.Auth;
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
-using BNS.Models;
+using BNS.Domain.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -61,5 +61,18 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpPut("member/{id}")]
+        public async Task<IActionResult> UpdateMember(Guid id, UpdateMemberJM_TeamRequest request)
+        {
+            request.Id = id;
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpDelete("member/{id}")]
+        public async Task<IActionResult> DeleteMember(Guid id, DeleteMemberJM_TeamRequest request)
+        {
+            request.Id = id;
+            return Ok(await _mediator.Send(request));
+        }
     }
 }

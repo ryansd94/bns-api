@@ -3,8 +3,7 @@ using AutoMapper;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
-using BNS.Models.Responses;
+using BNS.Domain.Responses;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Threading;
@@ -32,8 +31,9 @@ namespace BNS.Service.Features
         public async Task<ApiResult<JM_TeamResponseItem>> Handle(GetJM_TeamByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<JM_TeamResponseItem>();
-            var data = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Id == request.Id &&
-            !s.IsDelete);
+            var data = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
+            !s.IsDelete &&
+            s.CompanyIndex == request.CompanyId);
             if (data == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

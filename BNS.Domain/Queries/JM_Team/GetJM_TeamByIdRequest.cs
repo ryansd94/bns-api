@@ -1,5 +1,5 @@
-﻿using BNS.Models;
-using BNS.Models.Responses;
+﻿
+using BNS.Domain.Responses;
 
 namespace BNS.Domain.Queries
 {

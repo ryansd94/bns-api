@@ -1,7 +1,6 @@
 ﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -35,7 +34,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(UpdateStatusJM_UserRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var userCompany = await _unitOfWork.JM_AccountCompanyRepository.GetDefaultAsync(s => s.CompanyId == request.CompanyId
+            var userCompany = await _unitOfWork.JM_AccountCompanyRepository.FirstOrDefaultAsync(s => s.CompanyId == request.CompanyId
             && s.UserId == request.Id);
             if (userCompany == null)
             {

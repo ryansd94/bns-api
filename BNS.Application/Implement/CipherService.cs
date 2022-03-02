@@ -1,5 +1,4 @@
 ﻿using BNS.Domain;
-using BNS.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using System;

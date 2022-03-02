@@ -3,7 +3,6 @@ using BNS.Domain;
 using BNS.Domain.Messaging;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Nest;
@@ -20,32 +19,19 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IBusPublisher _busPublisher;
         public CreateJM_TeamCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IElasticClient elasticClient,
-         IUnitOfWork unitOfWork,
-        IBusPublisher busPublisher)
+         IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
             _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
-            _busPublisher = busPublisher;
         }
         public async Task<ApiResult<Guid>> Handle(CreateJM_TeamRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            //await _busPublisher.PublishAsync(new CreateJM_TeamSubcriberMQ
-            //{
-            //    Code=request.Code,
-            //    CompanyId=request.CompanyId,
-            //    CreatedBy=request.CreatedBy,
-            //    Description=request.Description,
-            //    Members=request.Members,
-            //    Name=request.Name,
-            //    ParentId=   request.ParentId,
-            //});
-            var dataCheck = await _unitOfWork.JM_TeamRepository.GetDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
+            var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();

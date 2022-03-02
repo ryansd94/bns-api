@@ -1,8 +1,8 @@
 ﻿
 using BNS.Data.EntityContext;
 using BNS.Resource;
-using BNS.Models;
-using BNS.Models.Responses.Project;
+using BNS.Domain.Responses;
+using BNS.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;

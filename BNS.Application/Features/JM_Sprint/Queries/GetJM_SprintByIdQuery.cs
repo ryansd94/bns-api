@@ -3,8 +3,7 @@ using AutoMapper;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
-using BNS.Models.Responses.Project;
+using BNS.Domain.Responses;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Threading;
@@ -32,7 +31,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<JM_SprintResponseItem>> Handle(GetJM_SprintByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<JM_SprintResponseItem>();
-            var data = await _unitOfWork.JM_SprintRepository.GetDefaultAsync(s => s.Id == request.Id &&
+            var data = await _unitOfWork.JM_SprintRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
              !s.IsDelete);
             if (data == null)
             {

@@ -1,7 +1,6 @@
 ﻿using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System;
@@ -27,7 +26,8 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(DeleteJM_TeamRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataChecks = await _unitOfWork.JM_TeamRepository.GetAsync(s => request.ids.Contains(s.Id));
+            var dataChecks = await _unitOfWork.JM_TeamRepository.GetAsync(s => request.ids.Contains(s.Id) &&
+            s.CompanyIndex == request.CompanyId);
             if (dataChecks == null || dataChecks.Count() ==0)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

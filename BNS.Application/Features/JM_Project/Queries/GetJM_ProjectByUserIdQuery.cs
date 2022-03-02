@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BNS.Data.EntityContext;
 using BNS.Resource;
-using BNS.Models;
-using BNS.Models.Responses.Project;
+using BNS.Domain.Responses;
+using BNS.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -31,7 +31,8 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<JM_ProjectResponseItem>();
             var query = _context.JM_ProjectMembers.Where(s => s.UserId == request.Id &&
-            !s.IsDelete).Include(s => s.JM_Project)
+            !s.IsDelete &&
+            s.CompanyIndex == request.CompanyId).Include(s => s.JM_Project)
                 .Select(s => _mapper.Map<JM_ProjectResponseItem>(s));
             var rs = await query.FirstOrDefaultAsync();
             response.data = rs;

@@ -2,8 +2,6 @@
 using AutoMapper;
 using BNS.Data.EntityContext;
 using BNS.Resource;
-using BNS.Models;
-using BNS.Models.Responses.Project;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -11,6 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BNS.Domain.Queries;
+using BNS.Domain.Responses;
+using BNS.Domain;
 
 namespace BNS.Service.Features
 {
