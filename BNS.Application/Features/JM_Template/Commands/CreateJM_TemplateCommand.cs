@@ -1,18 +1,15 @@
-﻿using BNS.Data.EntityContext;
-using BNS.Resource;
+﻿using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Nest;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using Newtonsoft.Json;
+using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Service.Features
 {
@@ -31,7 +28,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(CreateJM_TemplateRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_TemplateRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && 
+            var dataCheck = await _unitOfWork.JM_TemplateRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) &&
             s.CompanyId ==request.CompanyId);
             if (dataCheck != null)
             {
@@ -39,7 +36,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                 return response;
             }
-            var data = new BNS.Data.Entities.JM_Entities.JM_Template
+            var data = new JM_Template
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,

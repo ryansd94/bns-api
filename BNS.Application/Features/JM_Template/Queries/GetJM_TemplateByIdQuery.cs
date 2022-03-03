@@ -1,48 +1,36 @@
-﻿
-using BNS.Data.EntityContext;
-using BNS.Resource;
+﻿using BNS.Resource;
 using BNS.Domain.Responses;
 using BNS.Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BNS.Domain.Queries;
+using AutoMapper;
 
 namespace BNS.Service.Features
 {
     public class GetJM_TemplateByIdQuery : IRequestHandler<GetJM_TemplateByIdRequest, ApiResult<JM_TemplateResponseItem>>
     {
-        protected readonly BNSDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IMapper _mapper;
 
-        public GetJM_TemplateByIdQuery(BNSDbContext context,
-         IStringLocalizer<SharedResource> sharedLocalizer)
+        public GetJM_TemplateByIdQuery(IUnitOfWork unitOfWork,
+         IStringLocalizer<SharedResource> sharedLocalizer,
+            IMapper mapper)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _sharedLocalizer = sharedLocalizer;
+            _mapper = mapper;
         }
         public async Task<ApiResult<JM_TemplateResponseItem>> Handle(GetJM_TemplateByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<JM_TemplateResponseItem>();
-            var query = _context.JM_Templates.Where(s => s.Id == request.Id &&
-            !s.IsDelete)
-                .Select(s => new JM_TemplateResponseItem
-                {
-                    Name = s.Name,
-                    Description = s.Description,
-                    Id = s.Id,
-                    UpdatedDate = s.UpdatedDate,
-                    CreatedDate = s.CreatedDate,
-                    CreatedUserId = s.CreatedUser,
-                    UpdatedUserId = s.UpdatedUser,
-                    AssigneeIssueStatus = s.AssigneeIssueStatus,
-                    ReporterIssueStatus = s.ReporterIssueStatus,
-                    IssueType = s.IssueType
-                });
-            var rs = await query.FirstOrDefaultAsync();
+            var query = await _unitOfWork.JM_TemplateRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
+             !s.IsDelete &&s.CompanyId == request.CompanyId);
+
+            var rs = _mapper.Map<JM_TemplateResponseItem>(query);
             response.data = rs;
             return response;
         }

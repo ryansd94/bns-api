@@ -33,8 +33,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<JM_TemplateResponse>();
             response.data = new JM_TemplateResponse();
-            var query = _context.JM_Templates.Where(s => !string.IsNullOrEmpty(s.Name) &&
-            !s.IsDelete);
+            var query = _context.JM_Templates.Where(s =>!s.IsDelete &&s.CompanyId == request.CompanyId);
             if (!string.IsNullOrEmpty(request.fieldSort))
             {
                 var columnSort = request.fieldSort;
