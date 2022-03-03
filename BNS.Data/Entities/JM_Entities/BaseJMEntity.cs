@@ -14,9 +14,9 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid? UpdatedUser { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedUser { get; set; }
-        public Guid? CompanyIndex { get; set; }
+        public Guid? CompanyId { get; set; }
         public bool IsDelete { get; set; }
-        [ForeignKey("CompanyIndex")]
+        [ForeignKey("CompanyId")]
         public virtual JM_Company JM_Company { get; set; }
 
     }

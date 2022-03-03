@@ -27,7 +27,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var dataChecks = await _unitOfWork.JM_TeamRepository.GetAsync(s => request.ids.Contains(s.Id) &&
-            s.CompanyIndex == request.CompanyId);
+            s.CompanyId == request.CompanyId);
             if (dataChecks == null || dataChecks.Count() ==0)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

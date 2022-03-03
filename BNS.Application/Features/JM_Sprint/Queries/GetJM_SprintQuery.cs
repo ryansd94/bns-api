@@ -41,7 +41,7 @@ namespace BNS.Service.Features
 
             var response = new ApiResult<JM_SprintResponse>();
             response.data = new JM_SprintResponse();
-            Expression<Func<JM_Sprint, bool>> filter = s => !s.IsDelete && s.CompanyIndex == request.CompanyId;
+            Expression<Func<JM_Sprint, bool>> filter = s => !s.IsDelete && s.CompanyId == request.CompanyId;
 
             var query = (await _unitOfWork.JM_SprintRepository.GetAsync(filter,
                 s => s.OrderBy(d => d.Name))).Select(s => _mapper.Map<JM_SprintResponseItem>(s));

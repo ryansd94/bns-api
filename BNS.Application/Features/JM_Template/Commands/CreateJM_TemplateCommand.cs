@@ -12,27 +12,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using Newtonsoft.Json;
 
 namespace BNS.Service.Features
 {
     public class CreateJM_TemplateCommand : IRequestHandler<CreateJM_TemplateRequest, ApiResult<Guid>>
     {
-        protected readonly BNSDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
 
-        public CreateJM_TemplateCommand(BNSDbContext context,
+        public CreateJM_TemplateCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient)
+         IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
         }
         public async Task<ApiResult<Guid>> Handle(CreateJM_TemplateRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _context.JM_Templates.Where(s => s.Name.Equals(request.Name)).FirstOrDefaultAsync();
+            var dataCheck = await _unitOfWork.JM_TemplateRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && 
+            s.CompanyId ==request.CompanyId);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -46,15 +46,14 @@ namespace BNS.Service.Features
                 Description = request.Description,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = request.UserId,
-                IssueType = request.IssueType,
-                AssigneeIssueStatus = request.AssigneeIssueStatus,
-                ReporterIssueStatus = request.ReporterIssueStatus
+                IssueType = JsonConvert.SerializeObject(request.IssueTypes),
+                AssigneeIssueStatus =JsonConvert.SerializeObject(request.AssigneeIssueStatus),
+                ReporterIssueStatus = JsonConvert.SerializeObject(request.ReporterIssueStatus)
 
             };
-            var abc = await _elasticClient.IndexDocumentAsync(data);
 
-            await _context.JM_Templates.AddAsync(data);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.JM_TemplateRepository.AddAsync(data);
+            await _unitOfWork.SaveChangesAsync();
             response.data = data.Id;
             return response;
         }

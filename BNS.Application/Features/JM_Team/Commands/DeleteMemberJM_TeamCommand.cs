@@ -27,7 +27,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var team = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
-            s.CompanyIndex == request.CompanyId, x => x.JM_TeamMembers);
+            s.CompanyId == request.CompanyId, x => x.JM_TeamMembers);
             if (team == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

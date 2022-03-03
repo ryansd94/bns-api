@@ -15,6 +15,7 @@ namespace BNS.Domain
         IGenericRepository<JM_Project> JM_ProjectRepository { get; }
         IGenericRepository<JM_ProjectTeam> JM_ProjectTeamRepository { get; }
         IGenericRepository<JM_ProjectMember> JM_ProjectMemberRepository { get; }
+        IGenericRepository<JM_Template> JM_TemplateRepository { get; }
 
 
         Task<ApiResult<Guid>> SaveChangesAsync();

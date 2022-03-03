@@ -28,7 +28,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.JM_SprintRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name)
-            && s.CompanyIndex == request.CompanyId
+            && s.CompanyId == request.CompanyId
             && s.JM_ProjectId == request.JM_ProjectId);
             if (dataCheck != null)
             {

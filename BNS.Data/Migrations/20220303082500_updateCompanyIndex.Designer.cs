@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220303082500_updateCompanyIndex")]
+    partial class updateCompanyIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2895,6 +2897,9 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CompanyIndex")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -2953,7 +2958,7 @@ namespace BNS.Data.Migrations
 
                     b.HasIndex("AssignUserId");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("IssueParentId");
 
@@ -2979,6 +2984,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3013,7 +3021,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("JM_TemplateId");
 
@@ -3027,6 +3035,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3052,7 +3063,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("ProjectId");
 
@@ -3068,6 +3079,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3099,7 +3113,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.ToTable("JM_ProjectSprints");
                 });
@@ -3111,6 +3125,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3136,7 +3153,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("ProjectId");
 
@@ -3152,6 +3169,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3189,7 +3209,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("JM_ProjectId");
 
@@ -3206,6 +3226,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3234,7 +3257,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("CreatedUser");
 
@@ -3252,6 +3275,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3277,7 +3303,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.HasIndex("TeamId");
 
@@ -3296,6 +3322,9 @@ namespace BNS.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyIndex")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -3327,7 +3356,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyIndex");
 
                     b.ToTable("JM_Templates");
                 });
@@ -3687,7 +3716,7 @@ namespace BNS.Data.Migrations
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Issue", "JM_IssueParent")
                         .WithMany()
@@ -3726,7 +3755,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Template", "JM_Template")
                         .WithMany()
@@ -3743,7 +3772,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_ProjectMembers")
@@ -3768,7 +3797,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.Navigation("JM_Company");
                 });
@@ -3777,7 +3806,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_ProjectTeams")
@@ -3802,7 +3831,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_Sprints")
@@ -3819,7 +3848,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "CreateUserAccount")
                         .WithMany("JM_TeamsCreate")
@@ -3848,7 +3877,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "JM_Team")
                         .WithMany("JM_TeamMembers")
@@ -3873,7 +3902,7 @@ namespace BNS.Data.Migrations
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyIndex");
 
                     b.Navigation("JM_Company");
                 });

@@ -44,7 +44,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<JM_TeamResponse>();
             response.data = new JM_TeamResponse();
-            Expression<Func<JM_Team, bool>> filter = s => !s.IsDelete && s.CompanyIndex == request.CompanyId;
+            Expression<Func<JM_Team, bool>> filter = s => !s.IsDelete && s.CompanyId == request.CompanyId;
 
             var query = (await _unitOfWork.JM_TeamRepository.GetAsync(filter,
                 s => s.OrderBy(d => d.Name))).Select(s => new JM_TeamResponseItem

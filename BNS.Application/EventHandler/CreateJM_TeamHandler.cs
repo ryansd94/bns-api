@@ -29,7 +29,7 @@ namespace BNS.Service.EventHandler
         public async Task<Unit> Handle(CreateJM_TeamSubcriberMQ request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyIndex == request.CompanyId);
+            var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyId == request.CompanyId);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -45,7 +45,7 @@ namespace BNS.Service.EventHandler
                 ParentId = request.ParentId,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = request.CreatedBy,
-                CompanyIndex=request.CompanyId
+                CompanyId=request.CompanyId
             };
             if (request.Members != null && request.Members.Count>0)
             {
@@ -53,7 +53,7 @@ namespace BNS.Service.EventHandler
                 {
                     await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
                     {
-                        CompanyIndex=request.CompanyId,
+                        CompanyId=request.CompanyId,
                         CreatedDate=DateTime.UtcNow,
                         CreatedUser=request.CreatedBy,
                         Id=Guid.NewGuid(),

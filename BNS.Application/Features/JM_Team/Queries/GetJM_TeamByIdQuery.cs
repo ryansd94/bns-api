@@ -33,7 +33,7 @@ namespace BNS.Service.Features
             var response = new ApiResult<JM_TeamResponseItem>();
             var data = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
             !s.IsDelete &&
-            s.CompanyIndex == request.CompanyId);
+            s.CompanyId == request.CompanyId);
             if (data == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

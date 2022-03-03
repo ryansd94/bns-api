@@ -20,9 +20,22 @@ namespace BNS.Service.Implement
         private IGenericRepository<JM_Project> jM_ProjectRepository;
         private IGenericRepository<JM_ProjectMember> jM_ProjectMemberRepository;
         private IGenericRepository<JM_ProjectTeam> jM_ProjectTeamRepository;
+        private IGenericRepository<JM_Template> jM_TemplateRepository;
 
 
         #region Repositories
+        public IGenericRepository<JM_Template> JM_TemplateRepository
+        {
+            get
+            {
+
+                if (this.jM_TemplateRepository == null)
+                {
+                    this.jM_TemplateRepository = new GenericRepository<JM_Template>(_context);
+                }
+                return jM_TemplateRepository;
+            }
+        }
         public IGenericRepository<JM_ProjectMember> JM_ProjectMemberRepository
         {
             get

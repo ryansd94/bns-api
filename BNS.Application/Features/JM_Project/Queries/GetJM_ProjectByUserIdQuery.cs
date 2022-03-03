@@ -32,7 +32,7 @@ namespace BNS.Service.Features
             var response = new ApiResult<JM_ProjectResponseItem>();
             var query = _context.JM_ProjectMembers.Where(s => s.UserId == request.Id &&
             !s.IsDelete &&
-            s.CompanyIndex == request.CompanyId).Include(s => s.JM_Project)
+            s.CompanyId == request.CompanyId).Include(s => s.JM_Project)
                 .Select(s => _mapper.Map<JM_ProjectResponseItem>(s));
             var rs = await query.FirstOrDefaultAsync();
             response.data = rs;
