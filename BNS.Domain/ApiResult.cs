@@ -11,7 +11,7 @@ namespace BNS.Domain
         {
             status = HttpStatusCode.OK;
             errorCode = EErrorCode.Success.ToString();
-            if (typeof(T).IsValueType)
+            if (typeof(T).IsClass)
                 data=   Activator.CreateInstance<T>();
         }
         public HttpStatusCode status { get; set; }
