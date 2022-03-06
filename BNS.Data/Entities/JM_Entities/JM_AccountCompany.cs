@@ -18,13 +18,11 @@ namespace BNS.Data.Entities.JM_Entities
         public bool IsDelete { get; set; }
         public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
-        public EStatus Status { get; set; }
+        public EUserStatus Status { get; set; }
         public bool IsDefault { get; set; }
         public bool IsMainAccount { get; set; }
         [MaxLength(100)]
         public string Email { get; set; }
-        [MaxLength(200)]
-        public string FullName { get; set; }
         public virtual JM_Company JM_Company { get; set; }
         public virtual JM_Account JM_Account { get; set; }
     }

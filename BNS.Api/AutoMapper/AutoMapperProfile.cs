@@ -14,7 +14,8 @@ namespace BNS.Api.AutoMapper
             CreateMap<JM_Project, JM_ProjectResponseItem>();
             CreateMap<JM_Team, JM_TeamResponseItem>();
             CreateMap<JM_Template, JM_TemplateResponseItem>();
-            CreateMap<JM_Account, JM_UserResponseItem>();
+            CreateMap<JM_AccountCompany, JM_UserResponseItem>().ForMember
+    (dest => dest.FullName, opt => opt.MapFrom(src => src.JM_Account.FullName)); ;
 
         }
     }

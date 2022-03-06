@@ -22,11 +22,11 @@ namespace BNS.Api.Auth
                 if (method == "GET")
                 {
                     var query = context.HttpContext.Request.QueryString;
-                    query= query.Add("CompanyId", companyId.Value);
-                    query= query.Add("UserId", userId.Value);
-                    context.HttpContext.Request.QueryString=query;
+                    query = query.Add("CompanyId", companyId.Value);
+                    query = query.Add("UserId", userId.Value);
+                    context.HttpContext.Request.QueryString = query;
                 }
-                else if (method == "POST" ||    method=="PUT"||    method=="DELETE")
+                else if (method == "POST" || method == "PUT")
                 {
                     var bodyStr = "";
                     var req = context.HttpContext.Request;
@@ -35,12 +35,18 @@ namespace BNS.Api.Auth
 
                     // Arguments: Stream, Encoding, detect encoding, buffer size 
                     // AND, the most important: keep stream opened
-                    using (StreamReader reader
-                              = new StreamReader(req.Body, Encoding.UTF8, true, 1024, true))
+                    if (req.Body.Length > 0)
                     {
-                        bodyStr = reader.ReadToEnd();
+                        using (StreamReader reader
+                                  = new StreamReader(req.Body, Encoding.UTF8, true, 2048, true))
+                        {
+                            bodyStr = reader.ReadToEnd();
+                        }
                     }
-                    var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(bodyStr);
+                    Dictionary<string, object> data = null;
+                    if (!string.IsNullOrEmpty(bodyStr))
+                        data = JsonConvert.DeserializeObject<Dictionary<string, object>>(bodyStr);
+                    else data = new Dictionary<string, object>();
                     data.Add("CompanyId", companyId.Value);
                     data.Add("UserId", userId.Value);
                     var requestData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
@@ -48,7 +54,7 @@ namespace BNS.Api.Auth
                 }
                 return;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 context.Result = new UnauthorizedResult();
                 return;

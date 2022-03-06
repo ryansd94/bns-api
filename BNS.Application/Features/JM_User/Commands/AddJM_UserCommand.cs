@@ -54,7 +54,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
                 return response;
             }
-            if (userCompany.Status != EStatus.WAILTING_CONFIRM_MAIL)
+            if (userCompany.Status != EUserStatus.WAILTING_CONFIRM_MAIL)
             {
                 response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
@@ -70,8 +70,8 @@ namespace BNS.Service.Features
 
             }
             user.PasswordHash=Ultility.MD5Encrypt(request.Password);
-            userCompany.Status=EStatus.ACTIVE;
-            userCompany.FullName=request.FullName;
+            user.FullName = request.FullName;
+            userCompany.Status=EUserStatus.ACTIVE;
             await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
             await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);
             await _unitOfWork.SaveChangesAsync();

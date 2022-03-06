@@ -107,6 +107,7 @@ namespace BNS.Service.Features
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
                 GoogleId = id,
+                FullName = infoUser.name.ToString(),
             };
 
             var accountCompany = new JM_AccountCompany
@@ -115,10 +116,9 @@ namespace BNS.Service.Features
                 IsDelete = false,
                 UserId = userid,
                 CompanyId = company.Id,
-                Status=EStatus.ACTIVE,
+                Status=EUserStatus.ACTIVE,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = userid,
-                FullName = infoUser.name.ToString(),
                 Email = infoUser.email.ToString(),
                 IsDefault=true,
                 IsMainAccount = true,

@@ -96,7 +96,7 @@ namespace BNS.Utilities
             asc,
             desc
         }
-        public enum EStatus
+        public enum EUserStatus
         {
             ACTIVE = 1,
             IN_ACTIVE = 2,

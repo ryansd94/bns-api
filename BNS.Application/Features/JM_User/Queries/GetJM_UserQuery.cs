@@ -53,7 +53,7 @@ namespace BNS.Service.Features
             response.recordsTotal = await query.CountAsync();
             query = query.Skip(request.start).Take(request.length);
 
-            var rs = await query.Select(d => _mapper.Map<JM_UserResponseItem>(d.JM_Account)).ToListAsync();
+            var rs = await query.Select(d => _mapper.Map<JM_UserResponseItem>(d)).ToListAsync();
             response.data.Items = rs;
             return response;
         }

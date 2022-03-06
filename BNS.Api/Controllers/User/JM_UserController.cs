@@ -57,5 +57,16 @@ namespace BNS.Api.Controllers.User
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpDelete("{id}")]
+        [BNSAuthorization]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var request = new DeleteJM_UserRequest();
+            request.Ids.Add(id);
+            request.CompanyId = CompanyId;
+            return Ok(await _mediator.Send(request));
+        }
+
+
     }
 }

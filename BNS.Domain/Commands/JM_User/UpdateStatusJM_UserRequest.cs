@@ -9,6 +9,6 @@ namespace BNS.Domain.Commands
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public EStatus Status { get; set; }
+        public EUserStatus Status { get; set; }
     }
 }

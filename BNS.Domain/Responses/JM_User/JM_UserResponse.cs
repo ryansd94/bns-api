@@ -20,6 +20,6 @@ namespace BNS.Domain.Responses
         public bool IsDelete { get; set; }
         public string GoogleId { get; set; }
         public string FullName { get; set; }
-        public EStatus? Status { get; set; }
+        public EUserStatus? Status { get; set; }
     }
 }

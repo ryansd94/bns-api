@@ -50,7 +50,7 @@ namespace BNS.Service.Features
                 return response;
             }
             var userCompanys = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => s.UserId == user.Id);
-            if (!userCompanys.Any(s => s.Status == EStatus.ACTIVE))
+            if (!userCompanys.Any(s => s.Status == EUserStatus.ACTIVE))
             {
                 response.errorCode = EErrorCode.Failed.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
@@ -63,7 +63,7 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            var userCompany =await userCompanys.Where(s => s.IsDefault && s.Status==EStatus.ACTIVE).FirstOrDefaultAsync();
+            var userCompany =await userCompanys.Where(s => s.IsDefault && s.Status==EUserStatus.ACTIVE).FirstOrDefaultAsync();
 
             var roles = new List<string>();
             //if (userCompany.IsMainAccount)

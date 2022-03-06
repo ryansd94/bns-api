@@ -62,7 +62,7 @@ namespace BNS.Service.Features
               && emails.Contains(s.JM_Account.Email), null, s => s.JM_Account);
 
 
-            emails = emails.Where(s => !userActive.Where(s => s.Status == EStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
+            emails = emails.Where(s => !userActive.Where(s => s.Status == EUserStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
 
             var accounts = await _unitOfWork.JM_AccountRepository.GetAsync(s => !s.IsDelete && emails.Contains(s.Email));
             var sendMailItems = new List<SendMailSubcriberMQItem>();
@@ -106,7 +106,7 @@ namespace BNS.Service.Features
                         CreatedUser=request.UserId,
                         UserId=account.Id,
                         CompanyId=request.CompanyId,
-                        Status=EStatus.WAILTING_CONFIRM_MAIL,
+                        Status=EUserStatus.WAILTING_CONFIRM_MAIL,
                         Email=email,
                         IsMainAccount=false,
                         IsDefault=true
