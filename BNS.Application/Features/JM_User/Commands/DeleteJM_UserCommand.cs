@@ -35,6 +35,15 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
                 return response;
             }
+            if(dataChecks.Count() ==0)
+            {
+                if(dataChecks.ToList()[0].IsMainAccount)
+                {
+                    response.errorCode = EErrorCode.Failed.ToString();
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_CannotDeleteMainUser];
+                    return response;
+                }
+            }
             foreach (var item in dataChecks)
             {
                 item.IsDelete = true;

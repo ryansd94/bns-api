@@ -21,6 +21,7 @@ namespace BNS.Data.Entities.JM_Entities
         public EUserStatus Status { get; set; }
         public bool IsDefault { get; set; }
         public bool IsMainAccount { get; set; }
+        public long EmailTimestamp { get; set; }
         [MaxLength(100)]
         public string Email { get; set; }
         public virtual JM_Company JM_Company { get; set; }

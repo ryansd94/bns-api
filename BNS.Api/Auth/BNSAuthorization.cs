@@ -35,14 +35,14 @@ namespace BNS.Api.Auth
 
                     // Arguments: Stream, Encoding, detect encoding, buffer size 
                     // AND, the most important: keep stream opened
-                    if (req.Body.Length > 0)
+
+                    using (StreamReader reader
+                              = new StreamReader(req.Body, Encoding.UTF8, true, 2048, true))
                     {
-                        using (StreamReader reader
-                                  = new StreamReader(req.Body, Encoding.UTF8, true, 2048, true))
-                        {
-                            bodyStr = reader.ReadToEnd();
-                        }
+                        var bodyStr2 = reader.ReadToEndAsync();
+                        bodyStr = bodyStr2.Result;
                     }
+
                     Dictionary<string, object> data = null;
                     if (!string.IsNullOrEmpty(bodyStr))
                         data = JsonConvert.DeserializeObject<Dictionary<string, object>>(bodyStr);

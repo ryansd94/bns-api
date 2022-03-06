@@ -25,34 +25,34 @@ namespace BNS.Api.Controllers.User
         }
         [HttpPost("add-user")]
         [BNSAuthorization]
-        public async Task<IActionResult> SendMailAddUser(  SendMailAddJM_UserRequest request)
+        public async Task<IActionResult> SendMailAddUser(SendMailAddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost("validate-signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> ValidateSignup( ValidateAddJM_UserRequest request)
+        public async Task<IActionResult> ValidateSignup(ValidateAddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Signup( AddJM_UserRequest request)
+        public async Task<IActionResult> Signup(AddJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
         [BNSAuthorization]
-        public async Task<IActionResult> GetAllData([FromQuery]  GetJM_UserRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery] GetJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut("status")]
         [BNSAuthorization]
-        public async Task<IActionResult> UpdateStatus( UpdateStatusJM_UserRequest request)
+        public async Task<IActionResult> UpdateStatus(UpdateStatusJM_UserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

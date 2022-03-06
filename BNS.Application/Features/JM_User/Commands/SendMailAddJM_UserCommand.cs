@@ -109,8 +109,20 @@ namespace BNS.Service.Features
                         Status=EUserStatus.WAILTING_CONFIRM_MAIL,
                         Email=email,
                         IsMainAccount=false,
-                        IsDefault=true
+                        IsDefault=true,
+                        EmailTimestamp= ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()
                     });
+                }
+                else
+                {
+                    var currentTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                    var aaaa = currentTimestamp - currentAccount.EmailTimestamp;
+                    if(aaaa<60)
+                    {
+                        continue;
+                    }
+                    currentAccount.EmailTimestamp = currentTimestamp;
+                    await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(currentAccount);
                 }
                 sendMailItems.Add(new SendMailSubcriberMQItem
                 {
