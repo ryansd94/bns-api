@@ -50,7 +50,7 @@ namespace BNS.Service.Features
             var response = new ApiResult<Guid>();
             var subject = "JOIN TEAM";
             var rootBody = "";
-            var filePath = Path.Combine(Environment.CurrentDirectory, @"../EmailTemplate", "AddUser.html"); ;
+            var filePath =  Environment.CurrentDirectory+ @"\EmailTemplate\"+"AddUser.html"; 
 
             using (StreamReader reader = File.OpenText(filePath))
             {
@@ -134,7 +134,7 @@ namespace BNS.Service.Features
             await _unitOfWork.SaveChangesAsync();
             await _busPublisher.PublishAsync(new SendMailSubcriberMQ
             {
-                Items=sendMailItems
+                Items = sendMailItems
             });
             return response;
         }
