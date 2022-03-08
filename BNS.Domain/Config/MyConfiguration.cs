@@ -51,6 +51,6 @@ namespace BNS.Domain
         public string VirtualHost { get; set; } = "mxnvtmhf";
         public string Username { get; set; } = "mxnvtmhf";
         public string Password { get; set; } = "SbGVlCeGGvGEdyUZxkK8rbwwk6VTY5L3";
-        public List<string> Hostnames { get; set; };
+        public List<string> Hostnames { get; set; }
     }
 }
