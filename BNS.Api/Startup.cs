@@ -45,15 +45,15 @@ namespace BNS.Api
             //// Configure Config
 
             services.Configure<MyConfiguration>(Configuration.GetSection("DefaultConfig"));
-            var appSettingsSection = Configuration.GetSection("DefaultConfig");
-            var appSettings = appSettingsSection.Get<MyConfiguration>();
+            //var appSettingsSection = Configuration.GetSection("DefaultConfig");
+            //var appSettings = appSettingsSection.Get<MyConfiguration>();
 
             services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
-            //var appSettings = new MyConfiguration();
+            var appSettings = new MyConfiguration();
             //services.AddCors(options =>
             //{
             //    options.AddPolicy("AllowAll",
