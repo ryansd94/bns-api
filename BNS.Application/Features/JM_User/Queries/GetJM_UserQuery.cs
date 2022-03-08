@@ -45,7 +45,7 @@ namespace BNS.Service.Features
             var query = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
             && s.CompanyId == request.CompanyId
             &&(string.IsNullOrEmpty(request.keyword) || (!string.IsNullOrEmpty(request.keyword) && s.Email.Contains(request.keyword)))
-            , s => s.OrderBy(d => d.CreatedDate));
+            , s => s.OrderBy(d => d.CreatedDate),s=>s.JM_Account);
 
             if (!string.IsNullOrEmpty(request.fieldSort))
                 query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);

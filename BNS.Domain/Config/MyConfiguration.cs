@@ -18,11 +18,11 @@ namespace BNS.Domain
     }
     public class MailConfig
     {
-        public string SmtpUserName { get; set; } = "noreply@ayasan-service.com";
-        public string SmtpPassword { get; set; } = "@y@5@nN0R3p/y";
-        public string SmtpHost { get; set; } = "cpanel02wh.bkk1.cloud.z.com";
+        public string SmtpUserName { get; set; } = "ayasan.global.official@gmail.com";
+        public string SmtpPassword { get; set; } = "12345678@Ab";
+        public string SmtpHost { get; set; } = "smtp.gmail.com";
         public string SmtpPort { get; set; } = "587";
-        public string SmtpEmailAddress { get; set; } = "noreply@ayasan-service.com";
+        public string SmtpEmailAddress { get; set; } = "ayasan.global.official@gmail.com";
 
     }
     public class Elasticsearch
@@ -48,9 +48,9 @@ namespace BNS.Domain
     }
     public class RabbitMQ
     {
-        public string VirtualHost { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public List<string> Hostnames { get; set; }
+        public string VirtualHost { get; set; } = "mxnvtmhf";
+        public string Username { get; set; } = "mxnvtmhf";
+        public string Password { get; set; } = "SbGVlCeGGvGEdyUZxkK8rbwwk6VTY5L3";
+        public List<string> Hostnames { get; set; };
     }
 }
