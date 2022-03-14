@@ -15,7 +15,7 @@ namespace BNS.Api.AutoMapper
             CreateMap<JM_Team, JM_TeamResponseItem>();
             CreateMap<JM_Template, JM_TemplateResponseItem>();
             CreateMap<JM_AccountCompany, JM_UserResponseItem>().ForMember
-    (dest => dest.FullName, opt => opt.MapFrom(src => src.JM_Account.FullName)); ;
+    (dest => dest.FullName, opt => opt.MapFrom(src => src.Status != Utilities.Enums.EUserStatus.ACTIVE ? string.Empty : src.JM_Account.FullName)); ;
 
         }
     }

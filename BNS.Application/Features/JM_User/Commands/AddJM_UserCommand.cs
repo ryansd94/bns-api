@@ -17,37 +17,42 @@ using BNS.Domain.Responses;
 namespace BNS.Service.Features
 {
 
-    public class AddJM_UserCommand : IRequestHandler<AddJM_UserRequest, ApiResult<Guid>>
+    public class AddJM_UserCommand : IRequestHandler<AddJM_UserRequest, ApiResult<LoginResponse>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly IElasticClient _elasticClient;
         protected readonly MyConfiguration _config;
         private readonly ICipherService _cipherService;
         private readonly IUnitOfWork _unitOfWork;
+        private IMediator _mediator;
         public AddJM_UserCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
         ICipherService CipherService,
          IElasticClient elasticClient,
-         IUnitOfWork unitOfWork)
+         IUnitOfWork unitOfWork,
+            IMediator mediator)
         {
             _sharedLocalizer = sharedLocalizer;
             _elasticClient = elasticClient;
             _config = config.Value;
             _cipherService = CipherService;
             _unitOfWork = unitOfWork;
+            _mediator = mediator;
         }
-        public async Task<ApiResult<Guid>> Handle(AddJM_UserRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<LoginResponse>> Handle(AddJM_UserRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<Guid>();
-            var data = JsonConvert.DeserializeObject<JoinTeamResponse>(_cipherService.DecryptString(request.Token));
+            var response = new ApiResult<LoginResponse>();
+            var data = JsonConvert.DeserializeObject<JoinTeamResponse>(await _cipherService.DecryptString(request.Token));
             if (data.Key != _config.Default.CipherKey)
             {
                 response.errorCode = EErrorCode.TokenNotValid.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_TokenNotValid];
                 return response;
             }
-            var userCompany = await _unitOfWork.JM_AccountCompanyRepository.FirstOrDefaultAsync(s => s.CompanyId == data.CompanyId && s.Email == data.EmailJoin);
+            var userCompany = await _unitOfWork.JM_AccountCompanyRepository.FirstOrDefaultAsync(s => s.CompanyId == data.CompanyId
+            && s.Id == data.Id
+            && !s.IsDelete);
             if (userCompany == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -69,13 +74,19 @@ namespace BNS.Service.Features
                 return response;
 
             }
-            user.PasswordHash=Ultility.MD5Encrypt(request.Password);
+            user.PasswordHash = Ultility.MD5Encrypt(request.Password);
             user.FullName = request.FullName;
-            userCompany.Status=EUserStatus.ACTIVE;
+            userCompany.Status = EUserStatus.ACTIVE;
             await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
             await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);
             await _unitOfWork.SaveChangesAsync();
-            return response;
+            var loginRequest = new LoginRequest
+            {
+                Username = user.UserName,
+                Password = request.Password
+            };
+            var rs = await _mediator.Send(loginRequest);
+            return rs;
         }
 
     }

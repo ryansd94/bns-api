@@ -7,5 +7,6 @@ namespace BNS.Domain.Responses
         public string EmailJoin { get; set; }
         public Guid CompanyId { get; set; }
         public Guid  UserRequest { get; set; }
+        public Guid Id { get; set; }
     }
 }

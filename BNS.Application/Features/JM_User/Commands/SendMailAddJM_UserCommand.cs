@@ -68,15 +68,6 @@ namespace BNS.Service.Features
             var sendMailItems = new List<SendMailSubcriberMQItem>();
             foreach (var email in emails)
             {
-                var joinTeam = new JoinTeamResponse
-                {
-                    CompanyId = request.CompanyId,
-                    EmailJoin = email,
-                    Key = _config.Default.CipherKey,
-                    UserRequest = request.UserId
-                };
-                var token = _cipherService.EncryptString(JsonConvert.SerializeObject(joinTeam));
-                var body = string.Format(rootBody, $"{_config.Default.WebUserDomain}/signup/jointeam?={token}");
                 var account = accounts.Where(s => s.Email.Equals(email)).FirstOrDefault();
                 if (account==null)
                 {
@@ -96,34 +87,46 @@ namespace BNS.Service.Features
                     };
                     await _unitOfWork.JM_AccountRepository.AddAsync(account);
                 }
-                var currentAccount = await userActive.Where(s => s.JM_Account.Email.Equals(email)).FirstOrDefaultAsync();
-                if (currentAccount == null)
+                var accountCompany = await userActive.Where(s => s.JM_Account.Email.Equals(email)).FirstOrDefaultAsync();
+                if (accountCompany == null)
                 {
-                    await _unitOfWork.JM_AccountCompanyRepository.AddAsync(new JM_AccountCompany
+                    accountCompany = new JM_AccountCompany
                     {
-                        IsDelete=false,
-                        CreatedDate=DateTime.UtcNow,
-                        CreatedUser=request.UserId,
-                        UserId=account.Id,
-                        CompanyId=request.CompanyId,
-                        Status=EUserStatus.WAILTING_CONFIRM_MAIL,
-                        Email=email,
-                        IsMainAccount=false,
-                        IsDefault=true,
-                        EmailTimestamp= ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()
-                    });
+                        Id = Guid.NewGuid(),
+                        IsDelete = false,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedUser = request.UserId,
+                        UserId = account.Id,
+                        CompanyId = request.CompanyId,
+                        Status = EUserStatus.WAILTING_CONFIRM_MAIL,
+                        Email = email,
+                        IsMainAccount = false,
+                        IsDefault = true,
+                        EmailTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()
+                    };
+                    await _unitOfWork.JM_AccountCompanyRepository.AddAsync(accountCompany);
                 }
                 else
                 {
                     var currentTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
-                    var aaaa = currentTimestamp - currentAccount.EmailTimestamp;
+                    var aaaa = currentTimestamp - accountCompany.EmailTimestamp;
                     if(aaaa<60)
                     {
                         continue;
                     }
-                    currentAccount.EmailTimestamp = currentTimestamp;
-                    await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(currentAccount);
+                    accountCompany.EmailTimestamp = currentTimestamp;
+                    await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(accountCompany);
                 }
+                var joinTeam = new JoinTeamResponse
+                {
+                    CompanyId = request.CompanyId,
+                    EmailJoin = email,
+                    Key = _config.Default.CipherKey,
+                    UserRequest = request.UserId,
+                    Id= accountCompany.Id
+                };
+                var token = _cipherService.EncryptString(JsonConvert.SerializeObject(joinTeam));
+                var body = string.Format(rootBody, $"{_config.Default.WebUserDomain}/signup/jointeam?token={token}");
                 sendMailItems.Add(new SendMailSubcriberMQItem
                 {
                     Body=body,

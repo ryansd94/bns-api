@@ -70,6 +70,8 @@ namespace BNS.Resource.LocalizationResources
             public const string MSG_UserHasRegister = "MSG_UserHasRegister";
             public const string MSG_UserNotRegister = "MSG_UserNotRegister";
             public const string MSG_CannotDeleteMainUser = "MSG_CannotDeleteMainUser";
+            public const string MSG_UserHasJoinTeam = "MSG_UserHasJoinTeam";
+            public const string MSG_UserHasDeleted = "MSG_UserHasDeleted";
 
         }
         public class Message

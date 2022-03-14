@@ -103,5 +103,10 @@ namespace BNS.Utilities
             WAILTING_CONFIRM_MAIL = 3,
             BLOCK = 4
         }
+        public enum EUserValidate
+        {
+            OK = 1,
+            IS_HAS_ACCOUNT = 2,
+        }
     }
 }

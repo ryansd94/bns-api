@@ -297,6 +297,9 @@
   <data name="MSG_ExistsData" xml:space="preserve">
     <value>Dữ liệu đã tồn tại!</value>
   </data>
+  <data name="MSG_ExistsUser" xml:space="preserve">
+    <value>Người dùng đã tồn tại</value>
+  </data>
   <data name="MSG_NotDeleteMasterBranch" xml:space="preserve">
     <value>Không thể xóa chi nhánh mặc định</value>
   </data>
@@ -341,6 +344,12 @@
   </data>
   <data name="MSG_TokenNotValid" xml:space="preserve">
     <value>Token không hợp lệ</value>
+  </data>
+  <data name="MSG_UserHasDeleted" xml:space="preserve">
+    <value>Người dùng đã bị xóa khỏi hệ thống</value>
+  </data>
+  <data name="MSG_UserHasJoinTeam" xml:space="preserve">
+    <value>Người dùng đã gia nhập hệ thống</value>
   </data>
   <data name="MSG_UserHasRegister" xml:space="preserve">
     <value>Tài khoản đã được đăng ký</value>

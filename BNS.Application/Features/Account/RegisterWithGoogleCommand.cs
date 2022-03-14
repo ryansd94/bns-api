@@ -21,6 +21,7 @@ using BNS.Domain.Commands;
 using BNS.Domain.Responses;
 using BNS.Domain;
 using BNS.Infrastructure;
+using BNS.Utilities;
 
 namespace BNS.Service.Features
 {
@@ -110,6 +111,8 @@ namespace BNS.Service.Features
                 FullName = infoUser.name.ToString(),
             };
 
+            user.PasswordHash = Ultility.MD5Encrypt(request.Password);
+            user.FullName = request.FullName;
             var accountCompany = new JM_AccountCompany
             {
                 Id = Guid.NewGuid(),

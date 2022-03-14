@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BNS.Service.Implement
 {
@@ -63,7 +64,7 @@ namespace BNS.Service.Implement
             return Convert.ToBase64String(array);
         }
 
-        public string DecryptString(string cipherText)
+        public async Task<string> DecryptString(string cipherText)
         {
             try
             {
@@ -80,15 +81,15 @@ namespace BNS.Service.Implement
                         {
                             using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
                             {
-                                return streamReader.ReadToEnd();
+                                return await streamReader.ReadToEndAsync();
                             }
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                return string.Empty;
             }
         }
     }

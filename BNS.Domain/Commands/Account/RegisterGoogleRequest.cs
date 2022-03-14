@@ -7,5 +7,10 @@ namespace BNS.Domain.Commands
     {
         [Required]
         public string Token { get; set; }
+        [Required]
+        public string FullName { get; set; }
+        [Required]
+        [PasswordValidationAttribute]
+        public string Password { get; set; }
     }
 }

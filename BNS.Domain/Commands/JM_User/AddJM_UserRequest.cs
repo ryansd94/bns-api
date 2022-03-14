@@ -1,10 +1,10 @@
 ﻿
-using System;
+using BNS.Domain.Responses;
 using System.ComponentModel.DataAnnotations;
 
 namespace BNS.Domain.Commands
 {
-    public class AddJM_UserRequest : CommandBase<ApiResult<Guid>>
+    public class AddJM_UserRequest : CommandBase<ApiResult<LoginResponse>>
     {
 
         [Required]
