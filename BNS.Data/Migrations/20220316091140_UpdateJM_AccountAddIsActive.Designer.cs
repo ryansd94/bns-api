@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220316091140_UpdateJM_AccountAddIsActive")]
+    partial class UpdateJM_AccountAddIsActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3242,7 +3244,11 @@ namespace BNS.Data.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("CreatedUser");
+
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("UpdatedUser");
 
                     b.ToTable("JM_Teams");
                 });
@@ -3684,7 +3690,7 @@ namespace BNS.Data.Migrations
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Issue", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_AccountAssign")
-                        .WithMany()
+                        .WithMany("JM_IssueAssign")
                         .HasForeignKey("AssignUserId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
@@ -3702,7 +3708,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_AccountReporter")
-                        .WithMany()
+                        .WithMany("JM_IssueReport")
                         .HasForeignKey("ReporterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -3823,13 +3829,27 @@ namespace BNS.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "CreateUserAccount")
+                        .WithMany("JM_TeamsCreate")
+                        .HasForeignKey("CreatedUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "TeamParent")
                         .WithMany()
                         .HasForeignKey("ParentId");
 
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "UpdateUserAccount")
+                        .WithMany("JM_TeamsUpdate")
+                        .HasForeignKey("UpdatedUser");
+
+                    b.Navigation("CreateUserAccount");
+
                     b.Navigation("JM_Company");
 
                     b.Navigation("TeamParent");
+
+                    b.Navigation("UpdateUserAccount");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TeamMember", b =>
@@ -3918,7 +3938,15 @@ namespace BNS.Data.Migrations
                 {
                     b.Navigation("JM_AccountCompanys");
 
+                    b.Navigation("JM_IssueAssign");
+
+                    b.Navigation("JM_IssueReport");
+
                     b.Navigation("JM_TeamMembers");
+
+                    b.Navigation("JM_TeamsCreate");
+
+                    b.Navigation("JM_TeamsUpdate");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Company", b =>

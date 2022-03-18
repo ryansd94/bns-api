@@ -47,7 +47,8 @@ namespace BNS.Service.Features
                 ParentId = request.ParentId,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = request.UserId,
-                CompanyId=request.CompanyId
+                CompanyId = request.CompanyId,
+                IsDelete = false
             };
             if (request.Members != null && request.Members.Count>0)
             {

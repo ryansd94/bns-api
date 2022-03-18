@@ -40,7 +40,7 @@ namespace BNS.Service.Features
                 if(dataChecks.ToList()[0].IsMainAccount)
                 {
                     response.errorCode = EErrorCode.Failed.ToString();
-                    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_CannotDeleteMainUser];
+                    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_CannotActionMainUser];
                     return response;
                 }
             }

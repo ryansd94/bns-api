@@ -35,11 +35,17 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var userCompany = await _unitOfWork.JM_AccountCompanyRepository.FirstOrDefaultAsync(s => s.CompanyId == request.CompanyId
-            && s.UserId == request.Id);
+            && s.Id == request.Id);
             if (userCompany == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
+                return response;
+            }
+            if(userCompany.IsMainAccount)
+            {
+                response.errorCode = EErrorCode.Failed.ToString();
+                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_CannotActionMainUser];
                 return response;
             }
             userCompany.Status=request.Status;

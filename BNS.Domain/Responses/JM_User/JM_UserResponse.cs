@@ -21,5 +21,7 @@ namespace BNS.Domain.Responses
         public string GoogleId { get; set; }
         public string FullName { get; set; }
         public EUserStatus? Status { get; set; }
+        public Guid UserId { get; set; }
+        
     }
 }

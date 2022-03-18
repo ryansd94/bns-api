@@ -34,7 +34,10 @@ namespace BNS.Api
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ICipherService, CipherService>();
-
+            services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
             //services.AddIdentity<CF_Account, Sys_Role>(ops =>
             //{
             //    //--- other code

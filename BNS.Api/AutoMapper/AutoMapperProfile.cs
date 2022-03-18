@@ -2,6 +2,7 @@
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain.Responses;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace BNS.Api.AutoMapper
@@ -12,7 +13,9 @@ namespace BNS.Api.AutoMapper
         {
             CreateMap<JM_Issue, JM_IssueResponseItem>();
             CreateMap<JM_Project, JM_ProjectResponseItem>();
-            CreateMap<JM_Team, JM_TeamResponseItem>();
+            CreateMap<JM_Team, JM_TeamResponseItem>()
+                .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_TeamMembers != null ? e.JM_TeamMembers.Select(u => u.UserId) : null))
+                .ForMember(s=>s.ParentName, d=>d.MapFrom(u=> u.TeamParent != null ? u.TeamParent.Name : string.Empty));
             CreateMap<JM_Template, JM_TemplateResponseItem>();
             CreateMap<JM_AccountCompany, JM_UserResponseItem>().ForMember
     (dest => dest.FullName, opt => opt.MapFrom(src => src.Status != Utilities.Enums.EUserStatus.ACTIVE ? string.Empty : src.JM_Account.FullName)); ;

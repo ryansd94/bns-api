@@ -60,7 +60,7 @@ namespace BNS.Service.Features
                 return response;
             }
             var account = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s =>   s.Email == data.EmailJoin && !s.IsDelete  );
-            if (account != null)
+            if (account != null && account.IsActive)
             {
                 response.data.Status = EUserValidate.IS_HAS_ACCOUNT;
                 return response;

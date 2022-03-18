@@ -91,7 +91,7 @@ namespace BNS.Service.Features
                 Id = Guid.NewGuid(),
                 IsDelete = false,
                 CreatedDate = DateTime.UtcNow,
-                Name=email.ToString().Split("@")[0]
+                Name = email.ToString().Split("@")[0]
             };
 
             user = new JM_Account
@@ -108,6 +108,7 @@ namespace BNS.Service.Features
                 LockoutEnabled = false,
                 AccessFailedCount = 0,
                 GoogleId = id,
+                IsActive = true,
                 FullName = infoUser.name.ToString(),
             };
 
@@ -119,11 +120,11 @@ namespace BNS.Service.Features
                 IsDelete = false,
                 UserId = userid,
                 CompanyId = company.Id,
-                Status=EUserStatus.ACTIVE,
+                Status = EUserStatus.ACTIVE,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = userid,
                 Email = infoUser.email.ToString(),
-                IsDefault=true,
+                IsDefault = true,
                 IsMainAccount = true,
             };
             company.CreatedUser = user.Id;

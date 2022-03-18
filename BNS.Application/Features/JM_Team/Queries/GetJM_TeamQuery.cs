@@ -47,15 +47,7 @@ namespace BNS.Service.Features
             Expression<Func<JM_Team, bool>> filter = s => !s.IsDelete && s.CompanyId == request.CompanyId;
 
             var query = (await _unitOfWork.JM_TeamRepository.GetAsync(filter,
-                s => s.OrderBy(d => d.Name))).Select(s => new JM_TeamResponseItem
-                {
-                    Name = s.Name,
-                    Id = s.Id,
-                    Description = s.Description,
-                    ParentId = s.ParentId,
-                    TeamParent = s.TeamParent,
-                    ParentName = s.TeamParent != null ? s.TeamParent.Name : string.Empty,
-                });
+                s => s.OrderBy(d => d.Name) ,s=>s.TeamParent)).Select(s => _mapper.Map<JM_TeamResponseItem>(s));
             if (!string.IsNullOrEmpty(request.fieldSort))
                 query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);
             response.recordsTotal = await _unitOfWork.JM_TeamRepository.CountAsync(filter);

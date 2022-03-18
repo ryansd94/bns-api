@@ -151,17 +151,12 @@ namespace BNS.Service.Implement
         public async Task<ApiResult<Guid>> SaveChangesAsync()
         {
             var result = new ApiResult<Guid>();
-            result.status=System.Net.HttpStatusCode.OK;
-            try
-            {
-                var rs = await _context.SaveChangesAsync();
-                result.errorCode=EErrorCode.Success.ToString();
-            }
-            catch (Exception ex)
-            {
-                result.errorCode=EErrorCode.Failed.ToString();
-                result.title=ex.Message;
-            }
+            result.status = System.Net.HttpStatusCode.OK;
+
+            var rs = await _context.SaveChangesAsync();
+            if (rs > 0)
+                result.errorCode = EErrorCode.Success.ToString();
+
             return result;
         }
 

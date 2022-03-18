@@ -114,17 +114,6 @@ namespace BNS.Data.EntityContext
 
 
 
-            modelBuilder.Entity<JM_Account>()
-            .HasMany(a => a.JM_TeamsCreate)
-            .WithOne(b => b.CreateUserAccount)
-            .HasForeignKey(b => b.CreatedUser);
-
-
-            modelBuilder.Entity<JM_Account>()
-            .HasMany(a => a.JM_TeamsUpdate)
-            .WithOne(b => b.UpdateUserAccount)
-            .HasForeignKey(b => b.UpdatedUser);
-
 
 
             modelBuilder.Entity<JM_AccountCompany>(entity =>
@@ -150,10 +139,10 @@ namespace BNS.Data.EntityContext
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Sprints);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Issues);
             modelBuilder.Entity<JM_Sprint>().HasMany(x => x.JM_Issues);
-            modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueAssign).WithOne(b => b.JM_AccountAssign)
-            .HasForeignKey(b => b.AssignUserId);
-            modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueReport).WithOne(b => b.JM_AccountReporter)
-            .HasForeignKey(b => b.ReporterId);
+            //modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueAssign).WithOne(b => b.JM_AccountAssign)
+            //.HasForeignKey(b => b.AssignUserId);
+            //modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueReport).WithOne(b => b.JM_AccountReporter)
+            //.HasForeignKey(b => b.ReporterId);
             modelBuilder.Entity<Sys_RoleGroup>(entity =>
             {
                 entity.HasKey(e => e.Index);

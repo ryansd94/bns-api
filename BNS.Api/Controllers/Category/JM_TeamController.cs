@@ -42,6 +42,7 @@ namespace BNS.Api.Controllers.Category
         {
             var request = new GetJM_TeamByIdRequest();
             request.Id = id;
+            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 

@@ -74,16 +74,19 @@ namespace BNS.Service.Features
                 return response;
 
             }
-            user.PasswordHash = Ultility.MD5Encrypt(request.Password);
-            user.FullName = request.FullName;
+            if (!request.IsHasAccount)
+            {
+                user.PasswordHash = Ultility.MD5Encrypt(request.Password);
+                user.FullName = request.FullName;
+                user.IsActive = true;
+                await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
+            }
             userCompany.Status = EUserStatus.ACTIVE;
-            await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
             await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);
             await _unitOfWork.SaveChangesAsync();
-            var loginRequest = new LoginRequest
+            var loginRequest = new LoginNoPasswordRequest
             {
-                Username = user.UserName,
-                Password = request.Password
+                Username = user.UserName
             };
             var rs = await _mediator.Send(loginRequest);
             return rs;

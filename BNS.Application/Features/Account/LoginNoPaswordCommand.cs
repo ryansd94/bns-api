@@ -20,13 +20,13 @@ using BNS.Utilities;
 using BNS.Domain.Responses;
 
 namespace BNS.Service.Features
-{
-    public class LoginCommand : IRequestHandler<LoginRequest, ApiResult<LoginResponse>>
+{ 
+    public class LoginNoPaswordCommand : IRequestHandler<LoginNoPasswordRequest, ApiResult<LoginResponse>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
         protected readonly MyConfiguration _config;
-        public LoginCommand(
+        public LoginNoPaswordCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
          IUnitOfWork unitOfWork)
@@ -35,7 +35,7 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
             _config = config.Value;
         }
-        public async Task<ApiResult<LoginResponse>> Handle(LoginRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<LoginResponse>> Handle(LoginNoPasswordRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<LoginResponse>();
 
@@ -46,21 +46,15 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
                 return response;
             }
-            
-            if (!user.PasswordHash.Equals(Ultility.MD5Encrypt(request.Password)))
+            var userCompanys = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => s.UserId == user.Id);
+            if (!userCompanys.Any(s => s.Status == EUserStatus.ACTIVE))
             {
                 response.errorCode = EErrorCode.Failed.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
                 return response;
             }
-            var userCompanys = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => s.UserId == user.Id);
-            //if (!userCompanys.Any(s => s.Status == EUserStatus.ACTIVE))
-            //{
-            //    response.errorCode = EErrorCode.Failed.ToString();
-            //    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
-            //    return response;
-            //}
-            var userCompany =await userCompanys.Where(s => s.IsDefault && s.Status==EUserStatus.ACTIVE).FirstOrDefaultAsync();
+
+            var userCompany = await userCompanys.Where(s => s.IsDefault && s.Status == EUserStatus.ACTIVE).FirstOrDefaultAsync();
 
             var roles = new List<string>();
             //if (userCompany.IsMainAccount)
