@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
 
 namespace BNS.Api
 {
@@ -45,15 +46,15 @@ namespace BNS.Api
             //// Configure Config
 
             services.Configure<MyConfiguration>(Configuration.GetSection("DefaultConfig"));
-            //var appSettingsSection = Configuration.GetSection("DefaultConfig");
-            //var appSettings = appSettingsSection.Get<MyConfiguration>();
+            var appSettingsSection = Configuration.GetSection("DefaultConfig");
+            var appSettings = appSettingsSection.Get<MyConfiguration>();
 
             services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
-            var appSettings = new MyConfiguration();
+            //var appSettings = new MyConfiguration();
             //services.AddCors(options =>
             //{
             //    options.AddPolicy("AllowAll",
@@ -73,14 +74,6 @@ namespace BNS.Api
             {
                 options.AllowSynchronousIO = true;
             });
-            //services.AddDbContext<BNSDbContext>((serviceProvider, dbContextBuilder) =>
-            //{
-            //    var connectionStringPlaceHolder = appSettings.ConnectionStrings.bnsConnection;
-            //    var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-            //    var dbName = httpContextAccessor.HttpContext.Request.Headers["tenantId"].First();
-            //    var connectionString = connectionStringPlaceHolder.Replace("{dbName}", dbName);
-            //    dbContextBuilder.UseSqlServer(connectionString);
-            //});
 
             services.AddDataProtection();
 

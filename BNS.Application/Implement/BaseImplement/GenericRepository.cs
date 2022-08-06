@@ -128,7 +128,7 @@ namespace BNS.Service.Implement
                 else
                     query = _context.Set<D>().AsQueryable().Where("ShopIndex = " + '"' + shopIndex + '"'
                     + " && Isdelete = null");
-                query = Common.OrderBy(query, "Number", false);
+                query = query.OrderBy("Number", "asc");
                 var rs = await query.Skip(0).Take(1).ToDynamicListAsync();
                 if (rs.Count > 0)
                 {

@@ -49,19 +49,7 @@ namespace BNS.Service.EventHandler
             };
             if (request.Members != null && request.Members.Count>0)
             {
-                foreach (var item in request.Members)
-                {
-                    await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
-                    {
-                        CompanyId=request.CompanyId,
-                        CreatedDate=DateTime.UtcNow,
-                        CreatedUser=request.CreatedBy,
-                        Id=Guid.NewGuid(),
-                        IsDelete=false,
-                        TeamId=data.Id,
-                        UserId=item
-                    });
-                }
+                
             }
             await _unitOfWork.JM_TeamRepository.AddAsync(data);
             response= await _unitOfWork.SaveChangesAsync();

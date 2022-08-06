@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using BNS.Domain.Queries;
 using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -27,7 +29,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<JM_TemplateResponseItem>> Handle(GetJM_TemplateByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<JM_TemplateResponseItem>();
-            var query = await _unitOfWork.JM_TemplateRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
+            var query = await _unitOfWork.Repository<JM_Template>().FirstOrDefaultAsync(s => s.Id == request.Id &&
              !s.IsDelete &&s.CompanyId == request.CompanyId);
 
             var rs = _mapper.Map<JM_TemplateResponseItem>(query);

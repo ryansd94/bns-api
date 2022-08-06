@@ -48,7 +48,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_CannotActionMainUser];
                 return response;
             }
-            userCompany.Status=request.Status;
+            userCompany.Status= (int)request.Status;
             userCompany.UpdatedDate=DateTime.UtcNow;
             userCompany.UpdatedUser=request.UserId;
             await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);

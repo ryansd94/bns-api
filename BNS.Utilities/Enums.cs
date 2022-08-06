@@ -26,7 +26,7 @@ namespace BNS.Utilities
             SupperAdmin = 1,
             User = 2
         }
-        public enum EIssueType
+        public enum ETaskType
         {
             STORY = 1,
             EPIC = 2,
@@ -74,16 +74,6 @@ namespace BNS.Utilities
             Product,
             Employee
         }
-        public enum EIssueStatus
-        {
-            NEW = 1,
-            IN_PROGRESS = 2,
-            RESLOVED = 3,
-            DONE = 4,
-            FEEDBACK = 5,
-            CANCELED = 6,
-            CONFIRM = 7
-        }
         public enum EVersionType
         {
             Trial = 1,
@@ -107,6 +97,17 @@ namespace BNS.Utilities
         {
             OK = 1,
             IS_HAS_ACCOUNT = 2,
+        }
+
+        public enum EWhereOperation
+        {
+            Equal = 0,
+            NotEqual = 1,
+            Contains = 2,
+            Greater = 3,
+            GreaterOrEqual = 4,
+            Less = 5,
+            LessEqual = 6
         }
     }
 }

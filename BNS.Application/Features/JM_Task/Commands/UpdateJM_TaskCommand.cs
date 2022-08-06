@@ -14,18 +14,18 @@ using BNS.Domain.Commands;
 
 namespace BNS.Service.Features
 {
-    public class UpdateJM_IssueCommand : IRequestHandler<UpdateJM_IssueRequest, ApiResult<Guid>>
+    public class UpdateJM_TaskCommand : IRequestHandler<UpdateJM_TaskRequest, ApiResult<Guid>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public UpdateJM_IssueCommand(BNSDbContext context,
+        public UpdateJM_TaskCommand(BNSDbContext context,
          IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _context = context;
             _sharedLocalizer = sharedLocalizer;
         }
-        public async Task<ApiResult<Guid>> Handle(UpdateJM_IssueRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<Guid>> Handle(UpdateJM_TaskRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _context.JM_Issues.Where(s => s.Id == request.Id).FirstOrDefaultAsync();
@@ -38,7 +38,7 @@ namespace BNS.Service.Features
 
             if (request.UserId != dataCheck.ReporterId)
             {
-                if (dataCheck.IssueType != request.IssueType)
+                if (dataCheck.TaskTypeId != request.TaskTypeId)
                 {
                     response.errorCode = EErrorCode.Failed.ToString();
                     response.title = _sharedLocalizer[LocalizedBackendMessages.Message.MSG_NotPermissionEdit];
@@ -49,10 +49,10 @@ namespace BNS.Service.Features
             dataCheck.SprintId = request.SprintId;
             dataCheck.StartDate = request.StartDate;
             dataCheck.DueDate = request.DueDate;
-            dataCheck.IssueType = request.IssueType;
-            dataCheck.IssueStatus = request.IssueStatus;
+            dataCheck.TaskTypeId = request.TaskTypeId;
+            dataCheck.StatusId = request.StatusId;
             dataCheck.Description = request.Description;
-            dataCheck.IssueParentId = request.IssueParentId;
+            dataCheck.TaskParentId = request.TaskParentId;
             dataCheck.OriginalTime = request.OriginalTime;
             dataCheck.RemainingTime = request.RemainingTime;
             dataCheck.AssignUserId = request.AssignUserId;

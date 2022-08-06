@@ -24,10 +24,13 @@ namespace BNS.Data.EntityContext
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Data Source=125.212.226.105,1968;Initial Catalog=test_bidv_2;User ID=sa;Password=TGn<@7qY");
+                options.UseSqlServer("Data Source=DESKTOP-096QE0I\\MSSQLSERVER01;Initial Catalog=CACore_2;User ID=test;Password=123456");
             }
         }
-         
+        public virtual DbSet<T> Repository<T>() where T : class
+        {
+            return Set<T>();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -124,25 +127,14 @@ namespace BNS.Data.EntityContext
             });
 
 
-            modelBuilder.Entity<JM_TeamMember>(entity =>
-            {
-                entity.HasOne(s => s.JM_Team).WithMany(s => s.JM_TeamMembers).HasForeignKey(s => s.TeamId);
-                entity.HasOne(s => s.JM_Account).WithMany(s => s.JM_TeamMembers).HasForeignKey(s => s.UserId);
-
-            });
-
-
-
-
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectTeams);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Sprints);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Issues);
             modelBuilder.Entity<JM_Sprint>().HasMany(x => x.JM_Issues);
-            //modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueAssign).WithOne(b => b.JM_AccountAssign)
-            //.HasForeignKey(b => b.AssignUserId);
-            //modelBuilder.Entity<JM_Account>().HasMany(x => x.JM_IssueReport).WithOne(b => b.JM_AccountReporter)
-            //.HasForeignKey(b => b.ReporterId);
+
+            modelBuilder.Entity<JM_Template>().HasMany(x => x.JM_TemplateStatus);
+
             modelBuilder.Entity<Sys_RoleGroup>(entity =>
             {
                 entity.HasKey(e => e.Index);
@@ -1295,10 +1287,12 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_ProjectSprint> JM_ProjectSprints { get; set; }
         public virtual DbSet<JM_Template> JM_Templates { get; set; }
         public virtual DbSet<JM_Sprint> JM_Sprints { get; set; }
-        public virtual DbSet<JM_Issue> JM_Issues { get; set; }
+        public virtual DbSet<JM_Task> JM_Issues { get; set; }
         public virtual DbSet<JM_Company> JM_Companys { get; set; }
         public virtual DbSet<JM_AccountCompany> JM_AccountCompanys { get; set; }
-        public virtual DbSet<JM_TeamMember> JM_TeamMembers { get; set; }
+        public virtual DbSet<SYS_FilterConfig> SYS_FilterConfigs { get; set; }
+        public virtual DbSet<JM_TemplateStatus> JM_TemplateStatus { get; set; }
+        public virtual DbSet<JM_Status> JM_Status { get; set; }
 
 
     }

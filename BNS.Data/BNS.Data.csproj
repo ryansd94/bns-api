@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Entities\bns_dbtestContext.cs" />
+    <Compile Remove="Entities\JM_Entities\JM_TeamMember.cs" />
     <Compile Remove="EntityContext\BNSContextFactory.cs" />
   </ItemGroup>
 
@@ -27,6 +28,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BNS.Utilities\BNS.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

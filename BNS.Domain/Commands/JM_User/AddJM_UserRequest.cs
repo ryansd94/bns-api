@@ -13,5 +13,6 @@ namespace BNS.Domain.Commands
         [PasswordValidationAttribute(false)]
         public string Password { get; set; }
         public bool IsHasAccount { get; set; }
+        public string Image { get; set; }
     }
 }

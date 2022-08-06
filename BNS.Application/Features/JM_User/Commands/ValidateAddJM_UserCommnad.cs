@@ -53,7 +53,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserHasDeleted];
                 return response;
             }
-            if (  accountCompany.Status == EUserStatus.ACTIVE)
+            if (  accountCompany.Status == (int)EUserStatus.ACTIVE)
             {
                 response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserHasJoinTeam];

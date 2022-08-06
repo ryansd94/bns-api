@@ -7,7 +7,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Nest;
 using Newtonsoft.Json;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
@@ -16,7 +15,6 @@ using BNS.Domain.Responses;
 
 namespace BNS.Service.Features
 {
-
     public class AddJM_UserCommand : IRequestHandler<AddJM_UserRequest, ApiResult<LoginResponse>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -29,12 +27,10 @@ namespace BNS.Service.Features
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
         ICipherService CipherService,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork,
             IMediator mediator)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _config = config.Value;
             _cipherService = CipherService;
             _unitOfWork = unitOfWork;
@@ -59,7 +55,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
                 return response;
             }
-            if (userCompany.Status != EUserStatus.WAILTING_CONFIRM_MAIL)
+            if (userCompany.Status != (int)EUserStatus.WAILTING_CONFIRM_MAIL)
             {
                 response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
@@ -79,9 +75,10 @@ namespace BNS.Service.Features
                 user.PasswordHash = Ultility.MD5Encrypt(request.Password);
                 user.FullName = request.FullName;
                 user.IsActive = true;
+                user.Image = request.Image;
                 await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
             }
-            userCompany.Status = EUserStatus.ACTIVE;
+            userCompany.Status = (int)EUserStatus.ACTIVE;
             await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);
             await _unitOfWork.SaveChangesAsync();
             var loginRequest = new LoginNoPasswordRequest

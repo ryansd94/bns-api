@@ -28,7 +28,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var team = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
-            s.CompanyId == request.CompanyId, x => x.JM_TeamMembers);
+            s.CompanyId == request.CompanyId);
             if (team == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -39,48 +39,7 @@ namespace BNS.Service.Features
             {
                 var userContain = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => request.Members.Contains(s.UserId));
                 var memberAdd = request.Members.Where(s => userContain.Select(d => d.UserId).Contains(s)).ToList();
-                var teamMembers = team.JM_TeamMembers;
-                if (teamMembers == null || teamMembers.Count ==0)
-                {
-                    foreach (var item in memberAdd)
-                    {
-                        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
-                        {
-                            CompanyId=request.CompanyId,
-                            CreatedDate=DateTime.UtcNow,
-                            CreatedUser=request.UserId,
-                            Id=Guid.NewGuid(),
-                            IsDelete=false,
-                            TeamId=request.Id,
-                            UserId=item
-                        });
-                    }
-                }
-                else
-                {
-                    var teamMemberAdd = memberAdd.Where(d => !teamMembers.Select(s => s.UserId).Contains(d));
-                    foreach (var item in teamMemberAdd)
-                    {
-                        await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
-                        {
-                            CompanyId=request.CompanyId,
-                            CreatedDate=DateTime.UtcNow,
-                            CreatedUser=request.UserId,
-                            Id=Guid.NewGuid(),
-                            IsDelete=false,
-                            TeamId=request.Id,
-                            UserId=item
-                        });
-                    }
-                    var teamMemberUpdate = teamMembers.Where(s => s.IsDelete && memberAdd.Contains(s.UserId));
-                    foreach (var item in teamMemberUpdate)
-                    {
-                        item.IsDelete=false;
-                        item.UpdatedDate=DateTime.UtcNow;
-                        item.UpdatedUser=request.UserId;
-                        await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
-                    }
-                }
+                
                 team.UpdatedDate = DateTime.UtcNow;
                 team.UpdatedUser = request.UserId;
 

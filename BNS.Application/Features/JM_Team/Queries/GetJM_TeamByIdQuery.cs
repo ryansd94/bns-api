@@ -10,6 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Queries;
+using BNS.Data.Entities.JM_Entities;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -31,9 +34,9 @@ namespace BNS.Service.Features
         public async Task<ApiResult<JM_TeamResponseItem>> Handle(GetJM_TeamByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<JM_TeamResponseItem>();
-            var data = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
+            var data = await _unitOfWork.Repository<JM_Team>().Include(s=>s.JM_AccountCompanys).FirstOrDefaultAsync(s => s.Id == request.Id &&
             !s.IsDelete &&
-            s.CompanyId == request.CompanyId, s => s.JM_TeamMembers);
+            s.CompanyId == request.CompanyId);
             if (data == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

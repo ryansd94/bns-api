@@ -10,14 +10,16 @@ using BNS.Domain;
 using BNS.Service.Implement;
 using System.Reflection;
 using BNS.Service.Features;
+using BNS.Domain.Commands;
 
 namespace BNS.Api
 {
-  public static  class DependencyInjection
+  public static  class RegisterDI
     {
         public static void AddRepository(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(SendMailAddJM_UserCommand));
+            //services.AddMediatR(typeof(SendMailAddJM_UserCommand));
+            services.AddMediatR(typeof(CreateJM_TeamCommand).GetTypeInfo().Assembly); 
             services.AddIdentity<CF_Account, Sys_Role>().AddEntityFrameworkStores<BNSDbContext>()
                 .AddDefaultTokenProviders();
             services.AddTransient<IUnitOfWork, UnitOfWork>();

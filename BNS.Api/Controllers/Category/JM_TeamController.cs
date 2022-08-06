@@ -1,9 +1,7 @@
 ﻿using BNS.Api.Auth;
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
-using BNS.Domain.Responses;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

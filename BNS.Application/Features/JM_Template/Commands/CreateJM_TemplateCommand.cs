@@ -10,6 +10,7 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using Newtonsoft.Json;
 using BNS.Data.Entities.JM_Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -28,30 +29,53 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(CreateJM_TemplateRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_TemplateRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) &&
-            s.CompanyId ==request.CompanyId);
+            var dataCheck = await _unitOfWork.Repository<JM_Template>().FirstOrDefaultAsync(s => s.Name.Equals(request.Name) &&
+            s.CompanyId == request.CompanyId);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                 return response;
             }
-            var data = new JM_Template
+            var template = new JM_Template
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = request.UserId,
-                IssueType = JsonConvert.SerializeObject(request.IssueTypes),
-                AssigneeIssueStatus =JsonConvert.SerializeObject(request.AssigneeIssueStatus),
-                ReporterIssueStatus = JsonConvert.SerializeObject(request.ReporterIssueStatus)
-
+                Content = request.Content,
+                CompanyId = request.CompanyId,
             };
 
-            await _unitOfWork.JM_TemplateRepository.AddAsync(data);
+            if (request.Status != null && request.Status.Count > 0)
+            {
+                foreach (var item in request.Status)
+                {
+                    if (item.IsNew == true)
+                    {
+                        var status = new JM_Status
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            Color = item.Color,
+                        };
+                        await _unitOfWork.Repository<JM_Status>().AddAsync(status);
+                    }
+                    var templateStatus = new JM_TemplateStatus
+                    {
+                        Id = Guid.NewGuid(),
+                        CompanyId = request.CompanyId,
+                        TemplateId = template.Id,
+                        StatusId = item.Id
+                    };
+                    await _unitOfWork.Repository<JM_TemplateStatus>().AddAsync(templateStatus);
+                }
+            }
+
+            await _unitOfWork.Repository<JM_Template>().AddAsync(template);
             await _unitOfWork.SaveChangesAsync();
-            response.data = data.Id;
+            response.data = template.Id;
             return response;
         }
 

@@ -14,18 +14,18 @@ using BNS.Domain;
 
 namespace BNS.Service.Features
 {
-    public class DeleteJM_IssueCommand : IRequestHandler<DeleteJM_IssueRequest, ApiResult<Guid>>
+    public class DeleteJM_TaskCommand : IRequestHandler<DeleteJM_TaskRequest, ApiResult<Guid>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public DeleteJM_IssueCommand(BNSDbContext context,
+        public DeleteJM_TaskCommand(BNSDbContext context,
          IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _context = context;
             _sharedLocalizer = sharedLocalizer;
         }
-        public async Task<ApiResult<Guid>> Handle(DeleteJM_IssueRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<Guid>> Handle(DeleteJM_TaskRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var dataChecks = await _context.JM_Issues.Where(s => request.ids.Contains(s.Id)).ToListAsync();

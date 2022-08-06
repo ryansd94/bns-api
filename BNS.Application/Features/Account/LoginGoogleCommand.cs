@@ -101,9 +101,11 @@ namespace BNS.Service.Features
             var token = new JwtSecurityToken(_config.Tokens.Issuer
                 , _config.Tokens.Issuer
                 , claims
-                , expires: DateTime.UtcNow.AddDays(1)
+                , expires: DateTime.UtcNow.AddDays(71)
                 , signingCredentials: creds
                 );
+            response.data.FullName = user.FullName;
+            response.data.Image = user.Image;
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
             return response;
         }

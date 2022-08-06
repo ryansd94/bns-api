@@ -1,24 +1,24 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using static BNS.Utilities.Enums;
-
 namespace BNS.Domain.Commands
 {
-    public class CreateJM_IssueRequest : CommandBase<ApiResult<Guid>>
+    public class UpdateJM_TaskRequest : CommandBase<ApiResult<Guid>>
     {
         [Required]
         public string Summary { get; set; }
         public string Description { get; set; }
         [Required]
-        public Guid ProjectId { get; set; }
+        public Guid Id { get; set; }
         [Required]
-        public EIssueType IssueType { get; set; }
+        public Guid TaskTypeId { get; set; }
+        public Guid StatusId { get; set; }
         public Guid? AssignUserId { get; set; }
         public Guid? SprintId { get; set; }
         public string OriginalTime { get; set; }
         public string RemainingTime { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
-        public Guid? IssueParentId { get; set; }
+        public Guid? TaskParentId { get; set; }
     }
 }

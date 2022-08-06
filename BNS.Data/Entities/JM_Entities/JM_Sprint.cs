@@ -17,6 +17,6 @@ namespace BNS.Data.Entities.JM_Entities
         [ForeignKey("JM_ProjectId")]
         public JM_Project JM_Project { get; set; }
 
-        public virtual IEnumerable<JM_Issue> JM_Issues { get; set; }
+        public virtual IEnumerable<JM_Task> JM_Issues { get; set; }
     }
 }

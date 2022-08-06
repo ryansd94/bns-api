@@ -27,25 +27,12 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var team = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
-            s.CompanyId == request.CompanyId, x => x.JM_TeamMembers);
+            s.CompanyId == request.CompanyId);
             if (team == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
                 return response;
-            }
-
-            var teamMembers = team.JM_TeamMembers;
-            if (teamMembers != null || teamMembers.Count >0)
-            {
-                var teamMemberDelete = teamMembers.Where(s => request.Members.Contains(s.UserId) && !s.IsDelete).ToList();
-                foreach (var item in teamMemberDelete)
-                {
-                    item.IsDelete=true;
-                    item.UpdatedDate=DateTime.UtcNow;
-                    item.UpdatedUser=request.UserId;
-                    await _unitOfWork.JM_TeamMemberRepository.UpdateAsync(item);
-                }
             }
             team.UpdatedDate = DateTime.UtcNow;
             team.UpdatedUser = request.UserId;

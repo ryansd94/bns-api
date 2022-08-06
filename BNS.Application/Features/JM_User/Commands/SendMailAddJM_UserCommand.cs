@@ -34,12 +34,10 @@ namespace BNS.Service.Features
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
         ICipherService CipherService,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork,
         IBusPublisher busPublisher)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _config = config.Value;
             _cipherService = CipherService;
             _unitOfWork = unitOfWork;
@@ -62,7 +60,7 @@ namespace BNS.Service.Features
               && emails.Contains(s.JM_Account.Email), null, s => s.JM_Account);
 
 
-            emails = emails.Where(s => !userActive.Where(s => s.Status == EUserStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
+            emails = emails.Where(s => !userActive.Where(s => s.Status == (int)EUserStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
 
             var accounts = await _unitOfWork.JM_AccountRepository.GetAsync(s => !s.IsDelete && emails.Contains(s.Email));
             var sendMailItems = new List<SendMailSubcriberMQItem>();
@@ -98,7 +96,7 @@ namespace BNS.Service.Features
                         CreatedUser = request.UserId,
                         UserId = account.Id,
                         CompanyId = request.CompanyId,
-                        Status = EUserStatus.WAILTING_CONFIRM_MAIL,
+                        Status = (int)EUserStatus.WAILTING_CONFIRM_MAIL,
                         Email = email,
                         IsMainAccount = false,
                         IsDefault = true,

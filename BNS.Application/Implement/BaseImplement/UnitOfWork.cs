@@ -1,6 +1,7 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
@@ -14,7 +15,6 @@ namespace BNS.Service.Implement
         private IGenericRepository<JM_Account> jM_AccountRepository;
         private IGenericRepository<JM_AccountCompany> jM_AccountCompanyRepository;
         private IGenericRepository<JM_Team> jM_TeamRepository;
-        private IGenericRepository<JM_TeamMember> jM_TeamMemberRepository;
         private IGenericRepository<JM_Sprint> jM_SprintRepository;
         private IGenericRepository<JM_Company> jM_CompanyRepository;
         private IGenericRepository<JM_Project> jM_ProjectRepository;
@@ -108,18 +108,6 @@ namespace BNS.Service.Implement
                 return jM_AccountCompanyRepository;
             }
         }
-        public IGenericRepository<JM_TeamMember> JM_TeamMemberRepository
-        {
-            get
-            {
-
-                if (this.jM_TeamMemberRepository == null)
-                {
-                    this.jM_TeamMemberRepository = new GenericRepository<JM_TeamMember>(_context);
-                }
-                return jM_TeamMemberRepository;
-            }
-        }
         public IGenericRepository<JM_Team> JM_TeamRepository
         {
             get
@@ -171,6 +159,10 @@ namespace BNS.Service.Implement
             {
                 _context.Dispose();
             }
+        }
+        public DbSet<T> Repository<T>() where T : class
+        {
+            return _context.Repository<T>();
         }
     }
 }

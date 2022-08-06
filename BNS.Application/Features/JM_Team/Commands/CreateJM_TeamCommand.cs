@@ -1,6 +1,5 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
-using BNS.Domain.Messaging;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
@@ -11,6 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -38,7 +39,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                 return response;
             }
-            var data = new JM_Team
+            var team = new JM_Team
             {
                 Id = Guid.NewGuid(),
                 Code = request.Code,
@@ -50,24 +51,18 @@ namespace BNS.Service.Features
                 CompanyId = request.CompanyId,
                 IsDelete = false
             };
-            if (request.Members != null && request.Members.Count>0)
+            await _unitOfWork.JM_TeamRepository.AddAsync(team);
+            if (request.Members != null && request.Members.Count > 0)
             {
-                foreach (var item in request.Members)
+                var accountCompanys = await _unitOfWork.Repository<JM_AccountCompany>().Where(s => request.Members.Contains(s.Id) &&
+                  !s.IsDelete).ToListAsync();
+                foreach (var account in accountCompanys)
                 {
-                    await _unitOfWork.JM_TeamMemberRepository.AddAsync(new JM_TeamMember
-                    {
-                        CompanyId=request.CompanyId,
-                        CreatedDate=DateTime.UtcNow,
-                        CreatedUser=request.UserId,
-                        Id=Guid.NewGuid(),
-                        IsDelete=false,
-                        TeamId=data.Id,
-                        UserId=item
-                    });
+                    account.TeamId = team.Id;
+                    _unitOfWork.Repository<JM_AccountCompany>().Update(account);
                 }
             }
-            await _unitOfWork.JM_TeamRepository.AddAsync(data);
-            response= await _unitOfWork.SaveChangesAsync();
+            response = await _unitOfWork.SaveChangesAsync();
 
             //_elasticClient.Index<JM_Team>(data, i => i
             //       .Index("bns")

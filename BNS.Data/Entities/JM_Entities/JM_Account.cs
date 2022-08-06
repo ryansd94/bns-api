@@ -19,8 +19,9 @@ namespace BNS.Data.Entities.JM_Entities
         public bool IsDelete { get; set; }
         public string GoogleId { get; set; }
         public bool IsActive { get; set; }
+        public string Image { get; set; }
         public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
-        public virtual ICollection<JM_TeamMember> JM_TeamMembers { get; set; }
+        public virtual ICollection<SYS_FilterConfig> SYS_FilterConfigs { get; set; }
 
     }
 }

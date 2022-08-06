@@ -11,14 +11,15 @@ namespace BNS.Api.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<JM_Issue, JM_IssueResponseItem>();
+            CreateMap<JM_Task, JM_TaskResponseItem>();
             CreateMap<JM_Project, JM_ProjectResponseItem>();
             CreateMap<JM_Team, JM_TeamResponseItem>()
-                .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_TeamMembers != null ? e.JM_TeamMembers.Select(u => u.UserId) : null))
-                .ForMember(s=>s.ParentName, d=>d.MapFrom(u=> u.TeamParent != null ? u.TeamParent.Name : string.Empty));
+                .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
+                .ForMember(s => s.ParentName, d => d.MapFrom(u => u.TeamParent != null ? u.TeamParent.Name : string.Empty));
             CreateMap<JM_Template, JM_TemplateResponseItem>();
+            CreateMap<JM_TemplateResponseItem, JM_Template>();
             CreateMap<JM_AccountCompany, JM_UserResponseItem>().ForMember
-    (dest => dest.FullName, opt => opt.MapFrom(src => src.Status != Utilities.Enums.EUserStatus.ACTIVE ? string.Empty : src.JM_Account.FullName)); ;
+    (dest => dest.FullName, opt => opt.MapFrom(src => src.Status == (int)Utilities.Enums.EUserStatus.WAILTING_CONFIRM_MAIL ? string.Empty : src.JM_Account.FullName)); ;
 
         }
     }

@@ -47,9 +47,9 @@ namespace BNS.Service.Features
             Expression<Func<JM_Team, bool>> filter = s => !s.IsDelete && s.CompanyId == request.CompanyId;
 
             var query = (await _unitOfWork.JM_TeamRepository.GetAsync(filter,
-                s => s.OrderBy(d => d.Name) ,s=>s.TeamParent)).Select(s => _mapper.Map<JM_TeamResponseItem>(s));
+                s => s.OrderBy(d => d.Name) )).Select(s => _mapper.Map<JM_TeamResponseItem>(s));
             if (!string.IsNullOrEmpty(request.fieldSort))
-                query = Common.OrderBy(query, request.fieldSort, request.sort == ESortEnum.desc.ToString() ? false : true);
+                query = query.OrderBy(request.fieldSort, request.sort);
             response.recordsTotal = await _unitOfWork.JM_TeamRepository.CountAsync(filter);
             query = query.Skip(request.start).Take(request.length);
             var rs = await query.ToListAsync();

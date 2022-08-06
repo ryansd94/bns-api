@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static BNS.Utilities.Common;
 
 namespace BNS.Domain
 {
@@ -14,6 +15,7 @@ namespace BNS.Domain
         public bool isAdd { get; set; }
         public bool isEdit { get; set; }
 
+        public string filters { get; set; }
         public string fieldSort { get; set; }
         public string sort { get; set; }
          

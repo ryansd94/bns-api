@@ -10,8 +10,15 @@ namespace BNS.Domain.Commands
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<EIssueType> IssueTypes { get; set; }
-        public List<EIssueStatus> ReporterIssueStatus { get; set; }
-        public List<EIssueStatus> AssigneeIssueStatus { get; set; }
+        public string Content { get; set; }
+        public List<StatusItem> Status { get; set; }
+    }
+
+    public class StatusItem
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+        public bool IsNew { get; set; }
     }
 }
