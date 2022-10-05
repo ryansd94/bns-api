@@ -45,7 +45,7 @@ namespace BNS.Api.Controllers.User
         }
         [HttpGet]
         [BNSAuthorization]
-        public async Task<IActionResult> GetAllData([FromQuery] GetJM_UserRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery] GetUserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

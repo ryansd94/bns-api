@@ -19,2694 +19,6 @@ namespace BNS.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BNS.Data.Entities.CF_Account", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BranchDefault")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsMainAccount")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityAnswer")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid?>("SecurityQuestion")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopCode")
-                        .HasMaxLength(200)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopIndex");
-
-                    b.ToTable("CF_Account");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Area", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.HasIndex("BranchIndex");
-
-                    b.HasIndex("ShopIndex");
-
-                    b.ToTable("CF_Area");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Bill", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<long?>("CustomerIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<double?>("CustomerNeedPay")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("CustomerPaying")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<bool?>("IsExample")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsPayment")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OrderIndex")
-                        .HasMaxLength(4000)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(4000)");
-
-                    b.Property<string>("PaymentUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("RoomIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Sale")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long?>("TableOrderIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<double?>("TotalCost")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("TotalMoney")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Bill");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_BillDetail", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ID");
-
-                    b.Property<Guid?>("BillId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("BillID");
-
-                    b.Property<Guid>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Cost")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("OrderDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid>("OrderUser")
-                        .HasMaxLength(200)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("ProductIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("RoomIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Sale")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("TotalMoney")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid>("UpdatedUser")
-                        .HasMaxLength(200)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CF_BillDetail");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_BookInfo", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CustomerIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateBook")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool?>("IsBookDish")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(10)
-                        .HasColumnType("nchar(10)")
-                        .IsFixedLength(true);
-
-                    b.Property<string>("NumberPeople")
-                        .HasMaxLength(10)
-                        .HasColumnType("nchar(10)")
-                        .IsFixedLength(true);
-
-                    b.Property<Guid?>("RoomIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("TableOrderIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_BookInfo");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_BookInfoRoomDetail", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BookIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("RoomIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_BookInfoRoomDetail");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Branch", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool?>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsMaster")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.HasIndex("ShopIndex");
-
-                    b.ToTable("CF_Branch");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Config", b =>
-                {
-                    b.Property<DateTime?>("VersionDate")
-                        .HasColumnType("date");
-
-                    b.ToTable("CF_Config");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Customer", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("BrithDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("Cmnd")
-                        .HasMaxLength(15)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(15)")
-                        .HasColumnName("CMND");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("CustomerType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Gender")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameFacebook")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Customer");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Decentralization", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ByDepartment")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ByEmployeeCode")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<Guid?>("ByPosition")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Page")
-                        .HasColumnType("ntext");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Decentralization");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Department", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.HasIndex("ShopIndex");
-
-                    b.ToTable("CF_Department");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Discount", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("ApplyForBill")
-                        .HasColumnType("bit")
-                        .HasComment("Áp dụng khi hóa đơn thanh toán có giá trị lớn hơn");
-
-                    b.Property<bool?>("ApplyForProduct")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ApplyForProductGroup")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ApplyTime")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DateApplyType")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasComment("Ngày áp dụng (tất cả/ theo ngày)");
-
-                    b.Property<bool?>("ForFri")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ForMon")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ForSat")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ForSun")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ForThu")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ForTue")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ForWed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<TimeSpan?>("FromTime")
-                        .HasColumnType("time");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("MoneyBill")
-                        .HasColumnType("float")
-                        .HasComment("Số tiền áp dụng");
-
-                    b.Property<double?>("MoneyReduce")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ObjectType")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasComment("Đối tượng ap dụng (Giảm giá trên tổng tiền thanh toán/Giảm giá trên từng món)");
-
-                    b.Property<string>("ProductGroupValue")
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
-
-                    b.Property<string>("ProductValue")
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
-
-                    b.Property<double?>("RatioReduce")
-                        .HasColumnType("float");
-
-                    b.Property<string>("ReduceType")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasComment("Giảm theo tỷ lệ (%)/Giảm bằng số tiề");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<TimeSpan?>("ToTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Discount");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Employee", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AccountIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("BrithDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateOfNric")
-                        .HasColumnType("smalldatetime")
-                        .HasColumnName("DateOfNRIC");
-
-                    b.Property<Guid?>("DepartmentIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EmployeeCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("EmployeeImage")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("EmployeeName")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsMainAccount")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("JoinedDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("Nric")
-                        .HasMaxLength(15)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(15)")
-                        .HasColumnName("NRIC");
-
-                    b.Property<string>("PermanentAddress")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PlaceOfNric")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasColumnName("PlaceOfNRIC");
-
-                    b.Property<Guid?>("PositionIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Region")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TemporaryAddress")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("WorkingDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Index");
-
-                    b.HasIndex("AccountIndex")
-                        .IsUnique()
-                        .HasFilter("[AccountIndex] IS NOT NULL");
-
-                    b.HasIndex("BranchIndex");
-
-                    b.HasIndex("DepartmentIndex");
-
-                    b.HasIndex("PositionIndex");
-
-                    b.HasIndex("ShopIndex");
-
-                    b.ToTable("CF_Employee");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_EmployeeWorkingInfo", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("DepartmentIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EmployeeIndex")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("PositionIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_EmployeeWorkingInfo");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_History", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("EmployeeCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("FormName")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Function")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index")
-                        .HasName("PK_CF_History_1");
-
-                    b.ToTable("CF_History");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Kitchen", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DoneDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("FinishedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool?>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsPrioritize")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("OrderIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityDone")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityFinished")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityUnProcess")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityWaitProcess")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("WaitProcessDate")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Kitchen");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Order", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Cost")
-                        .HasColumnType("float");
-
-                    b.Property<bool?>("IsAnnounced")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsBook")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsInvalid")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsPrioritize")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("ProductIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityAnnounced")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityOld")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("Sale")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TableOrderIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("TotalMoney")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index")
-                        .HasName("PK_CF_Invoice");
-
-                    b.ToTable("CF_Order");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Payment", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<Guid?>("CustomerIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("EmployeeCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool?>("IsExample")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Payer")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TypeName")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Value")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("VendorIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Payment");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Position", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.HasIndex("ShopIndex");
-
-                    b.ToTable("CF_Position");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_PriceWithArea", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AreaIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<Guid?>("ProductIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RoomIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_PriceWithArea");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Product", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<double?>("Cost")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("GroupIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Image1")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Image2")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Image3")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Image4")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Image5")
-                        .HasColumnType("ntext");
-
-                    b.Property<double?>("Inventory")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("InventoryRest")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("InventoryRestOld")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("InventoryTemp")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("IsBusiness")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsDirectSales")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsSubElement")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("ProductType")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("RestMax")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("RestMin")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UnitIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Product");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ProductElement", b =>
-                {
-                    b.Property<Guid>("ProductEleIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Cost")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("TotalMoney")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProductEleIndex", "ProductIndex");
-
-                    b.ToTable("CF_ProductElement");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ProductGroup", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("Parent")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_ProductGroup");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ProductSub", b =>
-                {
-                    b.Property<Guid>("ProductSubIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProductSubIndex", "ProductIndex");
-
-                    b.ToTable("CF_ProductSub");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_PurchaseOrder", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<decimal?>("PayVendor")
-                        .HasColumnType("money");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("QuantityProduct")
-                        .HasColumnType("float");
-
-                    b.Property<decimal?>("Sale")
-                        .HasColumnType("money");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("ShoudPayVendor")
-                        .HasColumnType("money");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("TotalMoney")
-                        .HasColumnType("money");
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("VendorIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("VendorPay")
-                        .HasColumnType("money");
-
-                    b.Property<decimal?>("VendorShoudPay")
-                        .HasColumnType("money");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_PurchaseOrder");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_PurchaseOrderDetail", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("ImportPrice")
-                        .HasColumnType("money");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("ntext");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("money");
-
-                    b.Property<Guid?>("ProductIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PurchaseOrderIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<decimal?>("Sale")
-                        .HasColumnType("money");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("TotalMoney")
-                        .HasColumnType("money");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_PurchaseOrderDetail");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Room", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AreaIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Room");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Shift", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TimeEnd")
-                        .HasMaxLength(10)
-                        .HasColumnType("nchar(10)")
-                        .IsFixedLength(true);
-
-                    b.Property<string>("TimeStart")
-                        .HasMaxLength(10)
-                        .HasColumnType("nchar(10)")
-                        .IsFixedLength(true);
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Shift");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ShiftSettingByDepartment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ID");
-
-                    b.Property<string>("DateApply")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<Guid?>("DepartmentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DepartmentID");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ShiftID");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CF_ShiftSettingByDepartment");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ShiftSettingByEmployee", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ID");
-
-                    b.Property<string>("DateApply")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<Guid?>("EmployeeIndex")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("EmployeeATID");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ShiftID");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CF_ShiftSettingByEmployee");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ShiftSettingByPosition", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ID");
-
-                    b.Property<string>("DateApply")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("PositionId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("PositionID");
-
-                    b.Property<Guid?>("ShiftId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ShiftID");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CF_ShiftSettingByPosition");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Shop", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(25)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool?>("IsCreatedDataExample")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsShowCreateDataExampleMenu")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LicenseText")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("LogoImage")
-                        .HasColumnType("ntext");
-
-                    b.Property<int?>("Module")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool?>("NotShowDataExample")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("NotShowHelp")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("NumberOfBranch")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("RegisterDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int?>("VersionType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ShopIpsetting", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("IpAddress")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_ShopIPSetting");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ShopPrintSetting", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("IsPayAndPrintBill")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
-                    b.Property<string>("PrintBillIp")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("PrintBillIP");
-
-                    b.Property<string>("PrintBillName")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("PrintBillPort")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int?>("PrintType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ServiceIp")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("ServiceIP");
-
-                    b.Property<string>("ServicePort")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index")
-                        .HasName("PK_CF_ShopPrintSetting_1");
-
-                    b.ToTable("CF_ShopPrintSetting");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_ShopSetting", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsGoiMonKhiHetTonKho")
-                        .HasColumnType("bit")
-                        .HasColumnName("MSG_GoiMonKhiHetTonKho");
-
-                    b.Property<bool>("IsThanhToanCacMonDaOrder")
-                        .HasColumnType("bit")
-                        .HasColumnName("MSG_ThanhToanCacMonDaOrder");
-
-                    b.Property<bool>("MsgChanIpngoaiDanhSach")
-                        .HasColumnType("bit")
-                        .HasColumnName("MSG_ChanIPNgoaiDanhSach");
-
-                    b.Property<bool>("MsgKhongSuDungTinhNangBep")
-                        .HasColumnType("bit")
-                        .HasColumnName("MSG_KhongSuDungTinhNangBep");
-
-                    b.Property<bool>("MsgKiemTraCaLamViec")
-                        .HasColumnType("bit")
-                        .HasColumnName("MSG_KiemTraCaLamViec");
-
-                    b.Property<bool>("MsgTatCaHangHoaChuyenBepKhiThongBao")
-                        .HasColumnType("bit")
-                        .HasColumnName("MSG_TatCaHangHoaChuyenBepKhiThongBao");
-
-                    b.Property<Guid>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_ShopSetting");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_TableOrder", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CustomerIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("IsBook")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsPaid")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsPrintBill")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("PrintedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("PrintedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid?>("RoomIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_TableOrder");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Unit", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Unit");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Vendor", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Company")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TaxCode")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("VendorGroupIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_Vendor");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_VendorGroup", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_VendorGroup");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.Cf_SecurityQuestion", b =>
-                {
-                    b.Property<Guid>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Question")
-                        .HasColumnType("ntext");
-
-                    b.Property<Guid?>("ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CF_SecurityQuestion");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClAnalysis", b =>
-                {
-                    b.Property<int>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AnalysisGroupIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_Analysis");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClAnalysisGroup", b =>
-                {
-                    b.Property<int>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_AnalysisGroup");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClMedicalList", b =>
-                {
-                    b.Property<long>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("index")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("PatientIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("RegisterDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_MedicalList");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClMedicine", b =>
-                {
-                    b.Property<long>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<decimal?>("Cost")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<string>("Image1")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Image2")
-                        .HasColumnType("ntext");
-
-                    b.Property<decimal?>("Inventory")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MedicineType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<decimal?>("RestMax")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<decimal?>("RestMin")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UnitIndex")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Used")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_Medicine");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClMedicineType", b =>
-                {
-                    b.Property<int>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsExample")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_MedicineType");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClPatient", b =>
-                {
-                    b.Property<long>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Cmnd")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("CMND");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ExaminaCode")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_Patient");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClPrescription", b =>
-                {
-                    b.Property<long>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("BacSyKhamIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ChanDoan")
-                        .HasColumnType("ntext");
-
-                    b.Property<decimal?>("ExaminaMedicine")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<decimal?>("ExaminaMoney")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("MedicalListIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("NgayKhamBenh")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Note")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<long?>("PatientIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("PrescriptionCode")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("TotalMoney")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<string>("TrieuChung")
-                        .HasColumnType("ntext");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_Prescription");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClPrescriptionDetail", b =>
-                {
-                    b.Property<long>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("index")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Cost")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<int?>("IsDelete")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("MedicalListIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("MedicineIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PatientIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PrescriptionIndex")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("TotalMoney")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index")
-                        .HasName("PK_CL_CL_PrescriptionDetail");
-
-                    b.ToTable("CL_PrescriptionDetail");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.ClUnit", b =>
-                {
-                    b.Property<int>("Index")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BranchIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool?>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NameInEng")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("ShopIndex")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("UpdatedUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Index");
-
-                    b.ToTable("CL_Unit");
-                });
-
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2750,6 +62,9 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("JM_CompanyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("JM_TaskId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -2789,6 +104,8 @@ namespace BNS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("JM_CompanyId");
+
+                    b.HasIndex("JM_TaskId");
 
                     b.ToTable("JM_Accounts");
                 });
@@ -2897,6 +214,46 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_Companys");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_CustomColumn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ControlType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.ToTable("JM_CustomColumns");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2915,7 +272,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -2939,12 +296,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("JM_TemplateId");
 
@@ -2963,7 +320,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDelete")
@@ -2975,7 +332,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
@@ -2983,7 +340,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("ProjectId");
 
@@ -3004,7 +361,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EndDate")
@@ -3025,12 +382,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.ToTable("JM_ProjectSprints");
                 });
@@ -3047,7 +404,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDelete")
@@ -3062,12 +419,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("ProjectId");
 
@@ -3088,7 +445,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -3115,12 +472,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("JM_ProjectId");
 
@@ -3142,7 +499,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDelete")
@@ -3154,12 +511,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.ToTable("JM_Status");
                 });
@@ -3179,7 +536,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -3197,10 +554,7 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Key")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OriginalTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProjectId")
+                    b.Property<Guid?>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RemainingTime")
@@ -3218,38 +572,170 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("TaskParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TaskTypeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignUserId");
-
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("IssueParentId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("ReporterId");
-
                     b.HasIndex("SprintId");
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("JM_Issues");
+                    b.HasIndex("TaskTypeId");
+
+                    b.ToTable("JM_Tasks");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskCustomColumn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomColumnId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex("CustomColumnId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("JM_TaskCustomColumns");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TemplateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex("TemplateId");
+
+                    b.ToTable("JM_TaskTypies");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("JM_TaskUsers");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
@@ -3267,7 +753,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -3285,12 +771,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("ParentId");
 
@@ -3312,7 +798,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -3330,14 +816,70 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.ToTable("JM_Templates");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TemplateDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ColumnName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ColumnPosition")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ColumnTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CustomColumnId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TemplateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex("CustomColumnId");
+
+                    b.HasIndex("TemplateId");
+
+                    b.ToTable("JM_TemplateDetails");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TemplateStatus", b =>
@@ -3352,11 +894,14 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uniqueidentifier");
@@ -3367,12 +912,12 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("StatusId");
 
@@ -3393,7 +938,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedUser")
+                    b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FilterData")
@@ -3408,7 +953,7 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UpdatedUser")
+                    b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
@@ -3419,7 +964,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("UserId");
 
@@ -3480,7 +1025,7 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sys_Role");
+                    b.ToTable("Sys_Roles");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.Sys_RoleClaim", b =>
@@ -3533,9 +1078,6 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("BranchIndex")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CF_ShopIndex")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Code")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -3571,8 +1113,6 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Index");
-
-                    b.HasIndex("CF_ShopIndex");
 
                     b.ToTable("Sys_RoleGroup");
                 });
@@ -3651,107 +1191,15 @@ namespace BNS.Data.Migrations
                     b.ToTable("Sys_UserToken");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.CF_Account", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("CF_Accounts")
-                        .HasForeignKey("ShopIndex")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Area", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Branch", "CF_Branch")
-                        .WithMany("CF_Areas")
-                        .HasForeignKey("BranchIndex");
-
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("CF_Areas")
-                        .HasForeignKey("ShopIndex")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CF_Branch");
-
-                    b.Navigation("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Branch", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("CF_Branchs")
-                        .HasForeignKey("ShopIndex")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Department", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("CF_Departments")
-                        .HasForeignKey("ShopIndex")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Employee", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Account", "CF_Account")
-                        .WithOne("Cf_Employee")
-                        .HasForeignKey("BNS.Data.Entities.CF_Employee", "AccountIndex");
-
-                    b.HasOne("BNS.Data.Entities.CF_Branch", "CF_Branch")
-                        .WithMany("CF_Employees")
-                        .HasForeignKey("BranchIndex");
-
-                    b.HasOne("BNS.Data.Entities.CF_Department", "CF_Department")
-                        .WithMany("CF_Employees")
-                        .HasForeignKey("DepartmentIndex");
-
-                    b.HasOne("BNS.Data.Entities.CF_Position", "CF_Position")
-                        .WithMany("CF_Employees")
-                        .HasForeignKey("PositionIndex");
-
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("Cf_Employees")
-                        .HasForeignKey("ShopIndex")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CF_Account");
-
-                    b.Navigation("CF_Branch");
-
-                    b.Navigation("CF_Department");
-
-                    b.Navigation("CF_Position");
-
-                    b.Navigation("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Position", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("CF_Positions")
-                        .HasForeignKey("ShopIndex")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CF_Shop");
-                });
-
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", null)
                         .WithMany("JM_Accounts")
                         .HasForeignKey("JM_CompanyId");
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", null)
+                        .WithMany("TaskUsers")
+                        .HasForeignKey("JM_TaskId");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_AccountCompany", b =>
@@ -3766,24 +1214,37 @@ namespace BNS.Data.Migrations
                         .WithMany("JM_AccountCompanys")
                         .HasForeignKey("TeamId");
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_Account")
-                        .WithMany("JM_AccountCompanys")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "Account")
+                        .WithMany("AccountCompanys")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Account");
+                    b.Navigation("Account");
 
                     b.Navigation("JM_Company");
 
                     b.Navigation("JM_Team");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_CustomColumn", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Project", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Template", "JM_Template")
                         .WithMany()
@@ -3791,16 +1252,18 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Company");
-
                     b.Navigation("JM_Template");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectMember", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_ProjectMembers")
@@ -3816,25 +1279,29 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_Account");
 
-                    b.Navigation("JM_Company");
-
                     b.Navigation("JM_Project");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectSprint", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("JM_Company");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectTeam", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_ProjectTeams")
@@ -3848,18 +1315,20 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Company");
-
                     b.Navigation("JM_Project");
 
                     b.Navigation("JM_Team");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Sprint", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_Sprints")
@@ -3867,29 +1336,29 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Company");
-
                     b.Navigation("JM_Project");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Status", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("JM_Company");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_AccountAssign")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("AssignUserId");
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "JM_TaskParent")
                         .WithMany()
@@ -3897,160 +1366,202 @@ namespace BNS.Data.Migrations
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_Issues")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_AccountReporter")
-                        .WithMany()
-                        .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Sprint", "JM_Sprint")
                         .WithMany("JM_Issues")
                         .HasForeignKey("SprintId");
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Status", "JM_Status")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_AccountAssign");
-
-                    b.Navigation("JM_AccountReporter");
-
-                    b.Navigation("JM_Company");
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_TaskType", "TaskType")
+                        .WithMany("Tasks")
+                        .HasForeignKey("TaskTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("JM_Project");
 
                     b.Navigation("JM_Sprint");
 
-                    b.Navigation("JM_Status");
-
                     b.Navigation("JM_TaskParent");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("TaskType");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskCustomColumn", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_CustomColumn", "CustomColumn")
+                        .WithMany()
+                        .HasForeignKey("CustomColumnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
+                        .WithMany("TaskCustomColumns")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomColumn");
+
+                    b.Navigation("Task");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskType", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId");
+
+                    b.Navigation("Template");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskUser", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "TeamParent")
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("JM_Company");
-
                     b.Navigation("TeamParent");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("JM_Company");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TemplateDetail", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_CustomColumn", "CustomColumn")
+                        .WithMany()
+                        .HasForeignKey("CustomColumnId");
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Template", "Template")
+                        .WithMany("TemplateDetails")
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomColumn");
+
+                    b.Navigation("Template");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TemplateStatus", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Status", "JM_Status")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Template", "JM_Template")
-                        .WithMany("JM_TemplateStatus")
+                        .WithMany("TemplateStatus")
                         .HasForeignKey("TemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Company");
-
-                    b.Navigation("JM_Status");
-
                     b.Navigation("JM_Template");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_FilterConfig", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Company", "JM_Company")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_Account")
-                        .WithMany("SYS_FilterConfigs")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("JM_Account");
 
-                    b.Navigation("JM_Company");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.Sys_RoleGroup", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.CF_Shop", "CF_Shop")
-                        .WithMany("Sys_RoleGroups")
-                        .HasForeignKey("CF_ShopIndex");
-
-                    b.Navigation("CF_Shop");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Account", b =>
-                {
-                    b.Navigation("Cf_Employee");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Branch", b =>
-                {
-                    b.Navigation("CF_Areas");
-
-                    b.Navigation("CF_Employees");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Department", b =>
-                {
-                    b.Navigation("CF_Employees");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Position", b =>
-                {
-                    b.Navigation("CF_Employees");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.CF_Shop", b =>
-                {
-                    b.Navigation("CF_Accounts");
-
-                    b.Navigation("CF_Areas");
-
-                    b.Navigation("CF_Branchs");
-
-                    b.Navigation("CF_Departments");
-
-                    b.Navigation("Cf_Employees");
-
-                    b.Navigation("CF_Positions");
-
-                    b.Navigation("Sys_RoleGroups");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
                 {
-                    b.Navigation("JM_AccountCompanys");
-
-                    b.Navigation("SYS_FilterConfigs");
+                    b.Navigation("AccountCompanys");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Company", b =>
@@ -4076,6 +1587,18 @@ namespace BNS.Data.Migrations
                     b.Navigation("JM_Issues");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
+                {
+                    b.Navigation("TaskCustomColumns");
+
+                    b.Navigation("TaskUsers");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskType", b =>
+                {
+                    b.Navigation("Tasks");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
                 {
                     b.Navigation("JM_AccountCompanys");
@@ -4083,7 +1606,9 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>
                 {
-                    b.Navigation("JM_TemplateStatus");
+                    b.Navigation("TemplateDetails");
+
+                    b.Navigation("TemplateStatus");
                 });
 #pragma warning restore 612, 618
         }

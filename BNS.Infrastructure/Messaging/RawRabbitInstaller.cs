@@ -21,7 +21,6 @@ namespace BNS.Infrastructure.Messaging
         {
             var options = new RawRabbitConfiguration();
             configuration.GetSection("DefaultConfig:RabbitMq").Bind(options);
-
             var client = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
             {
                 ClientConfiguration = options,

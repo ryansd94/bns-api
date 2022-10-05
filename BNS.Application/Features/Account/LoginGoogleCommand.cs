@@ -73,7 +73,7 @@ namespace BNS.Service.Features
             }
             var email = infoUser.email;
             var id = infoUser.sub;
-            var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.Email.Equals(email),x=>x.JM_AccountCompanys);
+            var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.Email.Equals(email), x => x.AccountCompanys);
             var companyId = Guid.Empty;
             if (user == null)
             {
@@ -83,7 +83,7 @@ namespace BNS.Service.Features
             }
             else
             {
-                companyId = user.JM_AccountCompanys.FirstOrDefault().CompanyId;
+                companyId = user.AccountCompanys.FirstOrDefault().CompanyId;
             }
 
             var roles = new List<string>();

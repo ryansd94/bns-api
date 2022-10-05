@@ -29,5 +29,20 @@ namespace BNS.Api.Controllers
         {
             return Ok(await _mediator.Send(request));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllData([FromQuery] GetSYS_FilterConfigRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var request = new GetSYS_FilterConfigByIdRequest();
+            request.Id = id;
+            request.CompanyId = CompanyId;
+            return Ok(await _mediator.Send(request));
+        }
     }
 }

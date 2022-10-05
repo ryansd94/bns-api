@@ -24,7 +24,7 @@ namespace BNS.Utilities
         {
             public string Column;
             public object Value;
-            public EWhereOperation Operation;
+            public EWhereCondition Condition;
         }
         public static string? FirstCharToLowerCase(this string? str)
         {
@@ -73,10 +73,10 @@ namespace BNS.Utilities
 
                 //switch operation
                 Expression condition = null;
-                switch (searchCriteria.Operation)
+                switch (searchCriteria.Condition)
                 {
                     //equal ==
-                    case EWhereOperation.Equal:
+                    case EWhereCondition.Equal:
                         if (memberType != typeof(Int32))
                             condition = Expression.Equal(memberAccess, filter);
                         else
@@ -94,7 +94,7 @@ namespace BNS.Utilities
                         }
                         break;
                     //not equal !=
-                    case EWhereOperation.NotEqual:
+                    case EWhereCondition.NotEqual:
                         if (memberType != typeof(Int32))
                             condition = Expression.NotEqual(memberAccess, filter);
                         else
@@ -112,23 +112,23 @@ namespace BNS.Utilities
                         }
                         break;
                     // Greater
-                    case EWhereOperation.Greater:
+                    case EWhereCondition.Greater:
                         condition = Expression.GreaterThan(memberAccess, filter);
                         break;
                     // Greater or equal
-                    case EWhereOperation.GreaterOrEqual:
+                    case EWhereCondition.GreaterOrEqual:
                         condition = Expression.GreaterThanOrEqual(memberAccess, filter);
                         break;
                     // Less
-                    case EWhereOperation.Less:
+                    case EWhereCondition.Less:
                         condition = Expression.LessThan(memberAccess, filter);
                         break;
                     // Less or equal
-                    case EWhereOperation.LessEqual:
+                    case EWhereCondition.LessEqual:
                         condition = Expression.LessThanOrEqual(memberAccess, filter);
                         break;
                     //string.Contains()
-                    case EWhereOperation.Contains:
+                    case EWhereCondition.Contains:
 
                         MethodInfo refmethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
                         var parameters = Expression.Parameter(typeof(T), "p");

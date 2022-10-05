@@ -23,32 +23,36 @@ namespace BNS.Infrastructure.RabbitMq
 
         public IBusSubscriber SubscribeEvent<TEvent>() where TEvent : IEvent, IRequest
         {
-            _busClient.SubscribeAsync<TEvent>(async (@event) =>
+            if (_busClient != null)
             {
-                try
+                _busClient.SubscribeAsync<TEvent>(async (@event) =>
                 {
-                    using var scope = _serviceProvider.CreateScope();
-                    var handler = scope.ServiceProvider.GetService<IMediator>();
-                    await handler.Send(@event);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Erro ao processar mensagem");
-                    throw;
-                }
+                    try
+                    {
+                        using var scope = _serviceProvider.CreateScope();
+                        var handler = scope.ServiceProvider.GetService<IMediator>();
+                        await handler.Send(@event);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Erro ao processar mensagem");
+                        throw;
+                    }
 
-            }, ctx => ctx.UseSubscribeConfiguration(cfg => cfg
-                .Consume(c => c.WithRoutingKey(typeof(TEvent).Name))
-                .FromDeclaredQueue(q => q
-                    .WithName(GetQueueName<TEvent>())
-                    .WithDurability()
-                    .WithAutoDelete(false))
-                .OnDeclaredExchange(e => e
-                  .WithName("sample-rabbitmq-publish")
-                  .WithType(ExchangeType.Topic)
-                  .WithArgument("key", typeof(TEvent).Name.ToLower()))
-            ));
-            return this;
+                }, ctx => ctx.UseSubscribeConfiguration(cfg => cfg
+                    .Consume(c => c.WithRoutingKey(typeof(TEvent).Name))
+                    .FromDeclaredQueue(q => q
+                        .WithName(GetQueueName<TEvent>())
+                        .WithDurability()
+                        .WithAutoDelete(false))
+                    .OnDeclaredExchange(e => e
+                      .WithName("sample-rabbitmq-publish")
+                      .WithType(ExchangeType.Topic)
+                      .WithArgument("key", typeof(TEvent).Name.ToLower()))
+                ));
+                return this;
+            }
+            else return null;
         }
 
         private static string GetQueueName<T>() => $"{Assembly.GetEntryAssembly()?.GetName().Name}/{typeof(T).Name}";

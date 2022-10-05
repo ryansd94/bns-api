@@ -120,7 +120,7 @@ namespace BNS.Service.Features
                 IsDelete = false,
                 UserId = userid,
                 CompanyId = company.Id,
-                Status = (int)EUserStatus.ACTIVE,
+                Status = EUserStatus.ACTIVE,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUser = userid,
                 Email = infoUser.email.ToString(),

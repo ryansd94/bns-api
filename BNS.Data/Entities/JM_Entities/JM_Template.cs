@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace BNS.Data.Entities.JM_Entities
 {
@@ -10,6 +8,7 @@ namespace BNS.Data.Entities.JM_Entities
         public string Description { get; set; }
         public string IssueType { get; set; }
         public string Content { get; set; }
-        public virtual ICollection<JM_TemplateStatus> JM_TemplateStatus { get; set; }
+        public virtual ICollection<JM_TemplateStatus> TemplateStatus { get; set; }
+        public virtual ICollection<JM_TemplateDetail> TemplateDetails { get; set; }
     }
 }

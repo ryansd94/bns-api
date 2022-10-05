@@ -11,6 +11,7 @@ using BNS.Service.Implement;
 using System.Reflection;
 using BNS.Service.Features;
 using BNS.Domain.Commands;
+using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Api
 {
@@ -19,9 +20,9 @@ namespace BNS.Api
         public static void AddRepository(this IServiceCollection services)
         {
             //services.AddMediatR(typeof(SendMailAddJM_UserCommand));
-            services.AddMediatR(typeof(CreateJM_TeamCommand).GetTypeInfo().Assembly); 
-            services.AddIdentity<CF_Account, Sys_Role>().AddEntityFrameworkStores<BNSDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddMediatR(typeof(CreateTeamCommand).GetTypeInfo().Assembly);
+            services.AddIdentity<JM_Account, Sys_Role>().AddEntityFrameworkStores<BNSDbContext>()
+               .AddDefaultTokenProviders();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<ICacheData, CacheData>();
             services.AddSingleton<ICaptcha, Captcha>();
@@ -29,8 +30,6 @@ namespace BNS.Api
 
 
 
-            services.AddTransient<UserManager<CF_Account>, UserManager<CF_Account>>();
-            services.AddTransient<SignInManager<CF_Account>, SignInManager<CF_Account>>();
             services.AddTransient<RoleManager<Sys_Role>, RoleManager<Sys_Role>>();
 
 

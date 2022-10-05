@@ -20,27 +20,6 @@ namespace BNS.Service.Implement
             _context = context;
         }
 
-        public static void SetCreatedUpdatedUsername<D>(List<D> data, List<CF_Account> accounts)
-        {
-            foreach (var item in data)
-            {
-                var createdUserId = item.GetType().GetProperty("CreatedUserId");
-                var createdUserIdValue = createdUserId.GetValue(item, null);
-                if (createdUserIdValue != null)
-                {
-                    var user = accounts.Where(s => s.Id == Guid.Parse(createdUserIdValue.ToString())).FirstOrDefault();
-                    item.GetType().GetProperty("CreatedUser").SetValue(item, user != null ? user.Cf_Employee.EmployeeName : string.Empty);
-                }
-
-                var updatedUserId = item.GetType().GetProperty("UpdatedUserId");
-                var updatedUserIdValue = updatedUserId.GetValue(item, null);
-                if (updatedUserIdValue != null)
-                {
-                    var user = accounts.Where(s => s.Id == Guid.Parse(updatedUserIdValue.ToString())).FirstOrDefault();
-                    item.GetType().GetProperty("UpdatedUser").SetValue(item, user != null ? user.Cf_Employee.EmployeeName : string.Empty);
-                }
-            }
-        }
         public async Task AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);

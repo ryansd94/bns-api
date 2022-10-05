@@ -48,7 +48,7 @@ namespace BNS.Service.Features
             dataCheck.Name = request.Name;
             dataCheck.Description = request.Description;
             dataCheck.UpdatedDate = DateTime.UtcNow;
-            dataCheck.UpdatedUser = request.UserId;
+            dataCheck.UpdatedUserId = request.UserId;
 
             _context.JM_Sprints.Update(dataCheck);
             await _context.SaveChangesAsync();

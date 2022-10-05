@@ -18,7 +18,7 @@ namespace BNS.Data.Entities.JM_Entities
         public bool IsDelete { get; set; }
         public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
-        public int Status { get; set; }
+        public EUserStatus Status { get; set; }
         public bool IsDefault { get; set; }
         public bool IsMainAccount { get; set; }
         public long EmailTimestamp { get; set; }
@@ -27,7 +27,7 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid? TeamId { get; set; }
         public virtual JM_Company JM_Company { get; set; }
         [ForeignKey("UserId")]
-        public virtual JM_Account JM_Account { get; set; }
+        public virtual JM_Account Account { get; set; }
         [ForeignKey("TeamId")]
         public virtual JM_Team JM_Team { get; set; }
     }

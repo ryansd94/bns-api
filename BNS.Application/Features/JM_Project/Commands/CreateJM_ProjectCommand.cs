@@ -45,7 +45,7 @@ namespace BNS.Service.Features
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 CreatedDate = DateTime.UtcNow,
-                CreatedUser = request.UserId,
+                CreatedUserId = request.UserId,
                 JM_TemplateId = request.TemplateId
             };
             if (request.Teams != null && request.Teams.Count > 0)
@@ -58,7 +58,7 @@ namespace BNS.Service.Features
                         ProjectId = data.Id,
                         TeamId = team,
                         CreatedDate = DateTime.UtcNow,
-                        CreatedUser = request.UserId,
+                        CreatedUserId = request.UserId,
                     });
                 }
             }
@@ -72,7 +72,7 @@ namespace BNS.Service.Features
                         ProjectId = data.Id,
                         UserId = team,
                         CreatedDate = DateTime.UtcNow,
-                        CreatedUser = request.UserId,
+                        CreatedUserId = request.UserId,
                     });
                 }
             }

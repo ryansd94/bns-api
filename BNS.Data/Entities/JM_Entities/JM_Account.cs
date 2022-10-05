@@ -2,13 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using static BNS.Utilities.Enums;
 
 namespace BNS.Data.Entities.JM_Entities
 {
-  public  class JM_Account : IdentityUser<Guid>
+    public class JM_Account : IdentityUser<Guid>
     {
         [MaxLength(200)]
         public string FullName { get; set; }
@@ -20,8 +17,8 @@ namespace BNS.Data.Entities.JM_Entities
         public string GoogleId { get; set; }
         public bool IsActive { get; set; }
         public string Image { get; set; }
-        public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
-        public virtual ICollection<SYS_FilterConfig> SYS_FilterConfigs { get; set; }
-
+        public Guid? JM_CompanyId { get; set; }
+        public Guid? JM_TaskId { get; set; }
+        public virtual ICollection<JM_AccountCompany> AccountCompanys { get; set; }
     }
 }

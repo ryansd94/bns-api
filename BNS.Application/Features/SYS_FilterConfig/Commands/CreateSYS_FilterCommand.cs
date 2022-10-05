@@ -32,11 +32,11 @@ namespace BNS.Service.Features
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
-                View = request.View,
+                View = request.Component,
                 UserId = request.UserId,
                 FilterData = request.FilterData,
                 CreatedDate = DateTime.UtcNow,
-                CreatedUser = request.UserId,
+                CreatedUserId = request.UserId,
                 CompanyId = request.CompanyId,
                 IsDelete = false
             };

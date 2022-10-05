@@ -44,7 +44,7 @@ namespace BNS.Service.EventHandler
                 Description = request.Description,
                 ParentId = request.ParentId,
                 CreatedDate = DateTime.UtcNow,
-                CreatedUser = request.CreatedBy,
+                CreatedUserId = request.CreatedBy,
                 CompanyId=request.CompanyId
             };
             if (request.Members != null && request.Members.Count>0)

@@ -10,6 +10,6 @@ namespace BNS.Domain.Commands
         [Required]
         public string Name { get; set; }
         public string FilterData { get; set; }
-        public string View { get; set; }
+        public string Component { get; set; }
     }
 }

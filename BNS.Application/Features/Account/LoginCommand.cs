@@ -60,7 +60,7 @@ namespace BNS.Service.Features
             //    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
             //    return response;
             //}
-            var userCompany =await userCompanys.Where(s => s.IsDefault && s.Status== (int)EUserStatus.ACTIVE).FirstOrDefaultAsync();
+            var userCompany =await userCompanys.Where(s => s.IsDefault && s.Status== EUserStatus.ACTIVE).FirstOrDefaultAsync();
 
             var roles = new List<string>();
             //if (userCompany.IsMainAccount)

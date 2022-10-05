@@ -2,7 +2,6 @@
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,12 +24,12 @@ namespace BNS.Api.Controllers.Project
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost]
-        public async Task<IActionResult> Save(CreateJM_TemplateRequest request)
+        public async Task<IActionResult> Save(CreateTemplateRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData([FromQuery] GetJM_TemplateRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery] GetTemplateRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -38,7 +37,15 @@ namespace BNS.Api.Controllers.Project
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIndex(Guid id)
         {
-            var request = new GetJM_TemplateByIdRequest();
+            var request = new GetTemplateByIdRequest();
+            request.Id = id;
+            request.CompanyId = CompanyId;
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateTemplateRequest request)
+        {
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }

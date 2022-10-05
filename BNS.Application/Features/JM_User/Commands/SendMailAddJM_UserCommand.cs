@@ -22,7 +22,7 @@ using BNS.Service.Subcriber;
 
 namespace BNS.Service.Features
 {
-    public class SendMailAddJM_UserCommand  : IRequestHandler<SendMailAddJM_UserRequest, ApiResult<Guid>>
+    public class SendMailAddJM_UserCommand : IRequestHandler<SendMailAddJM_UserRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly IElasticClient _elasticClient;
@@ -48,7 +48,7 @@ namespace BNS.Service.Features
             var response = new ApiResult<Guid>();
             var subject = "JOIN TEAM";
             var rootBody = "";
-            var filePath =  Environment.CurrentDirectory+ @"\EmailTemplate\"+"AddUser.html"; 
+            var filePath = Environment.CurrentDirectory + @"\EmailTemplate\" + "AddUser.html";
 
             using (StreamReader reader = File.OpenText(filePath))
             {
@@ -57,26 +57,27 @@ namespace BNS.Service.Features
             var emails = request.Emails.Distinct().ToList();
             var userActive = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
               && s.CompanyId == request.CompanyId
-              && emails.Contains(s.JM_Account.Email), null, s => s.JM_Account);
+              && emails.Contains(s.Account.Email), null, s => s.Account);
 
 
-            emails = emails.Where(s => !userActive.Where(s => s.Status == (int)EUserStatus.ACTIVE).Select(s => s.JM_Account.Email).Contains(s)).ToList();
+            emails = emails.Where(s => !userActive.Where(s => s.Status == EUserStatus.ACTIVE)
+            .Select(s => s.Account.Email).Contains(s)).ToList();
 
             var accounts = await _unitOfWork.JM_AccountRepository.GetAsync(s => !s.IsDelete && emails.Contains(s.Email));
             var sendMailItems = new List<SendMailSubcriberMQItem>();
             foreach (var email in emails)
             {
                 var account = accounts.Where(s => s.Email.Equals(email)).FirstOrDefault();
-                if (account==null)
+                if (account == null)
                 {
                     account = new JM_Account
                     {
-                        Id=Guid.NewGuid(),
-                        Email=email,
-                        UserName=email,
-                        IsDelete=false,
-                        CreatedDate=DateTime.UtcNow,
-                        CreatedUser=request.UserId,
+                        Id = Guid.NewGuid(),
+                        Email = email,
+                        UserName = email,
+                        IsDelete = false,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedUser = request.UserId,
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = false,
                         TwoFactorEnabled = false,
@@ -85,7 +86,7 @@ namespace BNS.Service.Features
                     };
                     await _unitOfWork.JM_AccountRepository.AddAsync(account);
                 }
-                var accountCompany = await userActive.Where(s => s.JM_Account.Email.Equals(email)).FirstOrDefaultAsync();
+                var accountCompany = await userActive.Where(s => s.Account.Email.Equals(email)).FirstOrDefaultAsync();
                 if (accountCompany == null)
                 {
                     accountCompany = new JM_AccountCompany
@@ -96,7 +97,7 @@ namespace BNS.Service.Features
                         CreatedUser = request.UserId,
                         UserId = account.Id,
                         CompanyId = request.CompanyId,
-                        Status = (int)EUserStatus.WAILTING_CONFIRM_MAIL,
+                        Status = EUserStatus.WAILTING_CONFIRM_MAIL,
                         Email = email,
                         IsMainAccount = false,
                         IsDefault = true,
@@ -108,7 +109,7 @@ namespace BNS.Service.Features
                 {
                     var currentTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
                     var aaaa = currentTimestamp - accountCompany.EmailTimestamp;
-                    if(aaaa<60)
+                    if (aaaa < 60)
                     {
                         continue;
                     }
@@ -121,15 +122,15 @@ namespace BNS.Service.Features
                     EmailJoin = email,
                     Key = _config.Default.CipherKey,
                     UserRequest = request.UserId,
-                    Id= accountCompany.Id
+                    Id = accountCompany.Id
                 };
                 var token = _cipherService.EncryptString(JsonConvert.SerializeObject(joinTeam));
                 var body = string.Format(rootBody, $"{_config.Default.WebUserDomain}/signup/jointeam?token={token}");
                 sendMailItems.Add(new SendMailSubcriberMQItem
                 {
-                    Body=body,
-                    Email=email,
-                    Subject=subject
+                    Body = body,
+                    Email = email,
+                    Subject = subject
                 });
             }
             await _unitOfWork.SaveChangesAsync();

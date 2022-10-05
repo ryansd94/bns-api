@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;

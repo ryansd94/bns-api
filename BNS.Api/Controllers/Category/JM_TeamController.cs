@@ -15,7 +15,6 @@ namespace BNS.Api.Controllers.Category
     [BNSAuthorization]
     public class JM_TeamController : BaseController
     {
-
         private IMediator _mediator;
         private readonly ClaimsPrincipal _caller;
         public JM_TeamController(IHttpContextAccessor httpContextAccessor,
@@ -25,10 +24,11 @@ namespace BNS.Api.Controllers.Category
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost]
-        public async Task<IActionResult> Save(CreateJM_TeamRequest request)
+        public async Task<IActionResult> Save(CreateTeamRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllData([FromQuery] GetJM_TeamRequest request)
         {
@@ -36,7 +36,7 @@ namespace BNS.Api.Controllers.Category
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIndex(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var request = new GetJM_TeamByIdRequest();
             request.Id = id;
@@ -48,27 +48,28 @@ namespace BNS.Api.Controllers.Category
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var request = new DeleteJM_TeamRequest();
+            var request = new DeleteTeamRequest();
             request.ids.Add(id);
+            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, UpdateJM_TeamRequest request)
+        public async Task<IActionResult> Update(Guid id, UpdateTeamRequest request)
         {
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPut("member/{id}")]
-        public async Task<IActionResult> UpdateMember(Guid id, UpdateMemberJM_TeamRequest request)
+        public async Task<IActionResult> UpdateMember(Guid id, UpdateMemberTeamRequest request)
         {
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }
 
         [HttpDelete("member/{id}")]
-        public async Task<IActionResult> DeleteMember(Guid id, DeleteMemberJM_TeamRequest request)
+        public async Task<IActionResult> DeleteMember(Guid id, DeleteMemberTeamRequest request)
         {
             request.Id = id;
             return Ok(await _mediator.Send(request));

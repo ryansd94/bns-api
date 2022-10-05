@@ -99,7 +99,7 @@ namespace BNS.Utilities
             IS_HAS_ACCOUNT = 2,
         }
 
-        public enum EWhereOperation
+        public enum EWhereCondition
         {
             Equal = 0,
             NotEqual = 1,
@@ -108,6 +108,23 @@ namespace BNS.Utilities
             GreaterOrEqual = 4,
             Less = 5,
             LessEqual = 6
+        }
+
+        public enum EControlType
+        {
+            Typography,
+            TextField,
+            Editor,
+            Select,
+            Group,
+            DatePicker
+        }
+
+        public enum EColumnPosition
+        {
+            Column1,
+            Column2,
+            Column3
         }
     }
 }

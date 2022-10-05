@@ -9,6 +9,8 @@ namespace BNS.Domain
     public class CommandRequest<T> : IRequest<T> where T : class
     {
         public Guid CompanyId { get; set; }
+        public Guid UserId { get; set; }
+        
         public int draw { get; set; }
         public int start { get; set; }
         public int length { get; set; }
@@ -18,7 +20,8 @@ namespace BNS.Domain
         public string filters { get; set; }
         public string fieldSort { get; set; }
         public string sort { get; set; }
-         
+        public bool isGetAll { get; set; } = false;
+
     }
     public class CommandByIdRequest<T> : IRequest<T> where T : class
     {

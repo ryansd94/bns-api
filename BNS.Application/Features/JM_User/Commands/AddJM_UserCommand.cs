@@ -55,7 +55,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_NotExistsUser];
                 return response;
             }
-            if (userCompany.Status != (int)EUserStatus.WAILTING_CONFIRM_MAIL)
+            if (userCompany.Status != EUserStatus.WAILTING_CONFIRM_MAIL)
             {
                 response.errorCode = EErrorCode.UserHasJoinTeam.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_ExistsUser];
@@ -78,7 +78,7 @@ namespace BNS.Service.Features
                 user.Image = request.Image;
                 await _unitOfWork.JM_AccountRepository.UpdateAsync(user);
             }
-            userCompany.Status = (int)EUserStatus.ACTIVE;
+            userCompany.Status = EUserStatus.ACTIVE;
             await _unitOfWork.JM_AccountCompanyRepository.UpdateAsync(userCompany);
             await _unitOfWork.SaveChangesAsync();
             var loginRequest = new LoginNoPasswordRequest

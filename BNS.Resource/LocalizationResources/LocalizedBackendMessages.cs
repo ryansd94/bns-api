@@ -83,5 +83,9 @@ namespace BNS.Resource.LocalizationResources
         {
             public const string ProjectName = "ProjectName";
         }
+        public class Task
+        {
+            public const string TaskTypeName = "TaskTypeName";
+        }
     }
 }

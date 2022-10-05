@@ -12,10 +12,8 @@ using Microsoft.Extensions.Localization;
 using Nest;
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static BNS.Utilities.Enums;
 using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
@@ -44,14 +42,30 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<JM_TeamResponse>();
             response.data = new JM_TeamResponse();
-            Expression<Func<JM_Team, bool>> filter = s => !s.IsDelete && s.CompanyId == request.CompanyId;
 
-            var query = (await _unitOfWork.JM_TeamRepository.GetAsync(filter,
-                s => s.OrderBy(d => d.Name) )).Select(s => _mapper.Map<JM_TeamResponseItem>(s));
+            var query = _unitOfWork.Repository<JM_Team>().Where(s => !s.IsDelete
+               && s.CompanyId == request.CompanyId).OrderBy(d => d.CreatedDate).Select(s => new JM_TeamResponseItem
+               {
+                   Name = s.Name,
+                   Description = s.Description,
+                   Id = s.Id,
+                   CreatedDate = s.CreatedDate,
+                   ParentId = s.ParentId,
+                   TeamMembers = s.JM_AccountCompanys.Select(u => u.Id).ToList(),
+                   ParentName = s.TeamParent != null && !s.TeamParent.IsDelete ? s.TeamParent.Name : String.Empty
+               });
+
             if (!string.IsNullOrEmpty(request.fieldSort))
+            {
                 query = query.OrderBy(request.fieldSort, request.sort);
-            response.recordsTotal = await _unitOfWork.JM_TeamRepository.CountAsync(filter);
-            query = query.Skip(request.start).Take(request.length);
+            }
+            if (!string.IsNullOrEmpty(request.filters))
+                query = query.WhereOr(request.filters);
+            response.recordsTotal = await query.CountAsync();
+
+            if (!request.isGetAll)
+                query = query.Skip(request.start).Take(request.length);
+
             var rs = await query.ToListAsync();
             response.data.Items = rs;
             return response;

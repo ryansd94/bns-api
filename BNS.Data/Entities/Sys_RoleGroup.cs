@@ -10,6 +10,5 @@ namespace BNS.Data.Entities
         public string Code { get; set; }
         public string Description { get; set; }
         public int? Number { get; set; }
-        public CF_Shop CF_Shop { get; set; }
     }
 }
