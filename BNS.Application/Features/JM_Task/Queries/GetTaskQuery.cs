@@ -45,16 +45,17 @@ namespace BNS.Service.Features
             var query3 = await query1.Union(query2).Distinct().ToListAsync();
 
             var query = _unitOfWork.Repository<JM_Task>()
-                .Include(s => s.TaskType)
-                .Include(s => s.Status)
-                .Include(s => s.User)
                 .Where(s => query3.Contains(s.Id))
-                .OrderBy(d => d.CreatedDate).Select(s => new TaskItem
+                .OrderByDescending(d => d.CreatedDate).Select(s => new TaskItem
                 {
                     Id = s.Id,
                     Title = s.Title,
-                    Icon = s.TaskType.Icon,
-                    TaskTypeName = s.TaskType.Name,
+                    TaskType = new TaskType
+                    {
+                        Name = s.TaskType.Name,
+                        Color = s.TaskType.Color,
+                        Icon = s.TaskType.Icon,
+                    },
                     Status = new StatusResponseItem
                     {
                         Name = s.Status != null ? s.Status.Name : "",
@@ -78,11 +79,6 @@ namespace BNS.Service.Features
                     columnSort = columnSort[0].ToString().ToUpper() + columnSort.Substring(1, columnSort.Length - 1);
                     query = query.OrderBy(request.fieldSort, request.sort);
                 }
-            }
-
-            if (!string.IsNullOrEmpty(request.fieldSort))
-            {
-                query = query.OrderBy(request.fieldSort, request.sort);
             }
 
             query = query.WhereOr(request.filters);

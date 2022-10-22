@@ -1,18 +1,18 @@
-﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Data.EntityContext;
+﻿using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
+using BNS.Domain;
+using BNS.Domain.Commands;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-using BNS.Domain.Commands;
-using BNS.Domain;
-using System.Collections.Generic;
 
 namespace BNS.Service.Features
 {
@@ -20,13 +20,16 @@ namespace BNS.Service.Features
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public CreateTaskCommand(
-         IStringLocalizer<SharedResource> sharedLocalizer,
-         IUnitOfWork unitOfWork)
+            IStringLocalizer<SharedResource> sharedLocalizer,
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<ApiResult<Guid>> Handle(CreateTaskRequest request, CancellationToken cancellationToken)
         {
@@ -44,21 +47,13 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            var task = new JM_Task
-            {
-                Id = Guid.NewGuid(),
-                Title = request.Title,
-                IsDelete = false,
-                CompanyId = request.CompanyId,
-                CreatedDate = DateTime.UtcNow,
-                CreatedUserId = request.UserId,
-                ReporterId = request.UserId,
-                TaskTypeId = taskType.Id,
-                StatusId = request.StatusId
-            };
-            _unitOfWork.Repository<JM_Task>().Add(task);
+            var task = _mapper.Map<JM_Task>(request);
+            task.Id = Guid.NewGuid();
+            task.CreatedDate = DateTime.UtcNow;
+            task.CreatedUserId = request.UserId;
+            task.ReporterId = request.UserId;
 
-            #region Dynamic task data
+            _unitOfWork.Repository<JM_Task>().Add(task);
 
             #region Assign user
 
@@ -89,8 +84,10 @@ namespace BNS.Service.Features
 
             #endregion
 
+            #region Dynamic task data
+
             var templateDetails = taskType.Template?.TemplateDetails.ToList();
-            var dataDynamics = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(Convert.ToString(request.Data));
+            var dataDynamics = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(Convert.ToString(request.DynamicData));
 
             if (templateDetails != null && templateDetails.Count > 0)
             {
@@ -99,17 +96,18 @@ namespace BNS.Service.Features
                     var customColumn = templateDetails.Where(s => s.Id.ToString().Equals(value.Key)).FirstOrDefault();
                     if (customColumn != null)
                     {
-                        var taskCustomColumns = new JM_TaskCustomColumn
+                        var taskCustomColumns = new JM_TaskCustomColumnValue
                         {
                             TaskId = task.Id,
-                            CustomColumnId = customColumn.CustomColumnId.Value,
+                            CustomColumnId = customColumn.CustomColumnId != null ? customColumn.CustomColumnId.Value : null,
+                            TemplateDetailId = customColumn.Id,
                             CreatedDate = DateTime.UtcNow,
                             CreatedUserId = request.UserId,
                             IsDelete = false,
                             CompanyId = request.CompanyId,
                             Value = value.Value.ToString(),
                         };
-                        _unitOfWork.Repository<JM_TaskCustomColumn>().Add(taskCustomColumns);
+                        _unitOfWork.Repository<JM_TaskCustomColumnValue>().Add(taskCustomColumns);
                     }
                 }
             }

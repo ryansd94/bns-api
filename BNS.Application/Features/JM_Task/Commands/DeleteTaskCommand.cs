@@ -1,4 +1,7 @@
-﻿using BNS.Data.EntityContext;
+﻿using BNS.Data.Entities.JM_Entities;
+using BNS.Data.EntityContext;
+using BNS.Domain;
+using BNS.Domain.Commands;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
@@ -9,9 +12,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-using BNS.Domain.Commands;
-using BNS.Domain;
-using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Service.Features
 {
@@ -33,7 +33,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var dataChecks = await _unitOfWork.Repository<JM_Task>().Where(s => request.ids.Contains(s.Id)).ToListAsync();
-            if (dataChecks == null || dataChecks.Count() ==0)
+            if (dataChecks == null || dataChecks.Count() == 0)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
@@ -44,7 +44,7 @@ namespace BNS.Service.Features
                 item.IsDelete = true;
                 item.UpdatedDate = DateTime.UtcNow;
                 item.UpdatedUserId = request.UserId;
-                _context.JM_Tasks.Update(item);
+                _unitOfWork.Repository<JM_Task>().Update(item);
             }
             await _context.SaveChangesAsync();
             return response;
