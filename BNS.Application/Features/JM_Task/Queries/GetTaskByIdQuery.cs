@@ -48,12 +48,12 @@ namespace BNS.Service.Features
                 return response;
             }
             var dynamicData = await _unitOfWork.Repository<JM_TaskCustomColumnValue>().Where(s => s.TaskId == task.Id
-                 && !s.IsDelete && s.CustomColumnId != null).Select(s => new
+                 && !s.IsDelete).Select(s => new
                  {
                      id = s.TemplateDetailId.ToString().ToLower(),
                      value = s.Value
-                 }).ToListAsync();
-            task.DynamicData = Newtonsoft.Json.JsonConvert.SerializeObject(dynamicData);
+                 }).ToDictionaryAsync(r => r.id, r => r.value);
+            task.DynamicData = dynamicData;
             var taskTypeRequest = new GetTaskTypeByIdRequest
             {
                 Id = task.TaskTypeId,

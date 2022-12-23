@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
+using BNS.Domain;
+using BNS.Domain.Queries;
+using BNS.Domain.Responses;
 using BNS.Resource;
 using BNS.Utilities;
-using BNS.Domain.Responses;
-using BNS.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BNS.Domain.Queries;
-using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Service.Features
 {
@@ -45,6 +45,8 @@ namespace BNS.Service.Features
                     Description = s.Description,
                     Order = s.Order,
                     Icon = s.Icon,
+                    Color = s.Color,
+                    ColorFilter = s.ColorFilter,
                     CreatedDate = s.CreatedDate,
                     TemplateName = s.Template != null ? s.Template.Name : null,
                 });

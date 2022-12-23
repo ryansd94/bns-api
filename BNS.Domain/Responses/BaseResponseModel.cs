@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BNS.Domain
 {
@@ -17,5 +18,6 @@ namespace BNS.Domain
         }
         public Guid CreatedUserId { get; set; }
         public Guid Id { get; set; }
+        public Dictionary<string, string> DynamicData { get; set; }
     }
 }

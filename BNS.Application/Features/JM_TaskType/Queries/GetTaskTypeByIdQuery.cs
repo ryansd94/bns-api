@@ -1,14 +1,14 @@
-﻿using BNS.Resource;
-using BNS.Domain.Responses;
+﻿using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
+using BNS.Domain.Queries;
+using BNS.Domain.Responses;
+using BNS.Resource;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Threading;
 using System.Threading.Tasks;
-using BNS.Domain.Queries;
-using AutoMapper;
-using BNS.Data.Entities.JM_Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -30,11 +30,11 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<TaskTypeItem>();
             var query = await _unitOfWork.Repository<JM_TaskType>()
-                .Include(s=>s.Template)
-                .ThenInclude(s=>s.TemplateStatus)
+                .Include(s => s.Template)
+                .ThenInclude(s => s.TemplateStatus)
                 .ThenInclude(s => s.Status)
                 .FirstOrDefaultAsync(s => s.Id == request.Id &&
-             !s.IsDelete && s.CompanyId == request.CompanyId);
+             (request.IsDelete == null || (request.IsDelete != null && s.IsDelete == request.IsDelete.Value)) && s.CompanyId == request.CompanyId);
 
             var rs = _mapper.Map<TaskTypeItem>(query);
             response.data = rs;

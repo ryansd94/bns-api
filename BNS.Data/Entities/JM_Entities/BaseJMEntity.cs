@@ -12,7 +12,7 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid? UpdatedUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedUserId { get; set; }
-        public Guid? CompanyId { get; set; }
+        public Guid CompanyId { get; set; }
         public bool IsDelete { get; set; }
         [ForeignKey("CreatedUserId")]
         public virtual JM_Account User { get; set; }

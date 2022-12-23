@@ -1,16 +1,15 @@
-﻿using BNS.Resource;
-using BNS.Resource.LocalizationResources;
+﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
+using BNS.Domain.Commands;
+using BNS.Resource;
+using BNS.Resource.LocalizationResources;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-using BNS.Domain.Commands;
-using Newtonsoft.Json;
-using BNS.Data.Entities.JM_Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -30,7 +29,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.Repository<JM_TaskType>().FirstOrDefaultAsync(s => s.Name.Equals(request.Name) &&
-            s.CompanyId == request.CompanyId);
+            s.CompanyId == request.CompanyId && !s.IsDelete);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
@@ -48,7 +47,8 @@ namespace BNS.Service.Features
                 Order = request.Order,
                 CompanyId = request.CompanyId,
                 Color = request.Color,
-                TemplateId=request.TemplateId,
+                ColorFilter = request.ColorFilter,
+                TemplateId = request.TemplateId,
             };
             await _unitOfWork.Repository<JM_TaskType>().AddAsync(data);
             await _unitOfWork.SaveChangesAsync();

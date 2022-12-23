@@ -10,12 +10,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Nest;
-using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static BNS.Utilities.Enums;
 using BNS.Domain.Queries;
 
 namespace BNS.Service.Features

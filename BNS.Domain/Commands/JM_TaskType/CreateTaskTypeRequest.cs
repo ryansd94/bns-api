@@ -10,6 +10,7 @@ namespace BNS.Domain.Commands
         public string Description { get; set; }
         public string Icon { get; set; }
         public string Color { get; set; }
+        public string ColorFilter { get; set; }
         public int? Order { get; set; }
         public Guid? TemplateId { get; set; }
     }

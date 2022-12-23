@@ -1,7 +1,7 @@
 ﻿using BNS.Domain.Responses;
 namespace BNS.Domain.Queries
 {
-    public class GetSYS_FilterConfigRequest : CommandRequest<ApiResult<SYS_FilterConfigResponse>>
+    public class GetSYS_FilterConfigRequest : CommandGetRequest<ApiResult<SYS_FilterConfigResponse>>
     {
         public string Component { get; set; }
     }

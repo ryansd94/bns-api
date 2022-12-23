@@ -8,7 +8,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +35,7 @@ namespace BNS.Service.Features
             var response = new ApiResult<Guid>();
 
             var taskType = await _unitOfWork.Repository<JM_TaskType>()
-                .Where(s => s.Id == request.TaskTypeId)
+                .Where(s => s.Id == request.DefaultData.TaskTypeId)
                 .Include(s => s.Template)
                 .ThenInclude(s => s.TemplateDetails)
                 .FirstOrDefaultAsync();
@@ -47,8 +46,9 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            var task = _mapper.Map<JM_Task>(request);
+            var task = _mapper.Map<JM_Task>(request.DefaultData);
             task.Id = Guid.NewGuid();
+            task.CompanyId = request.CompanyId;
             task.CreatedDate = DateTime.UtcNow;
             task.CreatedUserId = request.UserId;
             task.ReporterId = request.UserId;
@@ -57,21 +57,21 @@ namespace BNS.Service.Features
 
             #region Assign user
 
-            if (request.UsersAssign != null && request.UsersAssign.Count > 0)
+            if (request.DefaultData.UsersAssign != null && request.DefaultData.UsersAssign.Count > 0)
             {
-                if (request.UsersAssign.Count == 1)
+                if (request.DefaultData.UsersAssign.Count == 1)
                 {
-                    task.AssignUserId = request.UsersAssign[0];
+                    task.AssignUserId = request.DefaultData.UsersAssign[0];
                 }
                 else
                 {
-                    for (int i = 0; i < request.UsersAssign.Count; i++)
+                    for (int i = 0; i < request.DefaultData.UsersAssign.Count; i++)
                     {
                         var taskUser = new JM_TaskUser
                         {
                             Id = Guid.NewGuid(),
                             TaskId = task.Id,
-                            UserId = request.UsersAssign[i],
+                            UserId = request.DefaultData.UsersAssign[i],
                             IsDelete = false,
                             CompanyId = request.CompanyId,
                             CreatedDate = DateTime.UtcNow,
@@ -87,19 +87,19 @@ namespace BNS.Service.Features
             #region Dynamic task data
 
             var templateDetails = taskType.Template?.TemplateDetails.ToList();
-            var dataDynamics = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(Convert.ToString(request.DynamicData));
+            var dataDynamics = request.DynamicData;
 
             if (templateDetails != null && templateDetails.Count > 0)
             {
                 foreach (var value in dataDynamics)
                 {
-                    var customColumn = templateDetails.Where(s => s.Id.ToString().Equals(value.Key)).FirstOrDefault();
+                    var customColumn = templateDetails.Where(s => s.Id.Equals(value.Key)).FirstOrDefault();
                     if (customColumn != null)
                     {
                         var taskCustomColumns = new JM_TaskCustomColumnValue
                         {
                             TaskId = task.Id,
-                            CustomColumnId = customColumn.CustomColumnId != null ? customColumn.CustomColumnId.Value : null,
+                            CustomColumnId = customColumn.CustomColumnId.Value,
                             TemplateDetailId = customColumn.Id,
                             CreatedDate = DateTime.UtcNow,
                             CreatedUserId = request.UserId,

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Commands\JM_CustomColumn\" />
     <Folder Include="Messaging\" />
   </ItemGroup>
 

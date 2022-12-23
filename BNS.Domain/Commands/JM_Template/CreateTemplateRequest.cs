@@ -18,7 +18,7 @@ namespace BNS.Domain.Commands
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public bool IsNew { get; set; }
+        public bool IsNew { get; set; } = false;
         public bool IsDelete { get; set; }
     }
 }

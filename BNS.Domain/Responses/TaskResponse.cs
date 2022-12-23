@@ -7,20 +7,28 @@ namespace BNS.Domain.Responses
     {
         public List<TaskItem> Items { get; set; }
     }
+    public class TaskByIdResponse
+    {
+        public TaskTypeItem TaskType { get; set; }
+        public TaskItem Task { get; set; }
+    }
     public class TaskItem : BaseResponseModel
     {
         public TaskItem()
         {
             Status = new StatusResponseItem();
+            TaskType = new TaskType();
         }
         public string Title { get; set; }
         public string Key { get; set; }
         public string Description { get; set; }
         public Guid TaskTypeId { get; set; }
-        public Guid? AssignUserId { get; set; }
+        public List<Guid> usersAssign { get; set; }
         public Guid ReporterId { get; set; }
         public Guid? SprintId { get; set; }
+        public TaskType TaskType { get; set; }
         public string Icon { get; set; }
+        public string IconColor { get; set; }
         public string OriginalTime { get; set; }
         public string RemainingTime { get; set; }
         public string TaskTypeName { get; set; }
@@ -30,6 +38,20 @@ namespace BNS.Domain.Responses
         public Guid StatusId { get; set; }
         public StatusResponseItem Status { get; set; }
         public TaskUser CreateUser { get; set; }
+        public ICollection<TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
+    }
+
+    public class TaskCustomColumnValue
+    {
+        public Guid CustomColumnId { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class TaskType
+    {
+        public string Name { get; set; }
+        public string Color { get; set; }
+        public string Icon { get; set; }
     }
 
     public class TaskUser

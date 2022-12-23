@@ -115,7 +115,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_TaskType> JM_TaskTypies { get; set; }
         public virtual DbSet<JM_CustomColumn> JM_CustomColumns { get; set; }
         public virtual DbSet<JM_TemplateDetail> JM_TemplateDetails { get; set; }
-        public virtual DbSet<JM_TaskCustomColumn> JM_TaskCustomColumns { get; set; }
+        public virtual DbSet<JM_TaskCustomColumnValue> JM_TaskCustomColumns { get; set; }
         public virtual DbSet<JM_TaskUser> JM_TaskUsers { get; set; }
     }
 }

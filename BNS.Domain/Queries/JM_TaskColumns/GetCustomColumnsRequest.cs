@@ -2,7 +2,7 @@
 
 namespace BNS.Domain.Queries
 {
-    public class GetCustomColumnsRequest : CommandRequest<ApiResult<CustomColumnsResponse>>
+    public class GetCustomColumnsRequest : CommandGetRequest<ApiResult<CustomColumnsResponse>>
     {
     }
 }

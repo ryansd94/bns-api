@@ -35,8 +35,8 @@ namespace BNS.Data.Entities.JM_Entities
         public virtual JM_Status Status { get; set; }
         [ForeignKey("TaskTypeId")]
         public virtual JM_TaskType TaskType { get; set; }
-        public virtual ICollection<JM_TaskCustomColumn> TaskCustomColumns { get; set; }
-        public virtual ICollection<JM_Account> TaskUsers { get; set; }
+        public virtual ICollection<JM_TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
+        public virtual ICollection<JM_TaskUser> TaskUsers { get; set; }
 
     }
 }

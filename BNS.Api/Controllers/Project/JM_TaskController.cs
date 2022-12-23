@@ -29,6 +29,13 @@ namespace BNS.Api.Controllers.Project
         {
             return Ok(await _mediator.Send(request));
         }
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateTaskRequest request)
+        {
+            request.Id = id;
+            return Ok(await _mediator.Send(request));
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllData([FromQuery] GetTaskRequest request)
@@ -45,7 +52,7 @@ namespace BNS.Api.Controllers.Project
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIndex(Guid id)
         {
-            var request = new GetJM_TaskByIdRequest();
+            var request = new GetTaskByIdRequest();
             request.Id = id;
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));

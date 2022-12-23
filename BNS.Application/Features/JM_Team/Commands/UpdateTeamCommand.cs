@@ -1,16 +1,13 @@
-﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Domain;
+﻿using BNS.Domain;
+using BNS.Domain.Commands;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-using BNS.Domain.Commands;
 
 namespace BNS.Service.Features
 {
@@ -29,7 +26,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
-            s.CompanyId == request.CompanyId);
+            s.CompanyId == request.CompanyId && !s.IsDelete);
             if (dataCheck == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -54,7 +51,7 @@ namespace BNS.Service.Features
             dataCheck.UpdatedUserId = request.UserId;
 
             await _unitOfWork.JM_TeamRepository.UpdateAsync(dataCheck);
-            response =await _unitOfWork.SaveChangesAsync();
+            response = await _unitOfWork.SaveChangesAsync();
             response.data = dataCheck.Id;
             return response;
         }

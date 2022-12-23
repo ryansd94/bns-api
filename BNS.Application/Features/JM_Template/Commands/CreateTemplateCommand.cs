@@ -1,17 +1,17 @@
-﻿using BNS.Resource;
-using BNS.Resource.LocalizationResources;
+﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
+using BNS.Domain.Commands;
+using BNS.Resource;
+using BNS.Resource.LocalizationResources;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
-using BNS.Domain.Commands;
-using BNS.Data.Entities.JM_Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace BNS.Service.Features
 {
@@ -31,7 +31,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.Repository<JM_Template>().FirstOrDefaultAsync(s => s.Name.Equals(request.Name) &&
-            s.CompanyId == request.CompanyId);
+            s.CompanyId == request.CompanyId && !s.IsDelete);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();

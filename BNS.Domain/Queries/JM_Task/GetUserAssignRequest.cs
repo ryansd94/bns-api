@@ -2,7 +2,7 @@
 
 namespace BNS.Domain.Queries
 {
-    public class GetUserAssignRequest : CommandRequest<ApiResult<UserResponse>>
+    public class GetUserAssignRequest : CommandGetRequest<ApiResult<UserResponse>>
     {
     }
 }

@@ -34,12 +34,27 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var request = new DeleteTaskTypeRequest();
+            request.ids.Add(id);
+            return Ok(await _mediator.Send(request));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIndex(Guid id)
         {
             var request = new GetTaskTypeByIdRequest();
             request.Id = id;
             request.CompanyId = CompanyId;
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateTaskTypeRequest request)
+        {
+            request.Id = id;
             return Ok(await _mediator.Send(request));
         }
     }

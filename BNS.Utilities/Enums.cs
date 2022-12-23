@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-
-namespace BNS.Utilities
+﻿namespace BNS.Utilities
 {
     public class Enums
     {
@@ -107,7 +102,16 @@ namespace BNS.Utilities
             Greater = 3,
             GreaterOrEqual = 4,
             Less = 5,
-            LessEqual = 6
+            LessEqual = 6,
+            Dynamic = 7,
+            LessThanOrEqual = 8,
+            NotContains = 9,
+        }
+
+        public enum EAndOr
+        {
+            And,
+            Or
         }
 
         public enum EControlType
