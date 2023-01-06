@@ -19,7 +19,7 @@ using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetJM_SprintQuery : IRequestHandler<GetJM_SprintRequest, ApiResult<JM_SprintResponse>>
+    public class GetJM_SprintQuery : IRequestHandler<GetJM_SprintRequest, ApiResult<SprintResponse>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -36,15 +36,15 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<ApiResult<JM_SprintResponse>> Handle(GetJM_SprintRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<SprintResponse>> Handle(GetJM_SprintRequest request, CancellationToken cancellationToken)
         {
 
-            var response = new ApiResult<JM_SprintResponse>();
-            response.data = new JM_SprintResponse();
+            var response = new ApiResult<SprintResponse>();
+            response.data = new SprintResponse();
             Expression<Func<JM_Sprint, bool>> filter = s => !s.IsDelete && s.CompanyId == request.CompanyId;
 
             var query = (await _unitOfWork.JM_SprintRepository.GetAsync(filter,
-                s => s.OrderBy(d => d.Name))).Select(s => _mapper.Map<JM_SprintResponseItem>(s));
+                s => s.OrderBy(d => d.Name))).Select(s => _mapper.Map<SprintResponseItem>(s));
 
             if (!string.IsNullOrEmpty(request.fieldSort))
                 query = query.OrderBy( request.fieldSort, request.sort );

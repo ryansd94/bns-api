@@ -13,7 +13,7 @@ using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetJM_ProjectByUserIdQuery : IRequestHandler<GetJM_ProjectByUserIdRequest, ApiResult<JM_ProjectResponseItem>>
+    public class GetJM_ProjectByUserIdQuery : IRequestHandler<GetJM_ProjectByUserIdRequest, ApiResult<ProjectResponseItem>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -27,13 +27,13 @@ namespace BNS.Service.Features
             _sharedLocalizer = sharedLocalizer;
             _mapper = mapper;
         }
-        public async Task<ApiResult<JM_ProjectResponseItem>> Handle(GetJM_ProjectByUserIdRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<ProjectResponseItem>> Handle(GetJM_ProjectByUserIdRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<JM_ProjectResponseItem>();
+            var response = new ApiResult<ProjectResponseItem>();
             var query = _context.JM_ProjectMembers.Where(s => s.UserId == request.Id &&
             !s.IsDelete &&
             s.CompanyId == request.CompanyId).Include(s => s.JM_Project)
-                .Select(s => _mapper.Map<JM_ProjectResponseItem>(s));
+                .Select(s => _mapper.Map<ProjectResponseItem>(s));
             var rs = await query.FirstOrDefaultAsync();
             response.data = rs;
             return response;

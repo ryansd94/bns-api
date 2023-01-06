@@ -218,7 +218,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ControlType")
@@ -264,7 +264,7 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -312,7 +312,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -353,7 +353,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -396,7 +396,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -437,7 +437,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -491,7 +491,7 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -519,6 +519,40 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_Status");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.ToTable("JM_Tags");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
                     b.Property<Guid>("Id")
@@ -528,7 +562,7 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("AssignUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -543,6 +577,9 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal?>("Estimatedhour")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
@@ -551,6 +588,12 @@ namespace BNS.Data.Migrations
 
                     b.Property<string>("Key")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ProjectId")
                         .HasColumnType("uniqueidentifier");
@@ -568,9 +611,6 @@ namespace BNS.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("StatusId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TaskParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TaskTypeId")
@@ -608,7 +648,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -617,7 +657,7 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CustomColumnId")
+                    b.Property<Guid>("CustomColumnId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDelete")
@@ -651,6 +691,50 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_TaskCustomColumns");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("JM_TaskTag");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -663,7 +747,7 @@ namespace BNS.Data.Migrations
                     b.Property<string>("ColorFilter")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -753,7 +837,7 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -795,7 +879,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -847,7 +931,7 @@ namespace BNS.Data.Migrations
                     b.Property<string>("ColumnTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -894,7 +978,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -938,7 +1022,7 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -1354,6 +1438,17 @@ namespace BNS.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Tag", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
@@ -1409,10 +1504,12 @@ namespace BNS.Data.Migrations
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_CustomColumn", "CustomColumn")
                         .WithMany()
-                        .HasForeignKey("CustomColumnId");
+                        .HasForeignKey("CustomColumnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
-                        .WithMany("TaskCustomColumns")
+                        .WithMany("TaskCustomColumnValues")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1428,6 +1525,33 @@ namespace BNS.Data.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("TemplateDetail");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskTag", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
+                        .WithMany("TaskTags")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("Task");
 
                     b.Navigation("User");
                 });
@@ -1597,7 +1721,9 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
-                    b.Navigation("TaskCustomColumns");
+                    b.Navigation("TaskCustomColumnValues");
+
+                    b.Navigation("TaskTags");
 
                     b.Navigation("TaskUsers");
                 });

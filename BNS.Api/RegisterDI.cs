@@ -54,7 +54,7 @@ namespace BNS.Api
             services.AddScoped<ICipherService, CipherService>();
             services.AddScoped<IRequestHandler<GetTaskRequest, ApiResultList<TaskItem>>, GetTaskQuery>();
             services.AddScoped<IRequestHandler<UpdateTaskTypeRequest, ApiResult<Guid>>, UpdateTaskTypeCommand>();
-            services.AddScoped<IRequestHandler<UpdateStatusRequest, ApiResult<Guid>>, UpdateStatusCommand>();
+            services.AddScoped<IRequestHandler<UpdateStatusRequest, ApiResult<Guid>>, UpdateTagCommand>();
 
             //services.AddScoped(typeof(IRequestHandler<,>), typeof(GetRequestHandler<,>));
             //services.AddMediatR(typeof(IRequestHandler<,>), typeof(GetRequestHandler<,>));

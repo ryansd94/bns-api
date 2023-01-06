@@ -35,7 +35,9 @@ namespace BNS.Service.Features
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.Repository<JM_Task>()
                 .Include(s => s.TaskType).ThenInclude(s => s.Template).ThenInclude(s => s.TemplateDetails)
-                .Include(s => s.TaskCustomColumnValues).Where(s => s.Id == request.Id).FirstOrDefaultAsync();
+                .Include(s => s.TaskCustomColumnValues)
+                .Include(s => s.TaskTags)
+                .Where(s => s.Id == request.Id).FirstOrDefaultAsync();
             if (dataCheck == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -138,6 +140,57 @@ namespace BNS.Service.Features
                 }
             }
 
+            #endregion
+
+            #region Tags
+            if (request.DefaultData.Tags != null && request.DefaultData.Tags.Count > 0)
+            {
+                var tagOld = dataCheck.TaskTags?.ToList();
+                foreach (var tag in request.DefaultData.Tags)
+                {
+                    if (!tag.IsDelete)
+                    {
+                        if (tag.IsAddNew)
+                        {
+                            _unitOfWork.Repository<JM_Tag>().Add(new JM_Tag
+                            {
+                                CompanyId = request.CompanyId,
+                                CreatedDate = DateTime.UtcNow,
+                                CreatedUserId = request.UserId,
+                                Id = tag.Id.Value,
+                                Name = tag.Name,
+                                IsDelete = false,
+                            });
+                        }
+                        else
+                        {
+                            var checkTag = tagOld.Where(s => s.TagId == tag.Id).FirstOrDefault();
+                            if (checkTag != null)
+                                continue;
+                        }
+
+                        _unitOfWork.Repository<JM_TaskTag>().Add(new JM_TaskTag
+                        {
+                            IsDelete = false,
+                            Id = Guid.NewGuid(),
+                            TagId = tag.Id.Value,
+                            TaskId = dataCheck.Id,
+                            CompanyId = request.CompanyId,
+                            CreatedDate = DateTime.UtcNow,
+                            CreatedUserId = request.UserId,
+                        });
+                    }
+                    else
+                    {
+                        var checkTag = tagOld.Where(s => s.TagId == tag.Id).FirstOrDefault();
+                        if (checkTag == null)
+                            continue;
+                        checkTag.IsDelete = true;
+
+                        _unitOfWork.Repository<JM_TaskTag>().Update(checkTag);
+                    }
+                }
+            }
             #endregion
 
             _unitOfWork.Repository<JM_Task>().Update(dataCheck);

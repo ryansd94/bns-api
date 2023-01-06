@@ -121,7 +121,9 @@
             Editor,
             Select,
             Group,
-            DatePicker
+            DatePicker,
+            Number,
+            DateTimePicker,
         }
 
         public enum EColumnPosition

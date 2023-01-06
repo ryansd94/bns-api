@@ -18,7 +18,7 @@ using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetJM_TeamQuery : IRequestHandler<GetJM_TeamRequest, ApiResult<JM_TeamResponse>>
+    public class GetJM_TeamQuery : IRequestHandler<GetJM_TeamRequest, ApiResult<TeamResponse>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -38,13 +38,13 @@ namespace BNS.Service.Features
             _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApiResult<JM_TeamResponse>> Handle(GetJM_TeamRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<TeamResponse>> Handle(GetJM_TeamRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<JM_TeamResponse>();
-            response.data = new JM_TeamResponse();
+            var response = new ApiResult<TeamResponse>();
+            response.data = new TeamResponse();
 
             var query = _unitOfWork.Repository<JM_Team>().Where(s => !s.IsDelete
-               && s.CompanyId == request.CompanyId).OrderBy(d => d.CreatedDate).Select(s => new JM_TeamResponseItem
+               && s.CompanyId == request.CompanyId).OrderBy(d => d.CreatedDate).Select(s => new TeamResponseItem
                {
                    Name = s.Name,
                    Description = s.Description,

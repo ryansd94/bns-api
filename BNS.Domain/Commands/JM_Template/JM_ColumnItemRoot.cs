@@ -12,6 +12,7 @@ namespace BNS.Domain.Commands
     public class JM_ColumnItem
     {
         public string id { get; set; }
+        public string customColumnId { get; set; }
         public string type { get; set; }
         public string label { get; set; }
         public string name { get; set; }

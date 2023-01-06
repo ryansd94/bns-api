@@ -17,7 +17,7 @@ using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetJM_StatusQuery : IRequestHandler<GetJM_StatusRequest, ApiResult<JM_StatusResponse>>
+    public class GetJM_StatusQuery : IRequestHandler<GetJM_StatusRequest, ApiResult<StatusResponse>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -37,10 +37,10 @@ namespace BNS.Service.Features
             _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApiResult<JM_StatusResponse>> Handle(GetJM_StatusRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<StatusResponse>> Handle(GetJM_StatusRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<JM_StatusResponse>();
-            response.data = new JM_StatusResponse();
+            var response = new ApiResult<StatusResponse>();
+            response.data = new StatusResponse();
 
             var query = _unitOfWork.Repository<JM_Status>().Where(s => !s.IsDelete
                && s.CompanyId == request.CompanyId).OrderBy(d => d.CreatedDate).Select(s => new StatusResponseItem

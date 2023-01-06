@@ -40,6 +40,8 @@ namespace BNS.Service.Features
             var task = await _unitOfWork.Repository<JM_Task>()
                 .Where(s => s.Id == request.Id && !s.IsDelete)
                 .Include(s => s.TaskUsers)
+                .Include(s => s.User)
+                .Include(s => s.TaskTags).ThenInclude(s => s.Tag)
                 .Select(s => _mapper.Map<TaskItem>(s)).FirstOrDefaultAsync();
             if (task == null)
             {

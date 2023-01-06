@@ -93,7 +93,12 @@ namespace BNS.Service.Features
             {
                 foreach (var value in dataDynamics)
                 {
-                    var customColumn = templateDetails.Where(s => s.Id.Equals(value.Key)).FirstOrDefault();
+                    var key = value.Key;
+                    if (key.IndexOf('@') != -1)
+                    {
+                        key = key.Split('@')[0];
+                    }
+                    var customColumn = templateDetails.Where(s => s.Id.Equals(Guid.Parse(key))).FirstOrDefault();
                     if (customColumn != null)
                     {
                         var taskCustomColumns = new JM_TaskCustomColumnValue
@@ -112,6 +117,39 @@ namespace BNS.Service.Features
                 }
             }
 
+            #endregion
+
+            #region Tags
+            if (request.DefaultData.Tags != null && request.DefaultData.Tags.Count > 0)
+            {
+                foreach (var tag in request.DefaultData.Tags)
+                {
+                    if(tag.IsDelete)
+                        continue;
+                    if (tag.IsAddNew)
+                    {
+                        _unitOfWork.Repository<JM_Tag>().Add(new JM_Tag
+                        {
+                            CompanyId = request.CompanyId,
+                            CreatedDate = DateTime.UtcNow,
+                            CreatedUserId = request.UserId,
+                            Id = tag.Id.Value,
+                            Name = tag.Name,
+                            IsDelete = false,
+                        });
+                    }
+                    _unitOfWork.Repository<JM_TaskTag>().Add(new JM_TaskTag
+                    {
+                        IsDelete = false,
+                        Id = Guid.NewGuid(),
+                        TagId = tag.Id.Value,
+                        TaskId = task.Id,
+                        CompanyId = request.CompanyId,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedUserId = request.UserId,
+                    });
+                }
+            }
             #endregion
             //var project = await _context.JM_Projects.Where(s => s.Id == request.ProjectId).FirstOrDefaultAsync();
             //if (project == null)

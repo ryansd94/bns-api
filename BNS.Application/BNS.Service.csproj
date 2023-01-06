@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\JM_Tag\Queries\" />
     <Folder Include="Features\JM_TaskColumns\Commands\" />
     <Folder Include="Implement\Role\" />
   </ItemGroup>

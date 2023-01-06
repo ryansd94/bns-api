@@ -651,6 +651,22 @@ namespace BNS.Utilities
                                 case EWhereCondition.Contains:
                                     body = Expression.Call(body, nameof(string.Contains), null, Expression.Constant(item.Value.ToString()));
                                     break;
+                                case EWhereCondition.Greater:
+                                    var greaterConstant = Expression.Constant(item.Value, ((PropertyInfo)memberAccess.Member).PropertyType);
+                                    body = Expression.GreaterThan(memberAccess, greaterConstant);
+                                    break;
+                                case EWhereCondition.GreaterOrEqual:
+                                    var greaterOrEqualConstant = Expression.Constant(item.Value, ((PropertyInfo)memberAccess.Member).PropertyType);
+                                    body = Expression.GreaterThanOrEqual(memberAccess, greaterOrEqualConstant);
+                                    break;
+                                case EWhereCondition.Less:
+                                    var lessConstant = Expression.Constant(item.Value, ((PropertyInfo)memberAccess.Member).PropertyType);
+                                    body = Expression.LessThan(memberAccess, lessConstant);
+                                    break;
+                                case EWhereCondition.LessEqual:
+                                    var lessEqualnConstant = Expression.Constant(item.Value, ((PropertyInfo)memberAccess.Member).PropertyType);
+                                    body = Expression.LessThanOrEqual(memberAccess, lessEqualnConstant);
+                                    break;
                                 case EWhereCondition.NotContains:
                                     body = Expression.Call(body, nameof(string.Contains), null, Expression.Constant(item.Value.ToString()));
                                     break;

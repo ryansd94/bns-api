@@ -179,7 +179,7 @@ namespace BNS.Service.Features
                                             Name = child.label
                                         };
                                         await _unitOfWork.Repository<JM_CustomColumn>().AddAsync(column);
-                                        await _unitOfWork.SaveChangesAsync();
+                                        //await _unitOfWork.SaveChangesAsync();
                                     }
 
                                     var templateChildDetail = new JM_TemplateDetail
@@ -198,6 +198,7 @@ namespace BNS.Service.Features
                                         Order = orderChild
                                     };
                                     child.id = String.Format("{0}@{1}", templateChildDetail.Id, templateDetail.Id);
+                                    child.customColumnId = templateChildDetail.Id.ToString();
                                     await _unitOfWork.Repository<JM_TemplateDetail>().AddAsync(templateChildDetail);
                                     orderChild += 1;
                                 }
@@ -214,7 +215,7 @@ namespace BNS.Service.Features
                 };
                 template.Content = Newtonsoft.Json.JsonConvert.SerializeObject(xxxx);
             }
-
+            //return response;
             await _unitOfWork.Repository<JM_Template>().AddAsync(template);
             await _unitOfWork.SaveChangesAsync();
             response.data = template.Id;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BNS.Domain.Commands;
+using System;
 using System.Collections.Generic;
 
 namespace BNS.Domain.Responses
@@ -22,8 +23,9 @@ namespace BNS.Domain.Responses
         public string Title { get; set; }
         public string Key { get; set; }
         public string Description { get; set; }
+        public string Note { get; set; }
         public Guid TaskTypeId { get; set; }
-        public List<Guid> usersAssign { get; set; }
+        public List<Guid> UsersAssign { get; set; }
         public Guid ReporterId { get; set; }
         public Guid? SprintId { get; set; }
         public TaskType TaskType { get; set; }
@@ -34,11 +36,13 @@ namespace BNS.Domain.Responses
         public string TaskTypeName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
-        public Guid? TaskParentId { get; set; }
+        public Guid? ParentId { get; set; }
         public Guid StatusId { get; set; }
+        public decimal? Estimatedhour { get; set; }
         public StatusResponseItem Status { get; set; }
-        public TaskUser CreateUser { get; set; }
+        public TaskUser CreatedUser { get; set; }
         public ICollection<TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
+        public List<TagItem> Tags { get; set; }
     }
 
     public class TaskCustomColumnValue

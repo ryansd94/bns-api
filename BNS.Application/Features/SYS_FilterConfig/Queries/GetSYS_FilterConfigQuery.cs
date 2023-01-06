@@ -18,7 +18,7 @@ using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetSYS_FilterConfigQuery : IRequestHandler<GetSYS_FilterConfigRequest, ApiResult<SYS_FilterConfigResponse>>
+    public class GetSYS_FilterConfigQuery : IRequestHandler<GetSYS_FilterConfigRequest, ApiResult<FilterConfigResponse>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -35,13 +35,13 @@ namespace BNS.Service.Features
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApiResult<SYS_FilterConfigResponse>> Handle(GetSYS_FilterConfigRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<FilterConfigResponse>> Handle(GetSYS_FilterConfigRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<SYS_FilterConfigResponse>();
-            response.data = new SYS_FilterConfigResponse();
+            var response = new ApiResult<FilterConfigResponse>();
+            response.data = new FilterConfigResponse();
 
             var query = _unitOfWork.Repository<SYS_FilterConfig>().Where(s => !s.IsDelete
-               && s.CompanyId == request.CompanyId).OrderBy(d => d.CreatedDate).Select(s => _mapper.Map<SYS_FilterConfigResponseItem>(s));
+               && s.CompanyId == request.CompanyId).OrderBy(d => d.CreatedDate).Select(s => _mapper.Map<FilterConfigResponseItem>(s));
 
             if (!string.IsNullOrEmpty(request.fieldSort))
             {

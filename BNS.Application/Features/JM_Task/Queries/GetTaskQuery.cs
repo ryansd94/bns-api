@@ -2,6 +2,7 @@
 using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
+using BNS.Domain.Commands;
 using BNS.Domain.Responses;
 using BNS.Resource;
 using Microsoft.EntityFrameworkCore;
@@ -33,24 +34,30 @@ namespace BNS.Service.Features
             {
                 Id = s.Id,
                 Title = s.Title,
+                StartDate = s.StartDate,
+                DueDate = s.DueDate,
                 TaskType = new TaskType
                 {
                     Name = s.TaskType.Name,
                     Color = s.TaskType.Color,
                     Icon = s.TaskType.Icon,
                 },
+                TaskTypeId = s.TaskTypeId,
                 Status = new StatusResponseItem
                 {
                     Name = s.Status != null ? s.Status.Name : "",
                     Color = s.Status != null ? s.Status.Color : "",
                 },
+                Estimatedhour = s.Estimatedhour,
                 CreatedDate = s.CreatedDate,
                 CreatedUserId = s.CreatedUserId,
-                CreateUser = new TaskUser
+                ParentId = s.ParentId,
+                CreatedUser = new TaskUser
                 {
                     Name = s.User != null ? s.User.FullName : "",
                     Image = s.User != null ? s.User.Image : "",
                 },
+                Tags = s.TaskTags != null ? s.TaskTags.Where(s => !s.IsDelete).Select(d => new TagItem { Id = d.Tag.Id, Name = d.Tag.Name }).ToList() : null,
                 TaskCustomColumnValues = s.TaskCustomColumnValues != null ?
                 s.TaskCustomColumnValues.Select(s => new TaskCustomColumnValue { Value = s.Value, CustomColumnId = s.CustomColumnId }).ToArray() : null,
             });
@@ -71,6 +78,7 @@ namespace BNS.Service.Features
 
             var query = _unitOfWork.Repository<JM_Task>()
                 .Where(s => query3.Contains(s.Id))
+                .OrderByDescending(d => d.CreatedDate)
                 .AsQueryable();
             return query;
 

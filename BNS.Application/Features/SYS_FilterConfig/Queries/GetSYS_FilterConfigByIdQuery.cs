@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
-    public class GetSYS_FilterConfigByIdQuery : IRequestHandler<GetSYS_FilterConfigByIdRequest, ApiResult<SYS_FilterConfigResponseItem>>
+    public class GetSYS_FilterConfigByIdQuery : IRequestHandler<GetSYS_FilterConfigByIdRequest, ApiResult<FilterConfigResponseItem>>
     {
         private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -30,9 +30,9 @@ namespace BNS.Service.Features
             _sharedLocalizer = sharedLocalizer;
             _mapper = mapper;
         }
-        public async Task<ApiResult<SYS_FilterConfigResponseItem>> Handle(GetSYS_FilterConfigByIdRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<FilterConfigResponseItem>> Handle(GetSYS_FilterConfigByIdRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<SYS_FilterConfigResponseItem>();
+            var response = new ApiResult<FilterConfigResponseItem>();
             var data = await _unitOfWork.Repository<SYS_FilterConfig>().FirstOrDefaultAsync(s => s.Id == request.Id &&
              !s.IsDelete &&
              s.CompanyId == request.CompanyId);
@@ -42,7 +42,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
                 return response;
             }
-            var rs = _mapper.Map<SYS_FilterConfigResponseItem>(data);
+            var rs = _mapper.Map<FilterConfigResponseItem>(data);
             response.data = rs;
             return response;
         }
