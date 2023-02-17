@@ -2,6 +2,7 @@
 using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
+using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using BNS.Domain.Responses;
 using BNS.Resource;
@@ -41,21 +42,39 @@ namespace BNS.Service.Features
                 .Where(s => s.Id == request.Id && !s.IsDelete)
                 .Include(s => s.TaskUsers)
                 .Include(s => s.User)
-                .Include(s => s.TaskTags).ThenInclude(s => s.Tag)
-                .Select(s => _mapper.Map<TaskItem>(s)).FirstOrDefaultAsync();
+                .Include(s => s.JM_TaskParent)
+                .Include(s => s.CommentTasks).ThenInclude(s => s.Comment)
+                .ThenInclude(s => s.User)
+                .Include(s => s.TaskTags).ThenInclude(s => s.Tag).FirstOrDefaultAsync();
             if (task == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
                 return response;
             }
+            var files = await _unitOfWork.Repository<JM_AttachedFiles>()
+                .Include(s => s.File)
+                .Where(s => s.EntityId == task.Id)
+                .Select(s => new FileUpload
+                {
+                    Id = s.Id,
+                    File = new FileItem
+                    {
+                        Name = s.File.Name
+                    },
+                    Url = s.File.Url,
+                    IsDelete = s.IsDelete,
+                })
+                .ToListAsync();
+            var taskItem = _mapper.Map<TaskItem>(task);
             var dynamicData = await _unitOfWork.Repository<JM_TaskCustomColumnValue>().Where(s => s.TaskId == task.Id
                  && !s.IsDelete).Select(s => new
                  {
                      id = s.TemplateDetailId.ToString().ToLower(),
                      value = s.Value
                  }).ToDictionaryAsync(r => r.id, r => r.value);
-            task.DynamicData = dynamicData;
+            taskItem.DynamicData = dynamicData;
+            taskItem.Files = files;
             var taskTypeRequest = new GetTaskTypeByIdRequest
             {
                 Id = task.TaskTypeId,
@@ -63,8 +82,26 @@ namespace BNS.Service.Features
                 IsDelete = null
             };
             var taskType = await _mediator.Send(taskTypeRequest);
-            response.data.Task = task;
+            var taskChilds = await _unitOfWork.Repository<JM_Task>().Where(s => s.ParentId != null && s.ParentId == task.Id
+              && !s.IsDelete).Select(s => _mapper.Map<TaskItem>(s)).ToListAsync();
+            var comments = task.CommentTasks.ToList().Select(s => new TaskCommentReponse
+            {
+                Value = s.Comment.Value,
+                Id = s.Comment.Id,
+                User = new User
+                {
+                    Id = s.Comment.User.Id,
+                    FullName = s.Comment.User.FullName,
+                    Image = s.Comment.User.Image
+                },
+                UpdatedTime = s.Comment.UpdatedDate.ToString()
+            }).ToList();
+
+            response.data.Task = taskItem;
             response.data.TaskType = taskType.data;
+            response.data.Task.TaskParent = _mapper.Map<TaskItem>(task.JM_TaskParent);
+            response.data.Task.TaskChilds = taskChilds;
+            response.data.Comments = comments;
             return response;
         }
 

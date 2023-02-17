@@ -6,6 +6,11 @@ namespace BNS.Data.Entities.JM_Entities
 {
     public abstract class BaseJMEntity
     {
+        public BaseJMEntity()
+        {
+            CreatedDate = DateTime.UtcNow;
+            UpdatedDate = DateTime.UtcNow;
+        }
         [Key]
         public Guid Id { get; set; }
         public DateTime? UpdatedDate { get; set; }

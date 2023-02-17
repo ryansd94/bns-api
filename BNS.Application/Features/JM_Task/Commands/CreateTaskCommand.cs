@@ -2,6 +2,7 @@
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Domain.Commands;
+using BNS.Domain.Interface;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
@@ -20,15 +21,18 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IAttachedFileService _attachedFileService;
 
         public CreateTaskCommand(
             IStringLocalizer<SharedResource> sharedLocalizer,
             IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper,
+            IAttachedFileService attachedFileService)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _attachedFileService = attachedFileService;
         }
         public async Task<ApiResult<Guid>> Handle(CreateTaskRequest request, CancellationToken cancellationToken)
         {
@@ -124,7 +128,7 @@ namespace BNS.Service.Features
             {
                 foreach (var tag in request.DefaultData.Tags)
                 {
-                    if(tag.IsDelete)
+                    if (tag.IsDelete)
                         continue;
                     if (tag.IsAddNew)
                     {
@@ -151,6 +155,49 @@ namespace BNS.Service.Features
                 }
             }
             #endregion
+
+            #region Files
+            if (request.DefaultData.Files != null && request.DefaultData.Files.Count > 0)
+            {
+                var fileAddNew = request.DefaultData.Files.Where(s => s.IsAddNew).Select(s => new CreateAttachedFilesRequest
+                {
+                    EntityId = task.Id,
+                    CompanyId = request.CompanyId,
+                    Url = s.Url,
+                    UserId = request.UserId,
+                    File = s.File,
+                }).ToList();
+                await _attachedFileService.AddAttachedFiles(fileAddNew);
+            }
+            #endregion
+
+            #region Comments
+            if (request.Comments != null && request.Comments.Count > 0)
+            {
+                foreach (var item in request.Comments)
+                {
+                    var comment = new JM_Comment
+                    {
+                        Value = item.Value,
+                        Id = Guid.NewGuid(),
+                        CompanyId = request.CompanyId,
+                        CreatedUserId = request.UserId,
+                        UpdatedUserId = request.UserId,
+                    };
+                    _unitOfWork.Repository<JM_Comment>().Add(comment);
+                    _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
+                    {
+                        TaskId = task.Id,
+                        CommentId = comment.Id,
+                        CreatedUserId = request.UserId,
+                        CompanyId = request.CompanyId,
+                        UpdatedUserId = request.UserId,
+                    });
+                }
+            }
+            #endregion
+
+
             //var project = await _context.JM_Projects.Where(s => s.Id == request.ProjectId).FirstOrDefaultAsync();
             //if (project == null)
             //{

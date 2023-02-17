@@ -27,7 +27,7 @@ namespace BNS.Data.Entities.JM_Entities
         public virtual JM_Project JM_Project { get; set; }
         [ForeignKey("SprintId")]
         public virtual JM_Sprint JM_Sprint { get; set; }
-        [ForeignKey("IssueParentId")]
+        [ForeignKey("ParentId")]
         public virtual JM_Task JM_TaskParent { get; set; }
         //[ForeignKey("AssignUserId")]
         //public virtual JM_Account JM_AccountAssign { get; set; }
@@ -40,5 +40,6 @@ namespace BNS.Data.Entities.JM_Entities
         public virtual ICollection<JM_TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
         public virtual ICollection<JM_TaskUser> TaskUsers { get; set; }
         public virtual ICollection<JM_TaskTag> TaskTags { get; set; }
+        public virtual ICollection<JM_CommentTask> CommentTasks { get; set; }
     }
 }

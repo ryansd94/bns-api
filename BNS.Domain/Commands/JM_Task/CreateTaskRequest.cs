@@ -8,6 +8,7 @@ namespace BNS.Domain.Commands
     {
         public Dictionary<string, string> DynamicData { get; set; }
         public TaskDefaultData DefaultData { get; set; }
+        public List<TaskCommentRequest> Comments { get; set; }
     }
 
     public class TaskDefaultData
@@ -24,6 +25,14 @@ namespace BNS.Domain.Commands
         public List<Guid> UsersAssign { get; set; }
         public List<TagItem> Tags { get; set; }
         public decimal? Estimatedhour { get; set; }
+        public List<Guid> TaskChildDelete { get; set; }
+        public List<Guid> TaskChild { get; set; }
+        public List<FileUpload> Files { get; set; }
+    }
+
+    public class TaskParent
+    {
+        public Guid? Id { get; set; }
     }
 
     public class TagItem
@@ -32,5 +41,12 @@ namespace BNS.Domain.Commands
         public string Name { get; set; }
         public bool IsAddNew { get; set; }
         public bool IsDelete { get; set; }
+    }
+
+    public class TaskCommentRequest
+    {
+        public string Value { get; set; }
+        public Guid? Id { get; set; }
+        public bool IsAddNew { get; set; }
     }
 }

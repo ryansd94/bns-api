@@ -13,6 +13,7 @@ using BNS.Domain.Commands;
 using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using System.Collections.Generic;
+using BNS.Domain.Interface;
 
 namespace BNS.Service.Features
 {
@@ -21,14 +22,17 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAttachedFileService _attachedFileService;
 
         public UpdateTaskCommand(IMapper mapper,
             IUnitOfWork unitOfWork,
-            IStringLocalizer<SharedResource> sharedLocalizer)
+            IStringLocalizer<SharedResource> sharedLocalizer,
+            IAttachedFileService attachedFileService)
         {
             _mapper = mapper;
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
+            _attachedFileService = attachedFileService;
         }
         public async Task<ApiResult<Guid>> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
@@ -189,6 +193,82 @@ namespace BNS.Service.Features
 
                         _unitOfWork.Repository<JM_TaskTag>().Update(checkTag);
                     }
+                }
+            }
+            #endregion
+
+            #region Task child delete
+            if (request.DefaultData.TaskChildDelete != null && request.DefaultData.TaskChildDelete.Count > 0)
+            {
+                var taskChildDeletes = await _unitOfWork.Repository<JM_Task>().Where(s => request.DefaultData.TaskChildDelete.Contains(s.Id)).ToListAsync();
+                foreach (var item in taskChildDeletes)
+                {
+                    item.ParentId = null;
+                    item.UpdatedDate = DateTime.UtcNow;
+                    item.UpdatedUserId = request.UserId;
+                    _unitOfWork.Repository<JM_Task>().Update(item);
+                }
+            }
+            #endregion
+
+            #region Task child add
+            if (request.DefaultData.TaskChild != null && request.DefaultData.TaskChild.Count > 0)
+            {
+                var taskChildDeletes = await _unitOfWork.Repository<JM_Task>().Where(s => request.DefaultData.TaskChild.Contains(s.Id)).ToListAsync();
+                foreach (var item in taskChildDeletes)
+                {
+                    item.ParentId = dataCheck.Id;
+                    item.UpdatedDate = DateTime.UtcNow;
+                    item.UpdatedUserId = request.UserId;
+                    _unitOfWork.Repository<JM_Task>().Update(item);
+                }
+            }
+            #endregion
+
+            #region Files
+            if (request.DefaultData.Files != null && request.DefaultData.Files.Count > 0)
+            {
+                var fileAddNew = request.DefaultData.Files.Where(s => s.IsAddNew).Select(s => new CreateAttachedFilesRequest
+                {
+                    EntityId = dataCheck.Id,
+                    CompanyId = request.CompanyId,
+                    Url = s.Url,
+                    UserId = request.UserId,
+                    File = s.File,
+                }).ToList();
+                await _attachedFileService.AddAttachedFiles(fileAddNew);
+
+                var fileDelete = request.DefaultData.Files.Where(s => s.IsDelete).Select(s => s.Id).ToList();
+                if (fileDelete != null && fileDelete.Count > 0)
+                {
+                    await _attachedFileService.RemoveAttachedFiles(fileDelete);
+                }
+            }
+            #endregion
+
+            #region Comments
+            var comments = request.Comments != null ? request.Comments.Where(s => s.IsAddNew).ToList() : null;
+            if (comments != null && comments.Count > 0)
+            {
+                foreach (var item in comments)
+                {
+                    var comment = new JM_Comment
+                    {
+                        Value = item.Value,
+                        Id = Guid.NewGuid(),
+                        CompanyId = request.CompanyId,
+                        CreatedUserId = request.UserId,
+                        UpdatedUserId = request.UserId,
+                    };
+                    _unitOfWork.Repository<JM_Comment>().Add(comment);
+                    _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
+                    {
+                        TaskId = dataCheck.Id,
+                        CommentId = comment.Id,
+                        CreatedUserId = request.UserId,
+                        CompanyId = request.CompanyId,
+                        UpdatedUserId = request.UserId,
+                    });
                 }
             }
             #endregion

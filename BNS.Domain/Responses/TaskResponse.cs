@@ -12,6 +12,7 @@ namespace BNS.Domain.Responses
     {
         public TaskTypeItem TaskType { get; set; }
         public TaskItem Task { get; set; }
+        public List<TaskCommentReponse> Comments { get; set; }
     }
     public class TaskItem : BaseResponseModel
     {
@@ -40,9 +41,12 @@ namespace BNS.Domain.Responses
         public Guid StatusId { get; set; }
         public decimal? Estimatedhour { get; set; }
         public StatusResponseItem Status { get; set; }
-        public TaskUser CreatedUser { get; set; }
+        public User CreatedUser { get; set; }
         public ICollection<TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
         public List<TagItem> Tags { get; set; }
+        public List<TaskItem> TaskChilds { get; set; }
+        public TaskItem TaskParent { get; set; }
+        public List<FileUpload> Files { get; set; }
     }
 
     public class TaskCustomColumnValue
@@ -58,9 +62,16 @@ namespace BNS.Domain.Responses
         public string Icon { get; set; }
     }
 
-    public class TaskUser
+    public class User
     {
-        public string Name { get; set; }
+        public Guid Id { get; set; }
+        public string FullName { get; set; }
         public string Image { get; set; }
+    }
+
+    public class TaskCommentReponse : TaskCommentRequest
+    {
+        public User User { get; set; }
+        public string UpdatedTime { get; set; }
     }
 }

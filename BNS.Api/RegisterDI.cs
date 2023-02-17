@@ -3,6 +3,7 @@ using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Domain;
 using BNS.Domain.Commands;
+using BNS.Domain.Interface;
 using BNS.Domain.Queries;
 using BNS.Domain.Responses;
 using BNS.Service.Features;
@@ -51,6 +52,8 @@ namespace BNS.Api
 
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //services.AddScoped(typeof(ICipherService), typeof(CipherService));
+            services.AddScoped<IAttachedFileService, AttachedFileService>();
             services.AddScoped<ICipherService, CipherService>();
             services.AddScoped<IRequestHandler<GetTaskRequest, ApiResultList<TaskItem>>, GetTaskQuery>();
             services.AddScoped<IRequestHandler<UpdateTaskTypeRequest, ApiResult<Guid>>, UpdateTaskTypeCommand>();

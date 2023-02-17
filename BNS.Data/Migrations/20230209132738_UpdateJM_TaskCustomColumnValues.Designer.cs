@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230209132738_UpdateJM_TaskCustomColumnValues")]
+    partial class UpdateJM_TaskCustomColumnValues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,87 +204,6 @@ namespace BNS.Data.Migrations
                     b.HasIndex("FileId");
 
                     b.ToTable("JM_AttachedFiles");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("ntext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedUserId");
-
-                    b.ToTable("JM_Comments");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_CommentTask", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("CreatedUserId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("JM_CommentTasks");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Company", b =>
@@ -1495,44 +1416,6 @@ namespace BNS.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Comment", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
-                        .WithMany()
-                        .HasForeignKey("CreatedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_CommentTask", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
-                        .WithMany()
-                        .HasForeignKey("CreatedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
-                        .WithMany("CommentTasks")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("Task");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_CustomColumn", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
@@ -1952,8 +1835,6 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
-                    b.Navigation("CommentTasks");
-
                     b.Navigation("TaskCustomColumnValues");
 
                     b.Navigation("TaskTags");

@@ -52,9 +52,9 @@ namespace BNS.Service.Features
                 CreatedDate = s.CreatedDate,
                 CreatedUserId = s.CreatedUserId,
                 ParentId = s.ParentId,
-                CreatedUser = new TaskUser
+                CreatedUser = new User
                 {
-                    Name = s.User != null ? s.User.FullName : "",
+                    FullName = s.User != null ? s.User.FullName : "",
                     Image = s.User != null ? s.User.Image : "",
                 },
                 Tags = s.TaskTags != null ? s.TaskTags.Where(s => !s.IsDelete).Select(d => new TagItem { Id = d.Tag.Id, Name = d.Tag.Name }).ToList() : null,

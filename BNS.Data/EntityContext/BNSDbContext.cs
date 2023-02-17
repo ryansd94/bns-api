@@ -90,8 +90,15 @@ namespace BNS.Data.EntityContext
                 entity.ToTable("Sys_RoleClaim");
             });
 
+            modelBuilder.Entity<JM_TaskCustomColumnValue>(e =>
+            {
+                e.Property(p => p.Value).HasColumnType("ntext");
+            });
             
-
+            modelBuilder.Entity<JM_Comment>(e =>
+            {
+                e.Property(p => p.Value).HasColumnType("ntext");
+            });
         }
 
         public virtual DbSet<SYS_VersionConfig> SYS_VersionConfigs { get; set; }
@@ -115,9 +122,13 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_TaskType> JM_TaskTypies { get; set; }
         public virtual DbSet<JM_CustomColumn> JM_CustomColumns { get; set; }
         public virtual DbSet<JM_TemplateDetail> JM_TemplateDetails { get; set; }
-        public virtual DbSet<JM_TaskCustomColumnValue> JM_TaskCustomColumns { get; set; }
+        public virtual DbSet<JM_TaskCustomColumnValue> JM_TaskCustomColumnValues { get; set; }
         public virtual DbSet<JM_TaskUser> JM_TaskUsers { get; set; }
         public virtual DbSet<JM_Tag> JM_Tags { get; set; }
         public virtual DbSet<JM_TaskTag> JM_TaskTag { get; set; }
+        public virtual DbSet<JM_File> JM_Files { get; set; }
+        public virtual DbSet<JM_AttachedFiles> JM_AttachedFiles { get; set; }
+        public virtual DbSet<JM_Comment> JM_Comments { get; set; }
+        public virtual DbSet<JM_CommentTask> JM_CommentTasks { get; set; }
     }
 }
