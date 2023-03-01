@@ -60,6 +60,12 @@ namespace BNS.Api.AutoMapper
             CreateMap<UpdateStatusRequest, JM_Status>();
             CreateMap<JM_CustomColumn, CustomColumnsResponseItem>();
             CreateMap<FileItem, JM_File>();
+            CreateMap<JM_Comment, CommentResponseItem>().ForMember(s => s.User, d => d.MapFrom(e => new User
+            {
+                Id = e.User.Id,
+                FullName = e.User.FullName,
+                Image = e.User.Image,
+            })).ForMember(s => s.UpdatedTime, d => d.MapFrom(s => s.UpdatedDate.ToString()));
         }
     }
 

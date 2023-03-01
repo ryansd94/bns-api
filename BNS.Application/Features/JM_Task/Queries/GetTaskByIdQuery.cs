@@ -10,6 +10,7 @@ using BNS.Resource.LocalizationResources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace BNS.Service.Features
                 .Include(s => s.TaskUsers)
                 .Include(s => s.User)
                 .Include(s => s.JM_TaskParent)
-                .Include(s => s.CommentTasks).ThenInclude(s => s.Comment)
+                .Include(s => s.CommentTasks).ThenInclude(s => s.Comment).ThenInclude(s => s.Chidrens)
                 .ThenInclude(s => s.User)
                 .Include(s => s.TaskTags).ThenInclude(s => s.Tag).FirstOrDefaultAsync();
             if (task == null)
@@ -84,26 +85,55 @@ namespace BNS.Service.Features
             var taskType = await _mediator.Send(taskTypeRequest);
             var taskChilds = await _unitOfWork.Repository<JM_Task>().Where(s => s.ParentId != null && s.ParentId == task.Id
               && !s.IsDelete).Select(s => _mapper.Map<TaskItem>(s)).ToListAsync();
-            var comments = task.CommentTasks.ToList().Select(s => new TaskCommentReponse
-            {
-                Value = s.Comment.Value,
-                Id = s.Comment.Id,
-                User = new User
-                {
-                    Id = s.Comment.User.Id,
-                    FullName = s.Comment.User.FullName,
-                    Image = s.Comment.User.Image
-                },
-                UpdatedTime = s.Comment.UpdatedDate.ToString()
-            }).ToList();
+            var comments = task.CommentTasks.Select(s=>s.Comment).ToList();
 
             response.data.Task = taskItem;
             response.data.TaskType = taskType.data;
             response.data.Task.TaskParent = _mapper.Map<TaskItem>(task.JM_TaskParent);
             response.data.Task.TaskChilds = taskChilds;
-            response.data.Comments = comments;
+            response.data.Comments = GetComments(comments);
             return response;
         }
+
+        private List<CommentResponseItem> GetComments(List<JM_Comment> lstComments)
+        {
+            var commentParents = lstComments.Where(s => s.ParentId == null).OrderByDescending(s => s.CreatedDate).ToList();
+            var commentChilds = lstComments.Where(s => s.ParentId != null).OrderByDescending(s => s.CreatedDate).ToList();
+            var result = new List<CommentResponseItem>();
+
+            foreach (var commentParent in commentParents)
+            {
+                var comment = _mapper.Map<CommentResponseItem>(commentParent);
+                result.Add(comment);
+            }
+
+            return result;
+        }
+
+        //private void GetCommentChild(CommentResponseItem commentParent, List<JM_Comment> lstCommentChilds)
+        //{
+        //    var commentChilds = lstCommentChilds.Where(s => s.ParentId == commentParent.Id).ToList();
+        //    if (commentChilds != null && commentChilds.Count > 0)
+        //    {
+        //        commentParent.Childrens = commentChilds.Select(s => new CommentResponseItem
+        //        {
+        //            Id = s.Id,
+        //            Value = s.Value,
+        //            UpdatedTime = s.UpdatedDate.ToString(),
+        //            CountReply = s.CountReply,
+        //            User = new User
+        //            {
+        //                Id = s.User.Id,
+        //                FullName = s.User.FullName,
+        //                Image = s.User.Image,
+        //            }
+        //        }).ToList();
+        //        foreach (var comment in commentParent.Childrens)
+        //        {
+        //            GetCommentChild(comment, lstCommentChilds);
+        //        }
+        //    }
+        //}
 
     }
 }

@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218125220_updateJM_CommentAddCountReply")]
+    partial class updateJM_CommentAddCountReply
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,9 +226,6 @@ namespace BNS.Data.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");

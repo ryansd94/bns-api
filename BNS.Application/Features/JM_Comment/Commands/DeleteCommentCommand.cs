@@ -15,13 +15,13 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Features
 {
-    public class DeleteTaskCommand : IRequestHandler<DeleteTaskRequest, ApiResult<Guid>>
+    public class DeleteCommentCommand : IRequestHandler<DeleteCommentRequest, ApiResult<Guid>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteTaskCommand(BNSDbContext context,
+        public DeleteCommentCommand(BNSDbContext context,
          IStringLocalizer<SharedResource> sharedLocalizer,
          IUnitOfWork unitOfWork)
         {
@@ -29,10 +29,10 @@ namespace BNS.Service.Features
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApiResult<Guid>> Handle(DeleteTaskRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<Guid>> Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataChecks = await _unitOfWork.Repository<JM_Task>().Where(s => request.ids.Contains(s.Id)).ToListAsync();
+            var dataChecks = await _unitOfWork.Repository<JM_Comment>().Where(s => request.ids.Contains(s.Id)).ToListAsync();
             if (dataChecks == null || dataChecks.Count() == 0)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -44,7 +44,7 @@ namespace BNS.Service.Features
                 item.IsDelete = true;
                 item.UpdatedDate = DateTime.UtcNow;
                 item.UpdatedUserId = request.UserId;
-                _unitOfWork.Repository<JM_Task>().Update(item);
+                _unitOfWork.Repository<JM_Comment>().Update(item);
             }
             await _context.SaveChangesAsync();
             return response;

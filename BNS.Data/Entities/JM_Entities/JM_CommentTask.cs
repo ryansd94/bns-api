@@ -7,7 +7,6 @@ namespace BNS.Data.Entities.JM_Entities
     {
         public Guid TaskId { get; set; }
         public Guid CommentId { get; set; }
-        public string Value { get; set; }
         [ForeignKey("TaskId")]
         public virtual JM_Task Task { get; set; }
         [ForeignKey("CommentId")]

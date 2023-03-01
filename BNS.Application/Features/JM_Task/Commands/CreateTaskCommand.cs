@@ -174,25 +174,9 @@ namespace BNS.Service.Features
             #region Comments
             if (request.Comments != null && request.Comments.Count > 0)
             {
-                foreach (var item in request.Comments)
+                for (int i = request.Comments.Count - 1; i >= 0; i--)
                 {
-                    var comment = new JM_Comment
-                    {
-                        Value = item.Value,
-                        Id = Guid.NewGuid(),
-                        CompanyId = request.CompanyId,
-                        CreatedUserId = request.UserId,
-                        UpdatedUserId = request.UserId,
-                    };
-                    _unitOfWork.Repository<JM_Comment>().Add(comment);
-                    _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
-                    {
-                        TaskId = task.Id,
-                        CommentId = comment.Id,
-                        CreatedUserId = request.UserId,
-                        CompanyId = request.CompanyId,
-                        UpdatedUserId = request.UserId,
-                    });
+                    InsertComment(request.Comments[i], null, request.CompanyId, request.UserId, task.Id);
                 }
             }
             #endregion
@@ -212,6 +196,36 @@ namespace BNS.Service.Features
             return response;
         }
 
+        private void InsertComment(TaskCommentRequest commentRequest, Guid? parentId, Guid CompanyId, Guid userId, Guid taskID, int level = 0)
+        {
+            var comment = new JM_Comment
+            {
+                Value = commentRequest.Value,
+                Id = Guid.NewGuid(),
+                CompanyId = CompanyId,
+                CreatedUserId = userId,
+                UpdatedUserId = userId,
+                ParentId = parentId,
+                Level = level,
+                CountReply = commentRequest.Childrens != null ? commentRequest.Childrens.Count : 0,
+            };
+            _unitOfWork.Repository<JM_Comment>().Add(comment);
+            _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
+            {
+                TaskId = taskID,
+                CommentId = comment.Id,
+                CreatedUserId = userId,
+                CompanyId = CompanyId,
+                UpdatedUserId = userId,
+            });
+            if (commentRequest.Childrens != null)
+            {
+                foreach (var childComment in commentRequest.Childrens)
+                {
+                    InsertComment(childComment, comment.Id, CompanyId, userId, taskID, level + 1);
+                }
+            }
+        }
     }
 }
 

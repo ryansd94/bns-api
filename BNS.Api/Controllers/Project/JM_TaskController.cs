@@ -31,12 +31,12 @@ namespace BNS.Api.Controllers.Project
         }
 
         [HttpPut("change-task-type/{id}")]
-        public async Task<IActionResult> ChangeTaskType(Guid id,ChangeTaskTypeRequest request)
+        public async Task<IActionResult> ChangeTaskType(Guid id, ChangeTaskTypeRequest request)
         {
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateTaskRequest request)
         {

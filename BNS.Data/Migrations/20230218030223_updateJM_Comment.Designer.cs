@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218030223_updateJM_Comment")]
+    partial class updateJM_Comment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,9 +215,6 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CountReply")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -224,9 +223,6 @@ namespace BNS.Data.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
@@ -243,8 +239,6 @@ namespace BNS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedUserId");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("JM_Comments");
                 });
@@ -278,6 +272,9 @@ namespace BNS.Data.Migrations
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1508,12 +1505,6 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Comment", "CommentParent")
-                        .WithMany("Chidrens")
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("CommentParent");
-
                     b.Navigation("User");
                 });
 
@@ -1936,11 +1927,6 @@ namespace BNS.Data.Migrations
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
                 {
                     b.Navigation("AccountCompanys");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Comment", b =>
-                {
-                    b.Navigation("Chidrens");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Company", b =>

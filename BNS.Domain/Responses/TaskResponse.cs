@@ -12,7 +12,7 @@ namespace BNS.Domain.Responses
     {
         public TaskTypeItem TaskType { get; set; }
         public TaskItem Task { get; set; }
-        public List<TaskCommentReponse> Comments { get; set; }
+        public List<CommentResponseItem> Comments { get; set; }
     }
     public class TaskItem : BaseResponseModel
     {
@@ -67,11 +67,5 @@ namespace BNS.Domain.Responses
         public Guid Id { get; set; }
         public string FullName { get; set; }
         public string Image { get; set; }
-    }
-
-    public class TaskCommentReponse : TaskCommentRequest
-    {
-        public User User { get; set; }
-        public string UpdatedTime { get; set; }
     }
 }

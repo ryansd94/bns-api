@@ -48,5 +48,6 @@ namespace BNS.Domain.Commands
         public string Value { get; set; }
         public Guid? Id { get; set; }
         public bool IsAddNew { get; set; }
+        public List<TaskCommentRequest> Childrens { get; set; }
     }
 }

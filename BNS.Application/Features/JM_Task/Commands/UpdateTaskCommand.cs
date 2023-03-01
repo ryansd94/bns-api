@@ -246,32 +246,32 @@ namespace BNS.Service.Features
             }
             #endregion
 
-            #region Comments
-            var comments = request.Comments != null ? request.Comments.Where(s => s.IsAddNew).ToList() : null;
-            if (comments != null && comments.Count > 0)
-            {
-                foreach (var item in comments)
-                {
-                    var comment = new JM_Comment
-                    {
-                        Value = item.Value,
-                        Id = Guid.NewGuid(),
-                        CompanyId = request.CompanyId,
-                        CreatedUserId = request.UserId,
-                        UpdatedUserId = request.UserId,
-                    };
-                    _unitOfWork.Repository<JM_Comment>().Add(comment);
-                    _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
-                    {
-                        TaskId = dataCheck.Id,
-                        CommentId = comment.Id,
-                        CreatedUserId = request.UserId,
-                        CompanyId = request.CompanyId,
-                        UpdatedUserId = request.UserId,
-                    });
-                }
-            }
-            #endregion
+            //#region Comments
+            //var comments = request.Comments != null ? request.Comments.Where(s => s.IsAddNew).ToList() : null;
+            //if (comments != null && comments.Count > 0)
+            //{
+            //    foreach (var item in comments)
+            //    {
+            //        var comment = new JM_Comment
+            //        {
+            //            Value = item.Value,
+            //            Id = Guid.NewGuid(),
+            //            CompanyId = request.CompanyId,
+            //            CreatedUserId = request.UserId,
+            //            UpdatedUserId = request.UserId,
+            //        };
+            //        _unitOfWork.Repository<JM_Comment>().Add(comment);
+            //        _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
+            //        {
+            //            TaskId = dataCheck.Id,
+            //            CommentId = comment.Id,
+            //            CreatedUserId = request.UserId,
+            //            CompanyId = request.CompanyId,
+            //            UpdatedUserId = request.UserId,
+            //        });
+            //    }
+            //}
+            //#endregion
 
             _unitOfWork.Repository<JM_Task>().Update(dataCheck);
             await _unitOfWork.SaveChangesAsync();
