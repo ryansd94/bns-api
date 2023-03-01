@@ -42,7 +42,7 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: 'Terraform'
+name: 'bns-api'
 
 on:
   push:
@@ -54,7 +54,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'bns_api'
+    name: 'bns-api'
     runs-on: ubuntu-latest
     environment: production
 
