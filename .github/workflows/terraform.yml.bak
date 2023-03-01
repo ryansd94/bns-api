@@ -54,7 +54,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'bns_api'
+    name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
 
