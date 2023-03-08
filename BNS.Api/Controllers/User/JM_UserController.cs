@@ -9,7 +9,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace BNS.Api.Controllers.User
+namespace BNS.Api.Controllers.Project
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -25,7 +25,7 @@ namespace BNS.Api.Controllers.User
         }
         [HttpPost("add-user")]
         [BNSAuthorization]
-        public async Task<IActionResult> SendMailAddUser(SendMailAddJM_UserRequest request)
+        public async Task<IActionResult> SendMailAddUser(SendMailAddUserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -46,6 +46,13 @@ namespace BNS.Api.Controllers.User
         [HttpGet]
         [BNSAuthorization]
         public async Task<IActionResult> GetAllData([FromQuery] GetUserRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpGet("suggest")]
+        [BNSAuthorization]
+        public async Task<IActionResult> GetSuggest([FromQuery] GetUserSuggest request)
         {
             return Ok(await _mediator.Send(request));
         }

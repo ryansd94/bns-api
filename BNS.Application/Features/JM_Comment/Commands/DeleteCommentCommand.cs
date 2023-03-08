@@ -32,7 +32,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataChecks = await _unitOfWork.Repository<JM_Comment>().Where(s => request.ids.Contains(s.Id)).ToListAsync();
+            var dataChecks = await _unitOfWork.Repository<JM_Comment>().Where(s => request.ids.Contains(s.Id) && s.CreatedUserId == request.UserId).ToListAsync();
             if (dataChecks == null || dataChecks.Count() == 0)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

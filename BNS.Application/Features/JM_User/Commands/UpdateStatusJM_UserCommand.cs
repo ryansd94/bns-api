@@ -13,7 +13,6 @@ using BNS.Domain.Commands;
 
 namespace BNS.Service.Features
 {
-
     public class UpdateStatusJM_UserCommand : IRequestHandler<UpdateStatusJM_UserRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;

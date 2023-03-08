@@ -48,6 +48,7 @@ namespace BNS.Service.Features
                     Name = s.Status != null ? s.Status.Name : "",
                     Color = s.Status != null ? s.Status.Color : "",
                 },
+                StatusId= s.StatusId,
                 Estimatedhour = s.Estimatedhour,
                 CreatedDate = s.CreatedDate,
                 CreatedUserId = s.CreatedUserId,

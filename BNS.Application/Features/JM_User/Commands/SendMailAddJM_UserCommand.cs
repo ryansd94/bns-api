@@ -17,33 +17,36 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
-using BNS.Domain.Messaging;
 using BNS.Service.Subcriber;
 
 namespace BNS.Service.Features
 {
-    public class SendMailAddJM_UserCommand : IRequestHandler<SendMailAddJM_UserRequest, ApiResult<Guid>>
+    public class SendMailAddJM_UserCommand : IRequestHandler<SendMailAddUserRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly IElasticClient _elasticClient;
         protected readonly MyConfiguration _config;
         private readonly ICipherService _cipherService;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IBusPublisher _busPublisher;
+        //private readonly IBusPublisher _busPublisher;
+        private IMediator _mediator;
         public SendMailAddJM_UserCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
         ICipherService CipherService,
          IUnitOfWork unitOfWork,
-        IBusPublisher busPublisher)
+         IMediator mediator
+        //IBusPublisher busPublisher
+            )
         {
             _sharedLocalizer = sharedLocalizer;
             _config = config.Value;
             _cipherService = CipherService;
             _unitOfWork = unitOfWork;
-            _busPublisher = busPublisher;
+            _mediator = mediator;
+            //_busPublisher = busPublisher;
         }
-        public async Task<ApiResult<Guid>> Handle(SendMailAddJM_UserRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<Guid>> Handle(SendMailAddUserRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var subject = "JOIN TEAM";
@@ -134,10 +137,11 @@ namespace BNS.Service.Features
                 });
             }
             await _unitOfWork.SaveChangesAsync();
-            await _busPublisher.PublishAsync(new SendMailSubcriberMQ
+            var sendMailRequest = new SendMailSubcriberMQ
             {
                 Items = sendMailItems
-            });
+            };
+            await _mediator.Send(sendMailRequest);
             return response;
         }
 

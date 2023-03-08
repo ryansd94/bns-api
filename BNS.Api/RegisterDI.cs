@@ -28,8 +28,9 @@ namespace BNS.Api
             //services.AddMediatR(typeof(GetTaskRequest));
             //services.AddMediatR(typeof(GetRequestHandler<,>));
             //services.AddMediatR(typeof(ApiResultList<>));
-            //services.AddMediatR(typeof(IRequestHandler<>));
-            //services.AddMediatR(typeof(IRequestHandler<,>));
+            services.AddMediatR(typeof(IRequestHandler<>));
+            services.AddMediatR(typeof(IRequestHandler<,>));
+            services.AddMediatR(typeof(IRequestHandler<SendMailAddUserRequest,ApiResult<Guid>>));
 
             //services.AddMediatR(typeof(TaskItem).GetTypeInfo().Assembly);
             //services.AddMediatR(typeof(GetTaskQuery).GetTypeInfo().Assembly);

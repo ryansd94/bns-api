@@ -21,7 +21,6 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.AspNetCore.Http;
 
 namespace BNS.Api
 {
@@ -178,7 +177,7 @@ namespace BNS.Api
             services.AddTransient<MyConfiguration>();
             services.AddElasticsearch(appSettings);
 
-            services.AddRabbitMq(Configuration);
+            //services.AddRabbitMq(Configuration);
             //services.AddGraphQLServer();
 
 

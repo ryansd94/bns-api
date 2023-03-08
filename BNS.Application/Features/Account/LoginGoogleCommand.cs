@@ -1,9 +1,6 @@
-﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Data.EntityContext;
-using BNS.Resource;
+﻿using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -104,6 +101,7 @@ namespace BNS.Service.Features
                 , expires: DateTime.UtcNow.AddDays(71)
                 , signingCredentials: creds
                 );
+            response.data.UserId = user.Id.ToString();
             response.data.FullName = user.FullName;
             response.data.Image = user.Image;
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);

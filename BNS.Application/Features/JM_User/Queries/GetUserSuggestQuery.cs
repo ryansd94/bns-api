@@ -3,6 +3,7 @@ using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Domain;
+using BNS.Domain.Queries;
 using BNS.Domain.Responses;
 using BNS.Resource;
 using BNS.Utilities;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace BNS.Service.Features
 {
-    public class GetUserQuery : IRequestHandler<Domain.Queries.GetUserRequest, ApiResult<UserResponse>>
+    public class GetUserSuggestQuery : IRequestHandler<GetUserSuggest, ApiResult<UserResponse>>
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -25,7 +26,7 @@ namespace BNS.Service.Features
         private readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetUserQuery(BNSDbContext context,
+        public GetUserSuggestQuery(BNSDbContext context,
          IStringLocalizer<SharedResource> sharedLocalizer,
             IMapper mapper,
          IElasticClient elasticClient,
@@ -37,35 +38,7 @@ namespace BNS.Service.Features
             _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
-        //public async Task<ApiResult<JM_UserResponse>> Handle(GetJM_UserRequest request, CancellationToken cancellationToken)
-        //{
-        //    var response = new ApiResult<JM_UserResponse>();
-        //    response.data = new JM_UserResponse();
-
-        //    var query = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
-        //    && s.CompanyId == request.CompanyId
-        //    && (string.IsNullOrEmpty(request.keyword) || (!string.IsNullOrEmpty(request.keyword) && s.Email.Contains(request.keyword)))
-        //    , s => s.OrderBy(d => d.CreatedDate), s => s.JM_Account);
-
-        //    if (!string.IsNullOrEmpty(request.fieldSort))
-        //    {
-        //        if (!request.fieldSort.Equals("fullName"))
-        //            query = query.OrderBy(request.fieldSort, request.sort);
-        //        else
-        //        {
-        //            Expression<Func<JM_AccountCompany, object>> sort = s => s.JM_Account.FullName;
-        //            query = query.OrderBy(sort, request.sort);
-        //        }
-        //    }
-        //    query = query.WhereOr(request.filters);
-        //    response.recordsTotal = await query.CountAsync();
-        //    query = query.Skip(request.start).Take(request.length);
-
-        //    var rs = await query.Select(d => _mapper.Map<JM_UserResponseItem>(d)).ToListAsync();
-        //    response.data.Items = rs;
-        //    return response;
-        //}
-        public async Task<ApiResult<UserResponse>> Handle(Domain.Queries.GetUserRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<UserResponse>> Handle(GetUserSuggest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<UserResponse>();
             response.data = new UserResponse();
@@ -76,7 +49,7 @@ namespace BNS.Service.Features
                    Email = s.Account != null ? s.Account.Email : string.Empty,
                    Status = s.Status,
                    FullName = s.Account != null ? s.Account.FullName : string.Empty,
-                   Id = s.Id,
+                   Id = s.Account.Id,
                    CreatedDate = s.CreatedDate,
                    IsMainAccount = s.IsMainAccount,
                    TeamName = s.JM_Team != null ? s.JM_Team.Name : string.Empty,

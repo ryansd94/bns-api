@@ -85,6 +85,9 @@ namespace BNS.Service.Features
                 , expires: DateTime.UtcNow.AddDays(1)
                 , signingCredentials: creds
                 );
+            response.data.UserId = user.Id.ToString();
+            response.data.FullName = user.FullName;
+            response.data.Image = user.Image;
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
             return response;
         }
