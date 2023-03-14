@@ -26,7 +26,9 @@ namespace BNS.Domain.Responses
         public string Description { get; set; }
         public string Note { get; set; }
         public Guid TaskTypeId { get; set; }
-        public List<Guid> UsersAssign { get; set; }
+        public Guid AssignUserId { get; set; }
+        public List<Guid> UsersAssignId { get; set; }
+        public List<User> UsersAssign { get; set; }
         public Guid ReporterId { get; set; }
         public Guid? SprintId { get; set; }
         public TaskType TaskType { get; set; }

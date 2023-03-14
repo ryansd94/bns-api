@@ -37,6 +37,14 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpPut("status/{id}")]
+        public async Task<IActionResult> UpdateStatus(Guid id, UpdateTaskStatusRequest request)
+        {
+            request.Id = id;
+            return Ok(await _mediator.Send(request));
+        }
+        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateTaskRequest request)
         {

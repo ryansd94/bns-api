@@ -15,7 +15,7 @@ namespace BNS.Api.AutoMapper
         public AutoMapperProfile()
         {
             CreateMap<JM_Task, TaskItem>()
-                 .ForMember(s => s.UsersAssign,
+                 .ForMember(s => s.UsersAssignId,
                  d => d.MapFrom(e => e.AssignUserId != null ?
                  new List<Guid> { e.AssignUserId.Value } :
                  (e.TaskUsers != null ? e.TaskUsers.Select(s => s.UserId).ToList() : null)))
@@ -60,6 +60,7 @@ namespace BNS.Api.AutoMapper
             CreateMap<UpdateStatusRequest, JM_Status>();
             CreateMap<JM_CustomColumn, CustomColumnsResponseItem>();
             CreateMap<FileItem, JM_File>();
+            CreateMap<JM_Account, User>();
             CreateMap<JM_Comment, CommentResponseItem>().ForMember(s => s.User, d => d.MapFrom(e => new User
             {
                 Id = e.User.Id,

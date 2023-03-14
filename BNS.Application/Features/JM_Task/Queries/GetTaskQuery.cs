@@ -7,6 +7,7 @@ using BNS.Domain.Responses;
 using BNS.Resource;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,10 +49,14 @@ namespace BNS.Service.Features
                     Name = s.Status != null ? s.Status.Name : "",
                     Color = s.Status != null ? s.Status.Color : "",
                 },
-                StatusId= s.StatusId,
+                UsersAssign = s.AssignUser != null ? new List<User> {
+                     _mapper.Map<User>(s.AssignUser)
+                    } : (s.TaskUsers != null ? s.TaskUsers.Select(d => _mapper.Map<User>(d.User)).ToList() : null),
+                StatusId = s.StatusId,
                 Estimatedhour = s.Estimatedhour,
                 CreatedDate = s.CreatedDate,
                 CreatedUserId = s.CreatedUserId,
+                Description = s.Description,
                 ParentId = s.ParentId,
                 CreatedUser = new User
                 {
