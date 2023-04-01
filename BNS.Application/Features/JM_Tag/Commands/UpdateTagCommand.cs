@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BNS.Service.Features
 {
-    public class UpdateTagCommand : UpdateRequestHandler<UpdateTagRequest, JM_Tag>
+    public class UpdateTagCommand : Implement.BaseImplement.UpdateRequestHandler<UpdateTagRequest, JM_Tag>
     {
         public UpdateTagCommand(IUnitOfWork unitOfWork,
             IMapper mapper,

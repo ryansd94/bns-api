@@ -20,7 +20,7 @@ namespace BNS.Data.EntityContext
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Data Source=DESKTOP-096QE0I\\MSSQLSERVER01;Initial Catalog=CACore_NotDelete;User ID=test;Password=123456");
+                options.UseSqlServer("Data Source=103.121.89.96,1433;Initial Catalog=bns;User ID=admkin;Password=123456A@a");
             }
         }
         public virtual DbSet<T> Repository<T>() where T : class
@@ -130,5 +130,6 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_AttachedFiles> JM_AttachedFiles { get; set; }
         public virtual DbSet<JM_Comment> JM_Comments { get; set; }
         public virtual DbSet<JM_CommentTask> JM_CommentTasks { get; set; }
+        public virtual DbSet<JM_Priority> JM_Priorities { get; set; }
     }
 }

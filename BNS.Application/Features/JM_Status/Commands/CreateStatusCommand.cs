@@ -46,6 +46,8 @@ namespace BNS.Service.Features
                 CreatedDate = DateTime.UtcNow,
                 CreatedUserId = request.UserId,
                 CompanyId = request.CompanyId,
+                IsStatusStart = request.IsStatusStart,
+                IsStatusEnd = request.IsStatusEnd,
                 IsDelete = false
             };
             await _unitOfWork.Repository<JM_Status>().AddAsync(team);

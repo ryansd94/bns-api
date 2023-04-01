@@ -19,6 +19,7 @@ namespace BNS.Data.Entities.JM_Entities
         public string Image { get; set; }
         public Guid? JM_CompanyId { get; set; }
         public Guid? JM_TaskId { get; set; }
+        public string Setting { get; set; }
         public virtual ICollection<JM_AccountCompany> AccountCompanys { get; set; }
     }
 }

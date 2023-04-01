@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Utilities;
 using MediatR;
@@ -10,7 +11,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Features
 {
-    public class GetRequestHandler<TModel, TEntity> : IRequestHandler<CommandGetRequest<ApiResultList<TModel>>, ApiResultList<TModel>> where TEntity : class
+    public class GetRequestHandler<TModel, TEntity> : IRequestHandler<CommandGetRequest<ApiResultList<TModel>>, ApiResultList<TModel>> where TEntity : BaseJMEntity
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,7 +28,7 @@ namespace BNS.Service.Features
 
         public virtual async Task<IQueryable<TEntity>> GetQueryableData(CommandGetRequest<ApiResultList<TModel>> request)
         {
-            return _unitOfWork.Repository<TEntity>().AsQueryable();
+            return _unitOfWork.Repository<TEntity>().Where(s=>s.CompanyId == request.CompanyId).AsQueryable();
         }
 
         public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, CommandGetRequest<ApiResultList<TModel>> request)

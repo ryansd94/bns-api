@@ -12,5 +12,7 @@ namespace BNS.Domain.Commands
         [Required]
         [PasswordValidationAttribute(true)]
         public string Password { get; set; }
+        [Required]
+        public string Organization { get; set; }
     }
 }

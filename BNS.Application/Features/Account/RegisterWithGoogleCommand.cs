@@ -1,17 +1,13 @@
 ﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using FirebaseAdmin.Auth;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
@@ -91,7 +87,8 @@ namespace BNS.Service.Features
                 Id = Guid.NewGuid(),
                 IsDelete = false,
                 CreatedDate = DateTime.UtcNow,
-                Name = email.ToString().Split("@")[0]
+                Name = email.ToString().Split("@")[0],
+                Organization= request.Organization
             };
 
             user = new JM_Account

@@ -9,5 +9,7 @@ namespace BNS.Domain.Commands
         public string Name { get; set; }
         public string Color { get; set; }
         public string Description { get; set; }
+        public bool IsStatusStart { get; set; }
+        public bool IsStatusEnd { get; set; }
     }
 }

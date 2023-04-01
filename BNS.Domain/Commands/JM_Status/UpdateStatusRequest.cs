@@ -8,5 +8,7 @@ namespace BNS.Domain.Commands
         [Required]
         public string Name { get; set; }
         public string Color { get; set; }
+        public bool IsStatusStart { get; set; }
+        public bool IsStatusEnd { get; set; }
     }
 }

@@ -17,6 +17,7 @@ using BNS.Domain.Commands;
 using BNS.Domain;
 using BNS.Domain.Responses;
 using BNS.Infrastructure;
+using Newtonsoft.Json;
 
 namespace BNS.Service.Features
 {
@@ -89,6 +90,7 @@ namespace BNS.Service.Features
                 new Claim(ClaimTypes.GivenName, user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
+                new Claim("DefaultOrganization",user.AccountCompanys.FirstOrDefault()?.JM_Company.Organization),
                 new Claim("CompanyId", companyId.ToString()),
                 new Claim("Role",string.Join(";",roles))
                 };
@@ -101,8 +103,10 @@ namespace BNS.Service.Features
                 , expires: DateTime.UtcNow.AddDays(71)
                 , signingCredentials: creds
                 );
+            response.data.DefaultOrganization = user.AccountCompanys.FirstOrDefault()?.JM_Company.Organization;
             response.data.UserId = user.Id.ToString();
             response.data.FullName = user.FullName;
+            response.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
             response.data.Image = user.Image;
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
             return response;

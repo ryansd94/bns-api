@@ -6,6 +6,7 @@ using BNS.Domain.Commands;
 using BNS.Domain.Interface;
 using BNS.Domain.Queries;
 using BNS.Domain.Responses;
+using BNS.Hubs;
 using BNS.Service.Features;
 using BNS.Service.Implement;
 using BNS.Utilities.Implement;
@@ -30,7 +31,7 @@ namespace BNS.Api
             //services.AddMediatR(typeof(ApiResultList<>));
             services.AddMediatR(typeof(IRequestHandler<>));
             services.AddMediatR(typeof(IRequestHandler<,>));
-            services.AddMediatR(typeof(IRequestHandler<SendMailAddUserRequest,ApiResult<Guid>>));
+            services.AddMediatR(typeof(IRequestHandler<SendMailAddUserRequest, ApiResult<Guid>>));
 
             //services.AddMediatR(typeof(TaskItem).GetTypeInfo().Assembly);
             //services.AddMediatR(typeof(GetTaskQuery).GetTypeInfo().Assembly);
@@ -46,6 +47,7 @@ namespace BNS.Api
             services.AddSingleton<ICacheData, CacheData>();
             services.AddSingleton<ICaptcha, Captcha>();
             services.AddSingleton<IMemoryCache, MemoryCache>();
+            services.AddSingleton<INotifytHub, NotifytHub>();
 
 
 
@@ -58,10 +60,12 @@ namespace BNS.Api
             services.AddScoped<ICipherService, CipherService>();
             services.AddScoped<IRequestHandler<GetTaskRequest, ApiResultList<TaskItem>>, GetTaskQuery>();
             services.AddScoped<IRequestHandler<UpdateTaskTypeRequest, ApiResult<Guid>>, UpdateTaskTypeCommand>();
-            services.AddScoped<IRequestHandler<UpdateStatusRequest, ApiResult<Guid>>, UpdateTagCommand>();
+            services.AddScoped<IRequestHandler<UpdateStatusRequest, ApiResult<Guid>>, UpdateStatusCommand>();
+            services.AddScoped<IRequestHandler<UpdateTagRequest, ApiResult<Guid>>, UpdateTagCommand>();
+            services.AddScoped<IRequestHandler<UpdatePriorityRequest, ApiResult<Guid>>, UpdatePriorityCommand>();
+            services.AddScoped<IRequestHandler<DeletePriorityRequest, ApiResult<Guid>>, DeletePriorityCommand>();
+            services.AddScoped<IRequestHandler<GetProjectByUserIdRequest, ApiResultList<ProjectResponseItem>>, GetProjectByUserIdQuery>();
 
-            //services.AddScoped(typeof(IRequestHandler<,>), typeof(GetRequestHandler<,>));
-            //services.AddMediatR(typeof(IRequestHandler<,>), typeof(GetRequestHandler<,>));
 
             services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>

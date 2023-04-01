@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace BNS.Data.Entities.JM_Entities
 {
@@ -15,6 +14,8 @@ namespace BNS.Data.Entities.JM_Entities
         public string Code { get; set; }
         [MaxLength(100)]
         public string Domain { get; set; }
+        [MaxLength(50)]
+        public string Organization { get; set; }
         public string Address { get; set; }
         public double? Lat { get; set; }
         public double? Long { get; set; }

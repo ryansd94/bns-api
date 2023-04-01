@@ -18,6 +18,9 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using BNS.Utilities;
 using BNS.Domain.Responses;
+using Newtonsoft.Json;
+using BNS.Data.Entities.JM_Entities;
+using AutoMapper;
 
 namespace BNS.Service.Features
 {
@@ -26,14 +29,17 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
         protected readonly MyConfiguration _config;
+        private readonly IMapper _mapper;
         public LoginCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
+            IMapper mapper,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
             _config = config.Value;
+            _mapper = mapper;
         }
         public async Task<ApiResult<LoginResponse>> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
@@ -46,7 +52,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
                 return response;
             }
-            
+
             if (!user.PasswordHash.Equals(Ultility.MD5Encrypt(request.Password)))
             {
                 response.errorCode = EErrorCode.Failed.ToString();
@@ -60,8 +66,8 @@ namespace BNS.Service.Features
             //    response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
             //    return response;
             //}
-            var userCompany =await userCompanys.Where(s => s.IsDefault && s.Status== EUserStatus.ACTIVE).FirstOrDefaultAsync();
-
+            var userCompany = await userCompanys.Where(s => s.IsDefault && s.Status == EUserStatus.ACTIVE).Include(s=>s.JM_Company).FirstOrDefaultAsync();
+            var projects = await _unitOfWork.Repository<JM_ProjectMember>().Include(s => s.JM_Project).Where(s => s.UserId == user.Id).Select(s => _mapper.Map<ProjectResponseItem>(s.JM_Project)).ToListAsync();
             var roles = new List<string>();
             //if (userCompany.IsMainAccount)
             //    roles.Add(EAccountType.SupperAdmin.ToString());
@@ -73,9 +79,10 @@ namespace BNS.Service.Features
                 new Claim(ClaimTypes.GivenName, user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
+                new Claim("DefaultOrganization",userCompany?.JM_Company.Organization),
                 new Claim("CompanyId",userCompany?.CompanyId.ToString()),
                 new Claim("Role",string.Join(";",roles))
-                };
+            };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -85,8 +92,10 @@ namespace BNS.Service.Features
                 , expires: DateTime.UtcNow.AddDays(1)
                 , signingCredentials: creds
                 );
+            response.data.DefaultOrganization = userCompany?.JM_Company.Organization;
             response.data.UserId = user.Id.ToString();
             response.data.FullName = user.FullName;
+            response.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
             response.data.Image = user.Image;
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
             return response;

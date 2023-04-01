@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Utilities;
 using BNS.Domain.Responses;

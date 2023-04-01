@@ -132,5 +132,11 @@
             Column2,
             Column3
         }
+
+        public enum EViewMode
+        {
+            List = 0,
+            Board = 1
+        }
     }
 }

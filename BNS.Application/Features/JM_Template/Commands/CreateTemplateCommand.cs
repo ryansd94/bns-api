@@ -45,7 +45,6 @@ namespace BNS.Service.Features
                 Description = request.Description,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUserId = request.UserId,
-                Content = request.Content,
                 CompanyId = request.CompanyId,
             };
 
@@ -83,9 +82,9 @@ namespace BNS.Service.Features
                 }
             }
 
-            if (!string.IsNullOrEmpty(request.Content))
+            if (request.Content != null)
             {
-                var contenObjects = Newtonsoft.Json.JsonConvert.DeserializeObject<JM_ColumnItemRoot>(request.Content);
+                var contenObjects = request.Content;
                 var columnObjects = new List<JM_ColumnObject>();
 
                 columnObjects.Add(new JM_ColumnObject

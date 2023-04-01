@@ -32,14 +32,14 @@ namespace BNS.Api.Controllers.Project
 
         [HttpPost("validate-signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> ValidateSignup(ValidateAddJM_UserRequest request)
+        public async Task<IActionResult> ValidateSignup(ValidateAddUserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Signup(AddJM_UserRequest request)
+        public async Task<IActionResult> Signup(AddUserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -59,7 +59,14 @@ namespace BNS.Api.Controllers.Project
 
         [HttpPut("status")]
         [BNSAuthorization]
-        public async Task<IActionResult> UpdateStatus(UpdateStatusJM_UserRequest request)
+        public async Task<IActionResult> UpdateStatus(UpdateStatusUserRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPut("me/{id}")]
+        [BNSAuthorization]
+        public async Task<IActionResult> UpdateMe(UpdateMeRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -68,7 +75,7 @@ namespace BNS.Api.Controllers.Project
         [BNSAuthorization]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var request = new DeleteJM_UserRequest();
+            var request = new DeleteUserRequest();
             request.Ids.Add(id);
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));

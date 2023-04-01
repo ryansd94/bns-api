@@ -2,7 +2,6 @@
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -24,12 +23,12 @@ namespace BNS.Api.Controllers.Project
             _caller = httpContextAccessor.HttpContext.User;
         }
         [HttpPost]
-        public async Task<IActionResult> Save(CreateJM_ProjectRequest request)
+        public async Task<IActionResult> Save(CreateProjectRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllData([FromQuery]GetJM_ProjectByUserIdRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery]GetProjectByUserIdRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

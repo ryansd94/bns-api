@@ -43,7 +43,6 @@ namespace BNS.Service.Features
             }
             var statusIds = dataCheck.TemplateStatus.Select(s => s.StatusId);
             dataCheck.Name = request.Name;
-            dataCheck.Content = request.Content;
             dataCheck.Description = request.Description;
             dataCheck.UpdatedDate = DateTime.UtcNow;
             dataCheck.UpdatedUserId = request.UserId;
@@ -73,9 +72,9 @@ namespace BNS.Service.Features
             }
 
 
-            if (!string.IsNullOrEmpty(request.Content))
+            if (request.Content != null)
             {
-                var contenObjects = Newtonsoft.Json.JsonConvert.DeserializeObject<JM_ColumnItemRoot>(request.Content);
+                var contenObjects = request.Content;
                 var columnObjects = new List<JM_ColumnObject>();
                 var templateDetails = dataCheck.TemplateDetails;
                 if (templateDetails != null)
@@ -83,7 +82,7 @@ namespace BNS.Service.Features
                     foreach (var item in templateDetails)
                     {
                         item.IsDelete = true;
-                        _unitOfWork.Repository<JM_TemplateDetail>().AddAsync(item);
+                        _unitOfWork.Repository<JM_TemplateDetail>().Update(item);
                     }
                 }
                 columnObjects.Add(new JM_ColumnObject

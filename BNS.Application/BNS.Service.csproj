@@ -7,8 +7,6 @@
   <ItemGroup>
     <Compile Remove="AppUserValidator.cs" />
     <Compile Remove="Implement\CF_AccountService.cs" />
-    <Compile Remove="Implement\Role\Sys_RoleClaimService.cs" />
-    <Compile Remove="Implement\Role\Sys_RoleService.cs" />
     <Compile Remove="Implement\SYS_ControlService.cs" />
   </ItemGroup>
 
@@ -37,7 +35,7 @@
   <ItemGroup>
     <Folder Include="Features\JM_Tag\Queries\" />
     <Folder Include="Features\JM_TaskColumns\Commands\" />
-    <Folder Include="Implement\Role\" />
+    <Folder Include="Features\JM_Priority\" />
   </ItemGroup>
 
 </Project>

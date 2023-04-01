@@ -16,8 +16,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
-using BNS.Utilities;
 using BNS.Domain.Responses;
+using Newtonsoft.Json;
 
 namespace BNS.Service.Features
 {
@@ -54,7 +54,7 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            var userCompany = await userCompanys.Where(s => s.IsDefault && s.Status == EUserStatus.ACTIVE).FirstOrDefaultAsync();
+            var userCompany = await userCompanys.Where(s => s.IsDefault && s.Status == EUserStatus.ACTIVE).Include(s=>s.JM_Company).FirstOrDefaultAsync();
 
             var roles = new List<string>();
             //if (userCompany.IsMainAccount)
@@ -67,6 +67,7 @@ namespace BNS.Service.Features
                 new Claim(ClaimTypes.GivenName, user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
+                new Claim("DefaultOrganization",userCompany?.JM_Company.Organization),
                 new Claim("CompanyId",userCompany?.CompanyId.ToString()),
                 new Claim("Role",string.Join(";",roles))
                 };
@@ -79,6 +80,8 @@ namespace BNS.Service.Features
                 , expires: DateTime.UtcNow.AddDays(1)
                 , signingCredentials: creds
                 );
+            response.data.DefaultOrganization = userCompany?.JM_Company.Organization;
+            response.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
             response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
             return response;
         }

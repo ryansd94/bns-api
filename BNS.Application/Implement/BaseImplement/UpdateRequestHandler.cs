@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
@@ -6,15 +7,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static BNS.Utilities.Common;
 using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Implement.BaseImplement
 {
-    public class UpdateRequestHandler<TModel, TEntity> : IRequestHandler<CommandUpdateBase<ApiResult<Guid>>, ApiResult<Guid>> where TEntity : class
+    public class UpdateRequestHandler<TModel, TEntity> : IRequestHandler<CommandUpdateBase<ApiResult<Guid>>, ApiResult<Guid>> where TEntity : BaseJMEntity
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -31,23 +31,7 @@ namespace BNS.Service.Implement.BaseImplement
         public async Task<ApiResult<Guid>> Handle(CommandUpdateBase<ApiResult<Guid>> request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var filters = new List<SearchCriteria>
-            {
-                new SearchCriteria
-                {
-                    Column="Id",
-                    Value=request.Id,
-                    Condition=EWhereCondition.Equal,
-                },
-                new SearchCriteria
-                {
-                    Column="CompanyId",
-                    Value=request.CompanyId,
-                    Condition=EWhereCondition.Equal,
-                }
-            };
-
-            var dataCheck = await _unitOfWork.Repository<TEntity>().WhereOr(filters).FirstOrDefaultAsync();
+            var dataCheck = await _unitOfWork.Repository<TEntity>().Where(s => s.Id == request.Id && s.CompanyId == request.CompanyId).FirstOrDefaultAsync();
             if (dataCheck == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
@@ -55,8 +39,8 @@ namespace BNS.Service.Implement.BaseImplement
                 return response;
             }
             _mapper.Map(request, dataCheck);
-            dataCheck.GetType().GetProperty("UpdatedDate").SetValue(dataCheck,DateTime.UtcNow);
-            dataCheck.GetType().GetProperty("UpdatedUserId").SetValue(dataCheck,request.UserId);
+            dataCheck.UpdatedDate = DateTime.UtcNow;
+            dataCheck.UpdatedUserId = request.UserId;
             _unitOfWork.Repository<TEntity>().Update(dataCheck);
             response = await _unitOfWork.SaveChangesAsync();
             response.data = (Guid)dataCheck.GetType().GetProperty("Id").GetValue(dataCheck, null);

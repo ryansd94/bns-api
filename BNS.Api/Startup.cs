@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using BNS.Hubs;
 
 namespace BNS.Api
 {
@@ -54,18 +55,19 @@ namespace BNS.Api
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
             //var appSettings = new MyConfiguration();
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowAll",
-            //        builder =>
-            //        {
-            //            builder
-            //            .AllowAnyOrigin()
-            //            .AllowAnyMethod()
-            //            .AllowAnyHeader()
-            //            .AllowCredentials();
-            //        });
-            //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .WithOrigins("http://localhost:3000");
+                    });
+            });
             services.AddDbContext<BNSDbContext>(
             options => options.UseSqlServer(appSettings.ConnectionStrings.bnsConnection)
             );
@@ -176,7 +178,7 @@ namespace BNS.Api
             // Services
             services.AddTransient<MyConfiguration>();
             services.AddElasticsearch(appSettings);
-
+            services.AddSignalR();
             //services.AddRabbitMq(Configuration);
             //services.AddGraphQLServer();
 
@@ -193,7 +195,9 @@ namespace BNS.Api
             app.UseCors(builder => builder
         .AllowAnyOrigin()
         .AllowAnyMethod()
-        .AllowAnyHeader());
+        .AllowAnyHeader()
+                        .AllowCredentials()
+        .WithOrigins("http://localhost:3000"));
             var supportedCultures = new List<CultureInfo>
             {
                    new CultureInfo("vi-VN"),
@@ -222,7 +226,6 @@ namespace BNS.Api
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -238,6 +241,7 @@ namespace BNS.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotifytHub>("/notify");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "api/{controller=Home}/{action=Index}/{id?}");

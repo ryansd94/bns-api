@@ -21,6 +21,7 @@ namespace BNS.Data.Entities.JM_Entities
         public DateTime? DueDate { get; set; }
         public Guid? ParentId { get; set; }
         public Guid StatusId { get; set; }
+        public Guid? PriorityId { get; set; }
         public decimal? Estimatedhour { get; set; }
 
         [ForeignKey("ProjectId")]
@@ -35,6 +36,8 @@ namespace BNS.Data.Entities.JM_Entities
         //public virtual JM_Account JM_AccountReporter { get; set; }
         [ForeignKey("StatusId")]
         public virtual JM_Status Status { get; set; }
+        [ForeignKey("PriorityId")]
+        public virtual JM_Priority Priority { get; set; }
         [ForeignKey("AssignUserId")]
         public virtual JM_Account AssignUser { get; set; }
         [ForeignKey("TaskTypeId")]

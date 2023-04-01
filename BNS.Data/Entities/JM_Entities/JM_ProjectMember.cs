@@ -7,6 +7,7 @@ namespace BNS.Data.Entities.JM_Entities
     {
         public Guid ProjectId { get; set; }
         public Guid UserId { get; set; }
+        public bool IsCreated { get; set; }
         [ForeignKey("UserId")]
         public virtual JM_Account JM_Account { get; set; }
         [ForeignKey("ProjectId")]

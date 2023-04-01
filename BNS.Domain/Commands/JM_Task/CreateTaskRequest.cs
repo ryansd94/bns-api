@@ -20,6 +20,7 @@ namespace BNS.Domain.Commands
         public Guid TaskTypeId { get; set; }
         public Guid StatusId { get; set; }
         public Guid? ParentId { get; set; }
+        public Guid? PriorityId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
         public List<Guid> UsersAssign { get; set; }

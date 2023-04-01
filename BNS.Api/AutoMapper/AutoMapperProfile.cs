@@ -67,6 +67,9 @@ namespace BNS.Api.AutoMapper
                 FullName = e.User.FullName,
                 Image = e.User.Image,
             })).ForMember(s => s.UpdatedTime, d => d.MapFrom(s => s.UpdatedDate.ToString()));
+            CreateMap<CreatePriorityRequest, JM_Priority>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<UpdatePriorityRequest, JM_Priority>().ForMember(s => s.UpdatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<JM_Priority, PriorityResponseItem>();
         }
     }
 
