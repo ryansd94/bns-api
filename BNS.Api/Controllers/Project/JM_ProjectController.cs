@@ -4,6 +4,7 @@ using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -33,5 +34,20 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIndex(Guid id)
+        {
+            var request = new GetProjectByIdRequest();
+            request.Id = id;
+            request.CompanyId = CompanyId;
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateProjectRequest request)
+        {
+            request.Id = id;
+            return Ok(await _mediator.Send(request));
+        }
     }
 }

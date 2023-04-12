@@ -49,11 +49,14 @@ namespace BNS.Service.Features
             account.UpdatedDate = DateTime.UtcNow;
             account.UpdatedUser = request.UserId;
             var settings = new SettingResponse();
-            if (account.Setting != null)
+            if (!string.IsNullOrEmpty(account.Setting))
             {
                 settings = JsonConvert.DeserializeObject<SettingResponse>(account.Setting);
             }
-            ObjectCommon.SetValueDynamic(settings, request.Key, request.Value);
+            foreach (var item in request.Configs)
+            {
+                ObjectCommon.SetValueDynamic(settings, item.Key, item.Value);
+            }
             account.Setting = JsonConvert.SerializeObject(settings);
 
             _unitOfWork.Repository<JM_Account>().Update(account);

@@ -79,7 +79,7 @@ namespace BNS.Service.Features
                 new Claim(ClaimTypes.GivenName, user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
-                new Claim("DefaultOrganization",userCompany?.JM_Company.Organization),
+                new Claim("DefaultOrganization",userCompany?.JM_Company.Organization ?? String.Empty),
                 new Claim("CompanyId",userCompany?.CompanyId.ToString()),
                 new Claim("Role",string.Join(";",roles))
             };

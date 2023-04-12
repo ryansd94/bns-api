@@ -28,7 +28,7 @@ namespace BNS.Service.Features
 
         public virtual async Task<IQueryable<TEntity>> GetQueryableData(CommandGetRequest<ApiResultList<TModel>> request)
         {
-            return _unitOfWork.Repository<TEntity>().Where(s=>s.CompanyId == request.CompanyId).AsQueryable();
+            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId).AsQueryable();
         }
 
         public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, CommandGetRequest<ApiResultList<TModel>> request)
@@ -48,7 +48,7 @@ namespace BNS.Service.Features
         public async Task<ApiResultList<TModel>> Handle(CommandGetRequest<ApiResultList<TModel>> request, CancellationToken cancellationToken)
         {
             var query = GetQueryableData(request).Result;
-            query = query.WhereOr(request.filters);
+            query = query.WhereOr(request.filters, request.defaultFilters);
 
             if (!string.IsNullOrEmpty(request.fieldSort))
             {

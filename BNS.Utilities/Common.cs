@@ -198,12 +198,21 @@ namespace BNS.Utilities
             return Expression.Lambda<Func<T, bool>>(resultCondition, parameter);
         }
         // Implementation
-        public static IQueryable<T> WhereOr<T>(this IQueryable<T> query, string strCriterias)
+        public static IQueryable<T> WhereOr<T>(this IQueryable<T> query, string strCriterias, string strDefaultCriterias = null)
         {
-            if (string.IsNullOrEmpty(strCriterias))
+            if (string.IsNullOrEmpty(strCriterias) && string.IsNullOrEmpty(strDefaultCriterias))
                 return query;
 
-            var criteriasByDefaultColumn = JsonConvert.DeserializeObject<List<SearchCriteria>>(strCriterias).ToList();
+            var criteriasByDefaultColumn = new List<SearchCriteria>();
+            if (!string.IsNullOrEmpty(strCriterias))
+            {
+                criteriasByDefaultColumn = JsonConvert.DeserializeObject<List<SearchCriteria>>(strCriterias).ToList();
+            }
+            if (!string.IsNullOrEmpty(strDefaultCriterias))
+            {
+                criteriasByDefaultColumn.AddRange(JsonConvert.DeserializeObject<List<SearchCriteria>>(strDefaultCriterias).ToList());
+            }
+
             return WhereOr<T>(query, criteriasByDefaultColumn);
         }
 
@@ -632,7 +641,11 @@ namespace BNS.Utilities
                             {
                                 case EWhereCondition.Equal:
                                     MethodInfo equalsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
-                                    if (body.Type.Name.Equals("Guid"))
+                                    if (body.Type == typeof(Nullable<System.Guid>))
+                                    {
+                                        equalsMethod = typeof(Nullable<System.Guid>).GetMethod("Equals", new[] { typeof(Nullable<System.Guid>) });
+                                    }
+                                    else if (body.Type == typeof(System.Guid))
                                     {
                                         equalsMethod = typeof(Guid).GetMethod("Equals", new[] { typeof(Guid) });
                                     }

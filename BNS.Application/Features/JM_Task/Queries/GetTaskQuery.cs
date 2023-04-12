@@ -58,6 +58,7 @@ namespace BNS.Service.Features
                 CreatedUserId = s.CreatedUserId,
                 Description = s.Description,
                 ParentId = s.ParentId,
+                ProjectId = s.ProjectId,
                 CreatedUser = new User
                 {
                     FullName = s.User != null ? s.User.FullName : "",

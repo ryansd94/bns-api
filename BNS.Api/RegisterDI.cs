@@ -65,7 +65,7 @@ namespace BNS.Api
             services.AddScoped<IRequestHandler<UpdatePriorityRequest, ApiResult<Guid>>, UpdatePriorityCommand>();
             services.AddScoped<IRequestHandler<DeletePriorityRequest, ApiResult<Guid>>, DeletePriorityCommand>();
             services.AddScoped<IRequestHandler<GetProjectByUserIdRequest, ApiResultList<ProjectResponseItem>>, GetProjectByUserIdQuery>();
-
+            services.AddScoped<IRequestHandler<GetProjectByIdRequest, ApiResult<ProjectResponseItem>>, GetProjectByIdQuery>();
 
             services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>

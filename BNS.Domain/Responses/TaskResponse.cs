@@ -40,6 +40,7 @@ namespace BNS.Domain.Responses
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
         public Guid? ParentId { get; set; }
+        public Guid? ProjectId { get; set; }
         public Guid StatusId { get; set; }
         public decimal? Estimatedhour { get; set; }
         public StatusResponseItem Status { get; set; }

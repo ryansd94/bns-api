@@ -1,21 +1,19 @@
 ﻿using AutoMapper;
-using BNS.Data.EntityContext;
 using BNS.Resource;
 using BNS.Domain.Responses;
 using BNS.Domain;
 using Microsoft.Extensions.Localization;
 using BNS.Data.Entities.JM_Entities;
+using BNS.Service.Implement;
 
 namespace BNS.Service.Features
 {
-    public class GetProjectByUserIdQuery : GetRequestHandler<ProjectResponseItem, JM_Project>
+    public class GetProjectByIdQuery : GetRequestByIdHandler<ProjectResponseItem, JM_Project>
     {
-        protected readonly BNSDbContext _context;
-
-        public GetProjectByUserIdQuery(
+        public GetProjectByIdQuery(
            IStringLocalizer<SharedResource> sharedLocalizer,
            IMapper mapper,
-           IUnitOfWork unitOfWork) : base(unitOfWork, mapper)
+           IUnitOfWork unitOfWork) : base(unitOfWork, sharedLocalizer, mapper)
         {
         }
     }

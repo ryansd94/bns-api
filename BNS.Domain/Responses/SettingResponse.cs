@@ -15,5 +15,6 @@ namespace BNS.Domain.Responses
     public class ProjectSetting
     {
         public string Current { get; set; }
+        public string CurrentId { get; set; }
     }
 }
