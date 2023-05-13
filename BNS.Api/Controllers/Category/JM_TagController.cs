@@ -1,33 +1,34 @@
 ﻿using BNS.Api.Auth;
+using BNS.Api.Route;
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 namespace BNS.Api.Controllers.Category
 {
-    [Route("api/[controller]")]
+    [AppRouteControllerAttribute]
     [ApiController]
     [BNSAuthorization]
     public class JM_TagController : BaseController
     {
         private IMediator _mediator;
-        private readonly ClaimsPrincipal _caller;
+
         public JM_TagController(IHttpContextAccessor httpContextAccessor,
             IMediator mediator) : base(httpContextAccessor)
         {
             _mediator = mediator;
-            _caller = httpContextAccessor.HttpContext.User;
         }
-        [HttpPost]
+        
+        [HttpPost(Name = "save-tag")]
         public async Task<IActionResult> Save(CreateTagRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
-        [HttpGet]
+        
+        [HttpGet(Name = "get-tag")]
         public async Task<IActionResult> GetAllData([FromQuery] GetTagRequest request)
         {
             return Ok(await _mediator.Send(request));
@@ -41,7 +42,6 @@ namespace BNS.Api.Controllers.Category
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

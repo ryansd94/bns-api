@@ -36,6 +36,7 @@
     <Folder Include="Features\JM_Tag\Queries\" />
     <Folder Include="Features\JM_TaskColumns\Commands\" />
     <Folder Include="Features\JM_Priority\" />
+    <Folder Include="Hubs\" />
   </ItemGroup>
 
 </Project>

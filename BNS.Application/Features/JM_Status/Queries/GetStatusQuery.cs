@@ -22,19 +22,16 @@ namespace BNS.Service.Features
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IMapper _mapper;
-        private readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
 
         public GetStatusQuery(BNSDbContext context,
          IStringLocalizer<SharedResource> sharedLocalizer,
             IMapper mapper,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _context = context;
             _mapper = mapper;
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
         public async Task<ApiResult<StatusResponse>> Handle(GetStatusRequest request, CancellationToken cancellationToken)

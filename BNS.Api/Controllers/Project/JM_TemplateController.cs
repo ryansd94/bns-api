@@ -1,34 +1,34 @@
 ﻿using BNS.Api.Auth;
+using BNS.Api.Route;
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BNS.Api.Controllers.Project
 {
-    [Route("api/[controller]")]
+    [AppRouteControllerAttribute]
     [ApiController]
     [BNSAuthorization]
     public class JM_TemplateController : BaseController
     {
         private IMediator _mediator;
-        private readonly ClaimsPrincipal _caller;
         public JM_TemplateController(IHttpContextAccessor httpContextAccessor,
             IMediator mediator) : base(httpContextAccessor)
         {
             _mediator = mediator;
-            _caller = httpContextAccessor.HttpContext.User;
         }
-        [HttpPost]
+        
+        [HttpPost(Name = "save-template")]
         public async Task<IActionResult> Save(CreateTemplateRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
-        [HttpGet]
+        
+        [HttpGet(Name = "get-template")]
         public async Task<IActionResult> GetAllData([FromQuery] GetTemplateRequest request)
         {
             return Ok(await _mediator.Send(request));

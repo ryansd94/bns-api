@@ -15,15 +15,12 @@ namespace BNS.Service.EventHandler
     public class CreateJM_TeamHandler : IRequestHandler<CreateJM_TeamSubcriberMQ>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
         public CreateJM_TeamHandler(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
         public async Task<Unit> Handle(CreateJM_TeamSubcriberMQ request, CancellationToken cancellationToken)

@@ -5,6 +5,7 @@ using BNS.Domain.Commands;
 using BNS.Domain.Interface;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
+using BNS.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -218,6 +219,10 @@ namespace BNS.Service.Features
                 CompanyId = CompanyId,
                 UpdatedUserId = userId,
             });
+            if (commentRequest.Value.Contains("data-id"))
+            {
+                var userTags = HtmlHelper.GetDataAttributeFromHtmlString(commentRequest.Value, "data-id");
+            }
             if (commentRequest.Childrens != null)
             {
                 foreach (var childComment in commentRequest.Childrens)

@@ -14,15 +14,12 @@ namespace BNS.Service.Features
     public class CreateSYS_FilterCommand : IRequestHandler<CreateSYS_FilterRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
         public CreateSYS_FilterCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
         public async Task<ApiResult<Guid>> Handle(CreateSYS_FilterRequest request, CancellationToken cancellationToken)

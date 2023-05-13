@@ -71,22 +71,13 @@ namespace BNS.Service.Features
             return queryData;
         }
 
-        public override async Task<IQueryable<JM_Task>> GetQueryableData(CommandGetRequest<ApiResultList<TaskItem>> request)
+        public override IQueryable<JM_Task> GetQueryableData(CommandGetRequest<ApiResultList<TaskItem>> request)
         {
-            var query1 = _unitOfWork.Repository<JM_Task>().Where(s => !s.IsDelete &&
-              s.CompanyId == request.CompanyId && s.ReporterId == request.UserId)
-                .OrderBy(d => d.CreatedDate).Select(s => s.Id);
-
-            var query2 = _unitOfWork.Repository<JM_TaskUser>().Where(s => !s.IsDelete &&
-               s.CompanyId == request.CompanyId && s.UserId == request.UserId)
-                .OrderBy(d => d.CreatedDate).Select(s => s.TaskId);
-
-            var query3 = await query1.Union(query2).Distinct().ToListAsync();
-
             var query = _unitOfWork.Repository<JM_Task>()
-                .Where(s => query3.Contains(s.Id))
-                .OrderByDescending(d => d.CreatedDate)
-                .AsQueryable();
+                .Include(s => s.TaskUsers)
+                .Where(s => !s.IsDelete && s.CompanyId == request.CompanyId && (request.isMainAccount || s.ReporterId == request.UserId || (s.TaskUsers != null && s.TaskUsers.Any(d => d.UserId == request.UserId)) || s.CreatedUserId == request.UserId))
+                  .OrderByDescending(d => d.CreatedDate).AsQueryable();
+
             return query;
 
         }

@@ -18,7 +18,7 @@ namespace BNS.Service.Features
     public class AddUserCommand : IRequestHandler<AddUserRequest, ApiResult<LoginResponse>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
+        //protected readonly IElasticClient _elasticClient;
         protected readonly MyConfiguration _config;
         private readonly ICipherService _cipherService;
         private readonly IUnitOfWork _unitOfWork;

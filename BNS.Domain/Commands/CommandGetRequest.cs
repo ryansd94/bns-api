@@ -17,6 +17,7 @@ namespace BNS.Domain
         public string fieldSort { get; set; }
         public string sort { get; set; }
         public bool isGetAll { get; set; } = false;
+        public bool isMainAccount { get; set; } = false;
     }
     public class CommandByIdRequest<T> : IRequest<T> where T : class
     {

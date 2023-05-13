@@ -16,18 +16,12 @@ namespace BNS.Service.EventHandler
     public class SendMailHandler : IRequestHandler<SendMailSubcriberMQ>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
-        private readonly IUnitOfWork _unitOfWork;
         protected readonly MyConfiguration _config;
         public SendMailHandler(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient,
-        IOptions<MyConfiguration> config,
-         IUnitOfWork unitOfWork)
+        IOptions<MyConfiguration> config)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
-            _unitOfWork = unitOfWork;
             _config = config.Value;
         }
         public async Task<Unit> Handle(SendMailSubcriberMQ request, CancellationToken cancellationToken)

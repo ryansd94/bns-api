@@ -1,40 +1,42 @@
 ﻿using BNS.Api.Auth;
+using BNS.Api.Route;
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BNS.Api.Controllers.Project
 {
-    [Route("api/[controller]")]
+    [AppRouteControllerAttribute]
     [ApiController]
-    [BNSAuthorization]
     public class JM_TaskTypeController : BaseController
     {
         private IMediator _mediator;
-        private readonly ClaimsPrincipal _caller;
         public JM_TaskTypeController(IHttpContextAccessor httpContextAccessor,
             IMediator mediator) : base(httpContextAccessor)
         {
             _mediator = mediator;
-            _caller = httpContextAccessor.HttpContext.User;
         }
-        [HttpPost]
+
+        [HttpPost(Name = "save-tasktype")]
+        [BNSAuthorization]
         public async Task<IActionResult> Save(CreateTaskTypeRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
-        [HttpGet]
+
+        [HttpGet(Name = "get-tasktype")]
+        [BNSAuthorization(false)]
         public async Task<IActionResult> GetAllData([FromQuery] GetTaskTypeRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpDelete("{id}")]
+        [BNSAuthorization]
         public async Task<IActionResult> Delete(Guid id)
         {
             var request = new DeleteTaskTypeRequest();
@@ -43,6 +45,7 @@ namespace BNS.Api.Controllers.Project
         }
 
         [HttpGet("{id}")]
+        [BNSAuthorization]
         public async Task<IActionResult> GetByIndex(Guid id)
         {
             var request = new GetTaskTypeByIdRequest();
@@ -52,6 +55,7 @@ namespace BNS.Api.Controllers.Project
         }
 
         [HttpPut("{id}")]
+        [BNSAuthorization]
         public async Task<IActionResult> Update(Guid id, UpdateTaskTypeRequest request)
         {
             request.Id = id;

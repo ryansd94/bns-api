@@ -1,6 +1,5 @@
 using AspNetCoreRateLimit;
 using AutoMapper;
-using BNS.Api.AutoMapper;
 using BNS.Service.Extensions;
 using BNS.Service.Middleware;
 using BNS.Service.Subcriber;
@@ -21,7 +20,8 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using BNS.Hubs;
+using BNS.Domain.AutoMapper;
+using BNS.Service.Notify;
 
 namespace BNS.Api
 {
@@ -78,7 +78,7 @@ namespace BNS.Api
 
             services.AddDataProtection();
 
-            services.AddRepository();
+            services.AddRepository(appSettings);
             services.Configure<RequestLocalizationOptions>(
                 options =>
                 {
@@ -139,8 +139,6 @@ namespace BNS.Api
 
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
-
-
             string issuer = appSettings.Tokens.Issuer;
             string signingKey = appSettings.Tokens.Key;
             byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
@@ -176,10 +174,11 @@ namespace BNS.Api
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             // Services
+            //services.AddScoped<INotifytHub, NotifyHub>();
             services.AddTransient<MyConfiguration>();
             services.AddElasticsearch(appSettings);
-            services.AddSignalR();
-            //services.AddRabbitMq(Configuration);
+            //services.AddSignalR();
+            services.AddRabbitMq(Configuration);
             //services.AddGraphQLServer();
 
 
@@ -196,8 +195,8 @@ namespace BNS.Api
         .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()
-                        .AllowCredentials()
-        .WithOrigins("http://localhost:3000"));
+        .AllowCredentials()
+        .WithOrigins("http://localhost:3000", "http://localhost:54568"));
             var supportedCultures = new List<CultureInfo>
             {
                    new CultureInfo("vi-VN"),
@@ -232,23 +231,16 @@ namespace BNS.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-            //app.Use(async (context, nextMiddleware) =>
+            //app.UseEndpoints(endpoints =>
             //{
-
-            //    await nextMiddleware.Invoke();
-            //    //await context.Response.WriteAsync("<div>this is return Middleware 1</div>");
+            //    endpoints.MapHub<NotifyHub>("/notify");
             //});
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<NotifytHub>("/notify");
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "api/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{organization}/api/{controller=Home}/{action=Index}/{id?}");
 
-                //endpoints.MapControllerRoute(
-                //   name: "default2",
-                //   pattern: "api/{name?}/{controller=Home}/{action=Index}/{id?}");
             });
 
         }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BNS.Domain.Commands;
+using System;
+using System.Collections.Generic;
+
 namespace BNS.Domain.Responses
 {
     public class LoginResponse
@@ -11,8 +14,9 @@ namespace BNS.Domain.Responses
         public Guid ShopIndex { get; set; }
         public string Token { get; set; }
         public string UserId { get; set; }
-        public bool MainAccount { get; set; }
+        public string AccountCompanyId { get; set; }
+        public bool IsMainAccount { get; set; }
         public string DefaultOrganization { get; set; }
-
+        public List<ViewPermissionAction> ViewPermissions{ get; set; }
     }
 }

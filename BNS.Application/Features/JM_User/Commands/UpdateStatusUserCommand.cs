@@ -16,17 +16,14 @@ namespace BNS.Service.Features
     public class UpdateStatusUserCommand : IRequestHandler<UpdateStatusUserRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         protected readonly MyConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         public UpdateStatusUserCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _config = config.Value;
             _unitOfWork = unitOfWork;
         }

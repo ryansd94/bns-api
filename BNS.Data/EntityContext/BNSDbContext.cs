@@ -131,5 +131,8 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_Comment> JM_Comments { get; set; }
         public virtual DbSet<JM_CommentTask> JM_CommentTasks { get; set; }
         public virtual DbSet<JM_Priority> JM_Priorities { get; set; }
+        public virtual DbSet<SYS_ViewPermission> SYS_ViewPermissions { get; set; }
+        public virtual DbSet<SYS_ViewPermissionAction> SYS_ViewPermissionActions { get; set; }
+        public virtual DbSet<SYS_ViewPermissionActionDetail> SYS_ViewPermissionActionDetails { get; set; }
     }
 }

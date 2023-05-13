@@ -20,22 +20,11 @@ namespace BNS.Service.Features
 {
     public class GetJM_TeamQuery : IRequestHandler<GetJM_TeamRequest, ApiResult<TeamResponse>>
     {
-        protected readonly BNSDbContext _context;
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        private readonly IMapper _mapper;
-        private readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetJM_TeamQuery(BNSDbContext context,
-         IStringLocalizer<SharedResource> sharedLocalizer,
-            IMapper mapper,
-         IElasticClient elasticClient,
+        public GetJM_TeamQuery(
          IUnitOfWork unitOfWork)
         {
-            _context = context;
-            _mapper = mapper;
-            _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
         public async Task<ApiResult<TeamResponse>> Handle(GetJM_TeamRequest request, CancellationToken cancellationToken)

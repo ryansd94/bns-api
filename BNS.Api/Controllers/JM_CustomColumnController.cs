@@ -1,4 +1,5 @@
 ﻿using BNS.Api.Auth;
+using BNS.Api.Route;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace BNS.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [AppRouteControllerAttribute]
     [ApiController]
-    [BNSAuthorization]
+    [BNSAuthorization(false)]
     public class JM_CustomColumnController : BaseController
     {
         private IMediator _mediator;
@@ -18,8 +19,8 @@ namespace BNS.Api.Controllers
         {
             _mediator = mediator;
         }
-
-        [HttpGet]
+        
+        [HttpGet(Name = "get-custom-column")]
         public async Task<IActionResult> GetAllData([FromQuery] GetCustomColumnRequest request)
         {
             return Ok(await _mediator.Send(request));

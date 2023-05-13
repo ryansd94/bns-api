@@ -1290,6 +1290,166 @@ namespace BNS.Data.Migrations
                     b.ToTable("SYS_FilterConfigs");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.ToTable("SYS_ViewPermissions");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Controller")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ViewPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex(new[] { "ViewPermissionId" }, "Nidx_SYS_ViewPermissionAction_ViewPermissionId");
+
+                    b.ToTable("SYS_ViewPermissionActions");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionActionDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Key")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("Value")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ViewPermissionActionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex(new[] { "ViewPermissionActionId" }, "Nidx_SYS_ViewPermissionActionDetail_ViewPermissionActionId");
+
+                    b.ToTable("SYS_ViewPermissionActionDetails");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionObject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ObjectType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ViewPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex(new[] { "ViewPermissionId" }, "Nidx_SYS_ViewPermissionObject_ViewPermissionId");
+
+                    b.ToTable("SYS_ViewPermissionObject");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.SYS_VersionConfig", b =>
                 {
                     b.Property<int>("VersionType")
@@ -2009,6 +2169,74 @@ namespace BNS.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionAction", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", "ViewPermission")
+                        .WithMany("ViewPermissionActions")
+                        .HasForeignKey("ViewPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("ViewPermission");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionActionDetail", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionAction", "ViewPermissionAction")
+                        .WithMany("ViewPermissionActionDetails")
+                        .HasForeignKey("ViewPermissionActionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("ViewPermissionAction");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionObject", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", "ViewPermission")
+                        .WithMany("ViewPermissionObjects")
+                        .HasForeignKey("ViewPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("ViewPermission");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
                 {
                     b.Navigation("AccountCompanys");
@@ -2063,6 +2291,18 @@ namespace BNS.Data.Migrations
                     b.Navigation("TemplateDetails");
 
                     b.Navigation("TemplateStatus");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", b =>
+                {
+                    b.Navigation("ViewPermissionActions");
+
+                    b.Navigation("ViewPermissionObjects");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionAction", b =>
+                {
+                    b.Navigation("ViewPermissionActionDetails");
                 });
 #pragma warning restore 612, 618
         }

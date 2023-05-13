@@ -5,10 +5,8 @@ using BNS.Domain.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 
-namespace BNS.Api.AutoMapper
+namespace BNS.Domain.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {
@@ -70,35 +68,25 @@ namespace BNS.Api.AutoMapper
             CreateMap<CreatePriorityRequest, JM_Priority>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
             CreateMap<UpdatePriorityRequest, JM_Priority>().ForMember(s => s.UpdatedUserId, d => d.MapFrom(e => e.UserId));
             CreateMap<JM_Priority, PriorityResponseItem>();
-        }
-    }
-
-    public static class Extensions
-    {
-        public static IMappingExpression<TSource, TDestination> Ignore<TSource, TDestination>(
-        this IMappingExpression<TSource, TDestination> map,
-        Expression<Func<TDestination, object>> selector)
-        {
-            map.ForMember(selector, config => config.Ignore());
-            return map;
-        }
-
-        public static void IgnoreSourceWhenDefault<TSource, TDestination>(this IMemberConfigurationExpression<TSource, TDestination, object> opt)
-        {
-            var destinationType = opt.DestinationMember.GetMemberType();
-            object defaultValue = destinationType.GetTypeInfo().IsValueType ? Activator.CreateInstance(destinationType) : null;
-            opt.Condition((src, dest, srcValue) => !Equals(srcValue, defaultValue));
-        }
-
-        public static Type GetMemberType(this MemberInfo memberInfo)
-        {
-            if (memberInfo is MethodInfo)
-                return ((MethodInfo)memberInfo).ReturnType;
-            if (memberInfo is PropertyInfo)
-                return ((PropertyInfo)memberInfo).PropertyType;
-            if (memberInfo is FieldInfo)
-                return ((FieldInfo)memberInfo).FieldType;
-            return null;
+            CreateMap<CreateViewPermissionRequest, SYS_ViewPermission>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<ViewPermissionAction, SYS_ViewPermissionAction>().ForMember(s => s.Controller, d => d.MapFrom(e => e.View)); ;
+            CreateMap<ViewActionItem, SYS_ViewPermissionActionDetail>();
+            CreateMap<SYS_ViewPermission, ViewPermissionResponseItem>();
+            CreateMap<SYS_ViewPermission, ViewPermissionByIdResponse>()
+                .ForMember(s => s.Permission, d => d.MapFrom(e => e.ViewPermissionActions.Select(a => new ViewPermissionAction
+                {
+                    View = a.Controller.ToString(),
+                    Actions = a.ViewPermissionActionDetails.Select(b => new ViewActionItem
+                    {
+                        Key = b.Key.ToString(),
+                        Value = b.Value != null ? b.Value.Value : false
+                    }).ToList()
+                }).ToList()))
+                .ForMember(s => s.Objects, d => d.MapFrom(e => e.ViewPermissionObjects.Select(a => new ViewPermissionObjectResponse
+                {
+                    Id = a.ObjectId,
+                    ObjectType = a.ObjectType
+                }).ToList()));
         }
     }
 }

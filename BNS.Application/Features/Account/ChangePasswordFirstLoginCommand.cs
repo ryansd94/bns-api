@@ -19,16 +19,13 @@ namespace BNS.Service.Features
     {
         protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         protected readonly IGenericRepository<JM_Account> _accountRepository;
         public ChangePasswordFirstLoginCommand(BNSDbContext context,
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IGenericRepository<JM_Account> accountRepository,
-         IElasticClient elasticClient)
+         IGenericRepository<JM_Account> accountRepository)
         {
             _context = context;
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _accountRepository = accountRepository;
         }
         public async Task<ApiResult<Guid>> Handle(ChangePasswordFirstLoginRequest request, CancellationToken cancellationToken)

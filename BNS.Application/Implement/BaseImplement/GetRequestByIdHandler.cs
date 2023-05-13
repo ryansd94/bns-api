@@ -26,10 +26,17 @@ namespace BNS.Service.Implement
             _mapper = mapper;
             _sharedLocalizer = sharedLocalizer;
         }
+
+        public virtual IQueryable<TEntity> GetQueryableData(CommandByIdRequest<ApiResult<TModel>> request)
+        {
+            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
+        }
         public async Task<ApiResult<TModel>> Handle(CommandByIdRequest<ApiResult<TModel>> request, CancellationToken cancellationToken)
         {
+            var query = GetQueryableData(request);
             var response = new ApiResult<TModel>();
-            var data = await _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).Select(s => _mapper.Map<TModel>(s)).FirstOrDefaultAsync();
+            var data = await query.Select(s => _mapper.Map<TModel>(s))
+                .FirstOrDefaultAsync();
 
             if (data == null)
             {

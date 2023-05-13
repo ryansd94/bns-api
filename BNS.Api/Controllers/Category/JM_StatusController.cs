@@ -1,29 +1,27 @@
 ﻿using BNS.Api.Auth;
+using BNS.Api.Route;
 using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 namespace BNS.Api.Controllers.Category
 {
-    [Route("api/[controller]")]
+    [AppRouteControllerAttribute]
     [ApiController]
     [BNSAuthorization]
     public class JM_StatusController : BaseController
     {
         private IMediator _mediator;
-        private readonly ClaimsPrincipal _caller;
         public JM_StatusController(IHttpContextAccessor httpContextAccessor,
             IMediator mediator) : base(httpContextAccessor)
         {
             _mediator = mediator;
-            _caller = httpContextAccessor.HttpContext.User;
         }
 
-        [HttpPost]
+        [HttpPost(Name = "save-status")]
         public async Task<IActionResult> Save(CreateStatusRequest request)
         {
             return Ok(await _mediator.Send(request));
@@ -35,7 +33,7 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpGet]
+        [HttpGet(Name = "get-status")]
         public async Task<IActionResult> GetAllData([FromQuery] GetStatusRequest request)
         {
             return Ok(await _mediator.Send(request));

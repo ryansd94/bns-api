@@ -18,7 +18,6 @@ namespace BNS.Service.Features
     public class ValidateAddUserCommnad : IRequestHandler<ValidateAddUserRequest, ApiResult<ValidateAddJM_UserResponse>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         protected readonly MyConfiguration _config;
         private readonly ICipherService _cipherService;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,11 +25,9 @@ namespace BNS.Service.Features
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
         ICipherService CipherService,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _config = config.Value;
             _cipherService = CipherService;
             _unitOfWork = unitOfWork;

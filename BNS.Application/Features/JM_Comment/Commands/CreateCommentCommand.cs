@@ -4,7 +4,6 @@ using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using Nest;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,22 +11,26 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using BNS.Utilities;
+using System.Collections.Generic;
+using BNS.Domain.Interface;
+using BNS.Domain.Responses;
 
 namespace BNS.Service.Features
 {
     public class CreateCommentCommand : IRequestHandler<CreateCommentRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
+        protected readonly INotifyService _notifyService;
         private readonly IUnitOfWork _unitOfWork;
         public CreateCommentCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient,
-         IUnitOfWork unitOfWork)
+         IUnitOfWork unitOfWork,
+         INotifyService notifyHub)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
+            _notifyService = notifyHub;
         }
         public async Task<ApiResult<Guid>> Handle(CreateCommentRequest request, CancellationToken cancellationToken)
         {
@@ -40,20 +43,25 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            await InsertComment(new TaskCommentRequest
+            var lstNotify = await InsertComment(new TaskCommentRequest
             {
                 Id = request.Id,
                 Value = request.Value
             }, request.ParentId, request.CompanyId, request.UserId, request.TaskId);
 
+            if (lstNotify.Count > 0)
+            {
+                _notifyService.SendNotify(lstNotify);
+            }
             response = await _unitOfWork.SaveChangesAsync();
             return response;
         }
 
 
-        private async Task InsertComment(TaskCommentRequest commentRequest, Guid? parentId, Guid CompanyId, Guid userId, Guid taskID)
+        private async Task<List<NotifyResponse>> InsertComment(TaskCommentRequest commentRequest, Guid? parentId, Guid CompanyId, Guid userId, Guid taskID)
         {
             JM_Comment commentParent = null;
+            var result = new List<NotifyResponse>();
             if (parentId != null)
             {
                 commentParent = await _unitOfWork.Repository<JM_Comment>().Where(s => s.Id == parentId.Value).FirstOrDefaultAsync();
@@ -82,7 +90,23 @@ namespace BNS.Service.Features
                 CompanyId = CompanyId,
                 UpdatedUserId = userId,
             });
+            if (commentRequest.Value.Contains("data-id"))
+            {
+                var userTags = HtmlHelper.GetDataAttributeFromHtmlString(commentRequest.Value, "data-id");
+                var userMenton = await _unitOfWork.Repository<JM_Account>().Where(s => s.Id == userId).FirstOrDefaultAsync();
+                foreach (var user in userTags)
+                {
+                    result.Add(new NotifyResponse
+                    {
+                        Id = Guid.NewGuid(),
+                        ObjectId = taskID,
+                        Type = ENotifyObjectType.TaskComment,
+                        Contents = new List<string> { userMenton.FullName },
+                        AccountCompanyId = user
+                    });
+                }
+            }
+            return result;
         }
-
     }
 }

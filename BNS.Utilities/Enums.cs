@@ -13,7 +13,8 @@
             SystemError,
             UserHasJoinTeam,
             TokenNotValid,
-            UserNotRegister
+            UserNotRegister,
+            NotPermission
         }
 
         public enum EAccountType
@@ -21,6 +22,7 @@
             SupperAdmin = 1,
             User = 2
         }
+
         public enum ETaskType
         {
             STORY = 1,
@@ -34,6 +36,7 @@
             Add,
             Edit
         }
+
         public enum ELang
         {
             vi,
@@ -45,10 +48,12 @@
             Position = 0,
             Department = 1
         }
+
         public enum ESortEnum
         {
             asc, desc
         }
+
         public enum EDataType
         {
             Product,
@@ -64,11 +69,13 @@
             Employee,
             Menu
         }
+
         public enum EUploadType
         {
             Product,
             Employee
         }
+
         public enum EVersionType
         {
             Trial = 1,
@@ -76,11 +83,13 @@
             Standard = 3,
             Pro = 4
         }
+
         public enum Sort
         {
             asc,
             desc
         }
+
         public enum EUserStatus
         {
             ACTIVE = 1,
@@ -88,6 +97,7 @@
             WAILTING_CONFIRM_MAIL = 3,
             BLOCK = 4
         }
+
         public enum EUserValidate
         {
             OK = 1,
@@ -137,6 +147,66 @@
         {
             List = 0,
             Board = 1
+        }
+
+        public enum EActionType
+        {
+            View,
+            Add,
+            ColumnConfig,
+            Edit,
+            Delete,
+            All
+        }
+
+        public enum EPermissionObject
+        {
+            User,
+            Team
+        }
+
+        public enum EControllerKey
+        {
+            User,
+            Summary,
+            Dashboard,
+            Project,
+            Team,
+            Priority,
+            Template,
+            Status,
+            Tasktype,
+            Task,
+            Permission,
+            Overview,
+            Category,
+            TaskGroup,
+            PermissionGroup
+        }
+
+        public enum EClaimType
+        {
+            UserId,
+            AccountCompanyId,
+            DefaultOrganization,
+            CompanyId,
+            Role,
+            IsMainAccount,
+            TeamId,
+            Organization
+        }
+
+        public enum ERestMethod
+        {
+            GET,
+            POST,
+            PUT,
+            DELETE
+        }
+
+        public enum ENotifyObjectType
+        {
+            TaskComment
         }
     }
 }

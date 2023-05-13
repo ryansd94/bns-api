@@ -17,15 +17,12 @@ namespace BNS.Service.Features
     public class CreateStatusCommand : IRequestHandler<CreateStatusRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
         public CreateStatusCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
         public async Task<ApiResult<Guid>> Handle(CreateStatusRequest request, CancellationToken cancellationToken)

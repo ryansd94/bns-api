@@ -18,15 +18,12 @@ namespace BNS.Service.Features
     public class CreateTeamCommand : IRequestHandler<CreateTeamRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
         public CreateTeamCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
-         IElasticClient elasticClient,
          IUnitOfWork unitOfWork)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
         }
         public async Task<ApiResult<Guid>> Handle(CreateTeamRequest request, CancellationToken cancellationToken)

@@ -26,9 +26,9 @@ namespace BNS.Service.Features
             return query.Select(s => _mapper.Map<TModel>(s));
         }
 
-        public virtual async Task<IQueryable<TEntity>> GetQueryableData(CommandGetRequest<ApiResultList<TModel>> request)
+        public virtual IQueryable<TEntity> GetQueryableData(CommandGetRequest<ApiResultList<TModel>> request)
         {
-            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId).AsQueryable();
+            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.IsDelete == false).AsQueryable();
         }
 
         public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, CommandGetRequest<ApiResultList<TModel>> request)
@@ -39,15 +39,15 @@ namespace BNS.Service.Features
 
             if (!request.isGetAll)
                 query = query.Skip(request.start).Take(request.length);
-            var u = GetItemData(query);
-            var rs = await u.ToListAsync();
+            var queryItem = GetItemData(query);
+            var rs = await queryItem.ToListAsync();
             response.data.Items = rs;
             return response;
         }
 
         public async Task<ApiResultList<TModel>> Handle(CommandGetRequest<ApiResultList<TModel>> request, CancellationToken cancellationToken)
         {
-            var query = GetQueryableData(request).Result;
+            var query = GetQueryableData(request);
             query = query.WhereOr(request.filters, request.defaultFilters);
 
             if (!string.IsNullOrEmpty(request.fieldSort))

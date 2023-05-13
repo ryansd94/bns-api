@@ -46,6 +46,7 @@ namespace BNS.Service.Features
                 .Include(s => s.JM_TaskParent)
                 .Include(s => s.CommentTasks).ThenInclude(s => s.Comment).ThenInclude(s => s.Chidrens)
                 .ThenInclude(s => s.User)
+                .Include(s => s.CommentTasks).ThenInclude(s => s.Comment).ThenInclude(s => s.User)
                 .Include(s => s.TaskTags).ThenInclude(s => s.Tag).FirstOrDefaultAsync();
             if (task == null)
             {

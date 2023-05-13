@@ -18,17 +18,14 @@ namespace BNS.Service.Features
     public class CreatePriorityCommand : IRequestHandler<CreatePriorityRequest, ApiResult<Guid>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        protected readonly IElasticClient _elasticClient;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public CreatePriorityCommand(
             IStringLocalizer<SharedResource> sharedLocalizer,
-            IElasticClient elasticClient,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _sharedLocalizer = sharedLocalizer;
-            _elasticClient = elasticClient;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }

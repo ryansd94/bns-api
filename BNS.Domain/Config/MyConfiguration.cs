@@ -44,6 +44,7 @@ namespace BNS.Domain
         public string bnsConnection { get; set; } = "Data Source=125.212.226.105,1968;Initial Catalog=test_bidv_2;User ID=sa;Password=TGn<@7qY";
 
         public string jmConnection { get; set; } = "Data Source=125.212.226.105,1968;Initial Catalog=test_bidv_3;User ID=sa;Password=TGn<@7qY";
+        public string redisConnection { get; set; }
 
     }
     public class RabbitMQ
