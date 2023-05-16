@@ -9,7 +9,20 @@ namespace BNS.Domain.Responses
         public Guid Id { get; set; }
         public Guid? ObjectId { get; set; }
         public ENotifyObjectType Type { get; set; }
-        public List<string> Contents { get; set; }
-        public string AccountCompanyId { get; set; }
+        public object Content { get; set; }
+        public string AccountId { get; set; }
+    }
+
+    public class NotifyTaskMention
+    {
+        public User UserMention { get; set; }
+        public TaskNotify TaskContent { get; set; }
+    }
+
+    public class TaskNotify
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public TaskType TaskType { get; set; }
     }
 }

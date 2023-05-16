@@ -3,6 +3,7 @@ using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Domain.Commands;
 using BNS.Domain.Interface;
+using BNS.Domain.Responses;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.Utilities;
@@ -10,6 +11,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,17 +25,23 @@ namespace BNS.Service.Features
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IAttachedFileService _attachedFileService;
+        protected readonly INotifyService _notifyService;
+        protected readonly ITaskService _taskService;
 
         public CreateTaskCommand(
             IStringLocalizer<SharedResource> sharedLocalizer,
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IAttachedFileService attachedFileService)
+            IAttachedFileService attachedFileService,
+            INotifyService notifyService,
+            ITaskService taskService)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _attachedFileService = attachedFileService;
+            _notifyService = notifyService;
+            _taskService = taskService;
         }
         public async Task<ApiResult<Guid>> Handle(CreateTaskRequest request, CancellationToken cancellationToken)
         {
@@ -52,6 +60,7 @@ namespace BNS.Service.Features
             }
 
             var task = _mapper.Map<JM_Task>(request.DefaultData);
+            var userMentionIds = new List<string>();
             task.Id = Guid.NewGuid();
             task.CompanyId = request.CompanyId;
             task.CreatedDate = DateTime.UtcNow;
@@ -62,21 +71,21 @@ namespace BNS.Service.Features
 
             #region Assign user
 
-            if (request.DefaultData.UsersAssign != null && request.DefaultData.UsersAssign.Count > 0)
+            if (request.DefaultData.UsersAssignId != null && request.DefaultData.UsersAssignId.Count > 0)
             {
-                if (request.DefaultData.UsersAssign.Count == 1)
+                if (request.DefaultData.UsersAssignId.Count == 1)
                 {
-                    task.AssignUserId = request.DefaultData.UsersAssign[0];
+                    task.AssignUserId = request.DefaultData.UsersAssignId[0];
                 }
                 else
                 {
-                    for (int i = 0; i < request.DefaultData.UsersAssign.Count; i++)
+                    for (int i = 0; i < request.DefaultData.UsersAssignId.Count; i++)
                     {
                         var taskUser = new JM_TaskUser
                         {
                             Id = Guid.NewGuid(),
                             TaskId = task.Id,
-                            UserId = request.DefaultData.UsersAssign[i],
+                            UserId = request.DefaultData.UsersAssignId[i],
                             IsDelete = false,
                             CompanyId = request.CompanyId,
                             CreatedDate = DateTime.UtcNow,
@@ -172,12 +181,15 @@ namespace BNS.Service.Features
             }
             #endregion
 
+
+            await _unitOfWork.SaveChangesAsync();
+
             #region Comments
             if (request.Comments != null && request.Comments.Count > 0)
             {
                 for (int i = request.Comments.Count - 1; i >= 0; i--)
                 {
-                    InsertComment(request.Comments[i], null, request.CompanyId, request.UserId, task.Id);
+                    await InsertComment(request.Comments[i], null, request.CompanyId, request.UserId, task.Id, userMentionIds);
                 }
             }
             #endregion
@@ -192,12 +204,50 @@ namespace BNS.Service.Features
             //}
 
             //await _context.JM_Tasks.AddAsync(data);
-            await _unitOfWork.SaveChangesAsync();
+            var notifyUserAssigns = await GetNotifyUsers(request.DefaultData.UsersAssignId, request.UserId, task,
+                taskType.Color, taskType.Icon, ENotifyObjectType.TaskAssigned);
+            if (notifyUserAssigns.Count > 0)
+            {
+                _notifyService.SendNotify(notifyUserAssigns);
+            }
+            if (userMentionIds.Count > 0)
+            {
+                var userAssignIds = notifyUserAssigns.Select(s => s.AccountId.ToString()).ToList();
+                var userNotifyIds = userMentionIds.Where(s => !userAssignIds.Contains(s)).Select(s => Guid.Parse(s)).ToList();
+                var userMentions = await GetNotifyUsers(userNotifyIds, request.UserId, task, taskType.Color, taskType.Icon, ENotifyObjectType.TaskCommentMention);
+                _notifyService.SendNotify(userMentions);
+            }
             //response.data = data.Id;
             return response;
         }
 
-        private void InsertComment(TaskCommentRequest commentRequest, Guid? parentId, Guid CompanyId, Guid userId, Guid taskID, int level = 0)
+        private async Task<List<NotifyResponse>> GetNotifyUsers(List<Guid> userMentionIds, Guid userCreateId, JM_Task task, string taskTypeColor, string taskTypeIcon, ENotifyObjectType notifyType)
+        {
+            var notifyResponses = new List<NotifyResponse>();
+            if (userMentionIds == null || userMentionIds.Count == 0)
+                return notifyResponses;
+            try
+            {
+                var userMentions = await _unitOfWork.Repository<JM_Account>().AsNoTracking().Where(s => userMentionIds.Contains(s.Id)).ToListAsync();
+                var userCreated = await _unitOfWork.Repository<JM_Account>().AsNoTracking().Where(s => s.Id == userCreateId).FirstOrDefaultAsync();
+                if (userCreated != null && userMentions.Count > 0)
+                {
+                    foreach (var item in userMentions)
+                    {
+                        var notifyResponse = _taskService.GetNotifyTaskResponse(task.Id, item.Id.ToString(), userCreated, task, taskTypeColor, taskTypeIcon, notifyType);
+                        notifyResponses.Add(notifyResponse);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return notifyResponses;
+        }
+
+        private async Task InsertComment(TaskCommentRequest commentRequest, Guid? parentId, Guid CompanyId, Guid userId,
+            Guid taskID, List<string> userMentions, int level = 0)
         {
             var comment = new JM_Comment
             {
@@ -221,13 +271,14 @@ namespace BNS.Service.Features
             });
             if (commentRequest.Value.Contains("data-id"))
             {
-                var userTags = HtmlHelper.GetDataAttributeFromHtmlString(commentRequest.Value, "data-id");
+                var result = _taskService.GetUserMentionIdsWhenAddComments(commentRequest.Value);
+                userMentions.AddRange(result);
             }
             if (commentRequest.Childrens != null)
             {
                 foreach (var childComment in commentRequest.Childrens)
                 {
-                    InsertComment(childComment, comment.Id, CompanyId, userId, taskID, level + 1);
+                    await InsertComment(childComment, comment.Id, CompanyId, userId, taskID, userMentions, level + 1);
                 }
             }
         }

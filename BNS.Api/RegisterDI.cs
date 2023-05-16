@@ -41,6 +41,7 @@ namespace BNS.Api
             services.AddScoped<ICipherService, CipherService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<INotifyService, NotifyService>();
+            services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IRequestHandler<GetTaskRequest, ApiResultList<TaskItem>>, GetTaskQuery>();
             services.AddScoped<IRequestHandler<UpdateTaskTypeRequest, ApiResult<Guid>>, UpdateTaskTypeCommand>();
             services.AddScoped<IRequestHandler<UpdateStatusRequest, ApiResult<Guid>>, UpdateStatusCommand>();

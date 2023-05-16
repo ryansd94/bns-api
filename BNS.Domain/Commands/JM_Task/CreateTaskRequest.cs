@@ -24,7 +24,7 @@ namespace BNS.Domain.Commands
         public Guid? PriorityId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? DueDate { get; set; }
-        public List<Guid> UsersAssign { get; set; }
+        public List<Guid> UsersAssignId { get; set; }
         public List<TagItem> Tags { get; set; }
         public decimal? Estimatedhour { get; set; }
         public List<Guid> TaskChildDelete { get; set; }

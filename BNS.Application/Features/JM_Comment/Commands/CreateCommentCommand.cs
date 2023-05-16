@@ -23,14 +23,18 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly INotifyService _notifyService;
         private readonly IUnitOfWork _unitOfWork;
+        protected readonly ITaskService _taskService;
+
         public CreateCommentCommand(
-         IStringLocalizer<SharedResource> sharedLocalizer,
-         IUnitOfWork unitOfWork,
-         INotifyService notifyHub)
+            IStringLocalizer<SharedResource> sharedLocalizer,
+            IUnitOfWork unitOfWork,
+            INotifyService notifyService,
+            ITaskService taskService)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
-            _notifyService = notifyHub;
+            _notifyService = notifyService;
+            _taskService = taskService;
         }
         public async Task<ApiResult<Guid>> Handle(CreateCommentRequest request, CancellationToken cancellationToken)
         {
@@ -92,19 +96,7 @@ namespace BNS.Service.Features
             });
             if (commentRequest.Value.Contains("data-id"))
             {
-                var userTags = HtmlHelper.GetDataAttributeFromHtmlString(commentRequest.Value, "data-id");
-                var userMenton = await _unitOfWork.Repository<JM_Account>().Where(s => s.Id == userId).FirstOrDefaultAsync();
-                foreach (var user in userTags)
-                {
-                    result.Add(new NotifyResponse
-                    {
-                        Id = Guid.NewGuid(),
-                        ObjectId = taskID,
-                        Type = ENotifyObjectType.TaskComment,
-                        Contents = new List<string> { userMenton.FullName },
-                        AccountCompanyId = user
-                    });
-                }
+                result = await _taskService.GetUserMentionNotifyWhenAddComments(commentRequest.Value, taskID, userId, comment.Id);
             }
             return result;
         }

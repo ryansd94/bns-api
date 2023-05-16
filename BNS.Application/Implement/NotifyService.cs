@@ -1,6 +1,7 @@
 ﻿using BNS.Domain;
 using BNS.Domain.Interface;
 using BNS.Domain.Responses;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -11,12 +12,17 @@ namespace BNS.Service.Implement
 {
     public class NotifyService : INotifyService
     {
+        private readonly MyConfiguration _config;
 
-        public NotifyService()
+        public NotifyService(IOptions<MyConfiguration> config)
         {
+            _config = config.Value;
         }
+
         public async Task SendNotify(List<NotifyResponse> notifyResponses)
         {
+            if (notifyResponses == null || notifyResponses.Count == 0)
+                return;
             PostData(notifyResponses);
         }
 
@@ -30,7 +36,7 @@ namespace BNS.Service.Implement
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             // Gửi yêu cầu POST
-            var response = await httpClient.PostAsync("http://localhost:54568/api/notify", content);
+            var response = await httpClient.PostAsync(string.Format("{0}/api/notify", _config.Default.NotifyUrl), content);
 
             // Xử lý kết quả
             if (response.IsSuccessStatusCode)

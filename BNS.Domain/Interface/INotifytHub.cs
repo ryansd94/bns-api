@@ -4,6 +4,6 @@ namespace BNS.Domain
 {
     public interface INotifytHub
     {
-        void SendNotify(string accountCompanyId, NotifyResponse notifyResponse);
+        void SendNotify(string accountId, NotifyResponse notifyResponse);
     }
 }

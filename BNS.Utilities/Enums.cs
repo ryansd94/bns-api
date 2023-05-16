@@ -206,7 +206,8 @@
 
         public enum ENotifyObjectType
         {
-            TaskComment
+            TaskCommentMention,
+            TaskAssigned
         }
     }
 }

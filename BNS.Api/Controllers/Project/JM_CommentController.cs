@@ -12,7 +12,7 @@ namespace BNS.Api.Controllers.Project
 {
     [AppRouteControllerAttribute]
     [ApiController]
-    [BNSAuthorization]
+    [BNSAuthorization(false)]
     public class JM_CommentController : BaseController
     {
         private IMediator _mediator;

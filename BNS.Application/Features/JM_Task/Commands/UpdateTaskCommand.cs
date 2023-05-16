@@ -66,13 +66,13 @@ namespace BNS.Service.Features
 
             #region Assign user
 
-            if (request.DefaultData.UsersAssign != null && request.DefaultData.UsersAssign.Count > 0)
+            if (request.DefaultData.UsersAssignId != null && request.DefaultData.UsersAssignId.Count > 0)
             {
-                if (request.DefaultData.UsersAssign.Count == 1)
+                if (request.DefaultData.UsersAssignId.Count == 1)
                 {
-                    if (dataCheck.AssignUserId != request.DefaultData.UsersAssign[0])
+                    if (dataCheck.AssignUserId != request.DefaultData.UsersAssignId[0])
                     {
-                        dataCheck.AssignUserId = request.DefaultData.UsersAssign[0];
+                        dataCheck.AssignUserId = request.DefaultData.UsersAssignId[0];
                     }
                 }
                 else
@@ -80,18 +80,18 @@ namespace BNS.Service.Features
                     var taskUsersId = dataCheck.TaskUsers?.Select(s => s.Id).ToList();
                     if (taskUsersId.Any())
                     {
-                        var taskUserDeletes = dataCheck.TaskUsers.Where(s => !request.DefaultData.UsersAssign.Contains(s.Id)).ToList();
+                        var taskUserDeletes = dataCheck.TaskUsers.Where(s => !request.DefaultData.UsersAssignId.Contains(s.Id)).ToList();
                         _unitOfWork.Repository<JM_TaskUser>().RemoveRange(taskUserDeletes);
                     }
-                    for (int i = 0; i < request.DefaultData.UsersAssign.Count; i++)
+                    for (int i = 0; i < request.DefaultData.UsersAssignId.Count; i++)
                     {
-                        if (taskUsersId.Any(s => s == request.DefaultData.UsersAssign[i]))
+                        if (taskUsersId.Any(s => s == request.DefaultData.UsersAssignId[i]))
                             continue;
                         var taskUser = new JM_TaskUser
                         {
                             Id = Guid.NewGuid(),
                             TaskId = dataCheck.Id,
-                            UserId = request.DefaultData.UsersAssign[i],
+                            UserId = request.DefaultData.UsersAssignId[i],
                             IsDelete = false,
                             CompanyId = request.CompanyId,
                             CreatedDate = DateTime.UtcNow,

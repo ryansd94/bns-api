@@ -25,7 +25,7 @@ namespace BNS.Notify.Controllers
         {
             foreach (var item in request)
             {
-                _notifyHub.SendNotify(item.AccountCompanyId, item);
+                _notifyHub.SendNotify(item.AccountId, item);
             }
         }
     }

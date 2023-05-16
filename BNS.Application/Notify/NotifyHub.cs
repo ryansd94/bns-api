@@ -20,20 +20,20 @@ namespace BNS.Service.Notify
             _connections = connections;
         }
 
-        public async Task OnDisConnected(string accountCompanyId)
+        public async Task OnDisConnected(string accountId)
         {
-            if (!string.IsNullOrEmpty(accountCompanyId))
+            if (!string.IsNullOrEmpty(accountId))
             {
-                _connections.Remove(accountCompanyId, Context.ConnectionId);
+                _connections.Remove(accountId, Context.ConnectionId);
                 await base.OnDisconnectedAsync(null);
             }
         }
 
-        public async Task OnConnected(string accountCompanyId)
+        public async Task OnConnected(string accountId)
         {
-            if (!string.IsNullOrEmpty(accountCompanyId))
+            if (!string.IsNullOrEmpty(accountId))
             {
-                _connections.Add(accountCompanyId, Context.ConnectionId);
+                _connections.Add(accountId, Context.ConnectionId);
                 await base.OnConnectedAsync();
             }
         }
@@ -44,9 +44,9 @@ namespace BNS.Service.Notify
             return base.OnConnectedAsync();
         }
 
-        public async void SendNotify(string accountCompanyId, NotifyResponse notifyResponse)
+        public async void SendNotify(string accountId, NotifyResponse notifyResponse)
         {
-            var connections = _connections.GetConnections(accountCompanyId);
+            var connections = _connections.GetConnections(accountId);
             foreach (var connectionId in connections)
             {
                 var isConnected = _notifyHub.Clients.Client(connectionId) != null;

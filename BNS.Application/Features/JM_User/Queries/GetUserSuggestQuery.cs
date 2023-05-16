@@ -43,7 +43,7 @@ namespace BNS.Service.Features
                    Email = s.Account != null ? s.Account.Email : string.Empty,
                    Status = s.Status,
                    FullName = s.Account != null ? s.Account.FullName : string.Empty,
-                   Id = s.Id,
+                   Id = s.Account.Id,
                    CreatedDate = s.CreatedDate,
                    IsMainAccount = s.IsMainAccount,
                    TeamName = s.JM_Team != null ? s.JM_Team.Name : string.Empty,
