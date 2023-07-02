@@ -10,8 +10,7 @@ namespace BNS.Service.Features
     public class UpdatePriorityCommand : Implement.BaseImplement.UpdateRequestHandler<UpdatePriorityRequest, JM_Priority>
     {
         public UpdatePriorityCommand(IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IStringLocalizer<SharedResource> sharedLocalizer) : base(unitOfWork, mapper,sharedLocalizer)
+            IMapper mapper) : base(unitOfWork, mapper)
         {
         }
     }

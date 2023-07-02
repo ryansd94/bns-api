@@ -15,12 +15,13 @@ namespace BNS.Service.Implement
         private readonly MyConfiguration config;
         private readonly IDataProtector _protector;
 
-        private static string key = "b14ca5898a4e4142aace2ea2143a2410";
+        private static string key = "";
         public CipherService(IDataProtectionProvider DataProtectionProvider
             , IOptions<MyConfiguration> config)
         {
             _dataProtectionProvider = DataProtectionProvider;
             this.config = config.Value;
+            key = this.config.Default.CipherKey;
             _protector = _dataProtectionProvider.CreateProtector(config.Value.Default.CipherKey);
         }
         public string Encrypt(string input)
@@ -42,50 +43,58 @@ namespace BNS.Service.Implement
 
         public string EncryptString(string plainText)
         {
-            byte[] iv = new byte[16];
-            byte[] array;
+            return Encrypt(plainText);
+            byte[] encryptedBytes;
             using (Aes aes = Aes.Create())
             {
                 aes.Key = Encoding.UTF8.GetBytes(key);
-                aes.IV = iv;
+                aes.Mode = CipherMode.CBC;
+
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-                using (MemoryStream memoryStream = new MemoryStream())
+
+                byte[] plaintextBytes = Encoding.UTF8.GetBytes(plainText);
+
+                using (var encryptedStream = new MemoryStream())
                 {
-                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+                    using (var cryptoStream = new CryptoStream(encryptedStream, encryptor, CryptoStreamMode.Write))
                     {
-                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
-                        {
-                            streamWriter.Write(plainText);
-                        }
-                        array = memoryStream.ToArray();
+                        cryptoStream.Write(plaintextBytes, 0, plaintextBytes.Length);
+                        cryptoStream.FlushFinalBlock();
+                        encryptedBytes = encryptedStream.ToArray();
                     }
                 }
             }
-            return Convert.ToBase64String(array);
+
+            return Convert.ToBase64String(encryptedBytes);
         }
 
         public async Task<string> DecryptString(string cipherText)
         {
+            return Decrypt(cipherText);
             try
             {
-                byte[] iv = new byte[16];
-                byte[] buffer = Convert.FromBase64String(cipherText);
+                byte[] decryptedBytes;
+                byte[] ciphertextBytes = Convert.FromBase64String(cipherText);
+
                 using (Aes aes = Aes.Create())
                 {
-                    aes.Key = Encoding.UTF8.GetBytes(key);//I have already defined "Key" in the above EncryptString function
-                    aes.IV = iv;
+                    aes.Key = Encoding.UTF8.GetBytes(key);
+                    aes.Mode = CipherMode.CBC;
+
                     ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-                    using (MemoryStream memoryStream = new MemoryStream(buffer))
+
+                    using (var decryptedStream = new MemoryStream())
                     {
-                        using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+                        using (var cryptoStream = new CryptoStream(decryptedStream, decryptor, CryptoStreamMode.Write))
                         {
-                            using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
-                            {
-                                return await streamReader.ReadToEndAsync();
-                            }
+                            await cryptoStream.WriteAsync(ciphertextBytes, 0, ciphertextBytes.Length);
+                            cryptoStream.FlushFinalBlock();
+                            decryptedBytes = decryptedStream.ToArray();
                         }
                     }
                 }
+
+                return Encoding.UTF8.GetString(decryptedBytes);
             }
             catch (Exception ex)
             {

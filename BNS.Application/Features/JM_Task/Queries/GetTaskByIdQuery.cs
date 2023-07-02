@@ -86,7 +86,7 @@ namespace BNS.Service.Features
             var taskType = await _mediator.Send(taskTypeRequest);
             var taskChilds = await _unitOfWork.Repository<JM_Task>().Where(s => s.ParentId != null && s.ParentId == task.Id
               && !s.IsDelete).Select(s => _mapper.Map<TaskItem>(s)).ToListAsync();
-            var comments = task.CommentTasks.Select(s=>s.Comment).ToList();
+            var comments = task.CommentTasks.Select(s => s.Comment).ToList();
 
             response.data.Task = taskItem;
             response.data.TaskType = taskType.data;

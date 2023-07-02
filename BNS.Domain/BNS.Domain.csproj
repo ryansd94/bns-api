@@ -8,6 +8,7 @@
     <Folder Include="Commands\JM_CustomColumn\" />
     <Folder Include="Commands\JM_Priority\" />
     <Folder Include="Messaging\" />
+    <Folder Include="Queries\JM_Account\" />
     <Folder Include="Queries\JM_Tag\" />
     <Folder Include="Queries\JM_Priority\" />
   </ItemGroup>

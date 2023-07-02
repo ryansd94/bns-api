@@ -122,7 +122,6 @@ namespace BNS.Service.Features
                 {
                     CompanyId = request.CompanyId,
                     EmailJoin = email,
-                    Key = _config.Default.CipherKey,
                     UserRequest = request.UserId,
                     Id = accountCompany.Id
                 };

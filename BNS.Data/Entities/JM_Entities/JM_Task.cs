@@ -27,7 +27,7 @@ namespace BNS.Data.Entities.JM_Entities
         [ForeignKey("ProjectId")]
         public virtual JM_Project JM_Project { get; set; }
         [ForeignKey("SprintId")]
-        public virtual JM_Sprint JM_Sprint { get; set; }
+        public virtual JM_ProjectPhase JM_ProjectPhase { get; set; }
         [ForeignKey("ParentId")]
         public virtual JM_Task JM_TaskParent { get; set; }
         //[ForeignKey("AssignUserId")]

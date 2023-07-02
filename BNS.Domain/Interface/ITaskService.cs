@@ -13,9 +13,9 @@ namespace BNS.Domain.Interface
     {
         Task<List<NotifyResponse>> GetUserMentionNotifyWhenAddComments(string comment, Guid taskId, Guid userId, Guid commentId);
         List<string> GetUserMentionIdsWhenAddComments(string comment);
-        NotifyResponse GetNotifyTaskResponse(Guid? objectId, string receivedAccountId,
+        NotifyResponse GetNotifyTaskResponse(Guid? objectId, Guid receivedAccountId,
             JM_Account userMenton, JM_Task task, ENotifyObjectType notifyObjectType);
-        NotifyResponse GetNotifyTaskResponse(Guid? objectId, string receivedAccountId,
+        NotifyResponse GetNotifyTaskResponse(Guid? objectId, Guid receivedAccountId,
             JM_Account userMenton, JM_Task task, string taskTypeColor, string taskTypeIcon, ENotifyObjectType notifyObjectType);
     }
 }

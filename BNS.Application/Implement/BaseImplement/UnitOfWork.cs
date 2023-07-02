@@ -15,7 +15,6 @@ namespace BNS.Service.Implement
         private IGenericRepository<JM_Account> jM_AccountRepository;
         private IGenericRepository<JM_AccountCompany> jM_AccountCompanyRepository;
         private IGenericRepository<JM_Team> jM_TeamRepository;
-        private IGenericRepository<JM_Sprint> jM_SprintRepository;
         private IGenericRepository<JM_Company> jM_CompanyRepository;
         private IGenericRepository<JM_Project> jM_ProjectRepository;
         private IGenericRepository<JM_ProjectMember> jM_ProjectMemberRepository;
@@ -118,17 +117,6 @@ namespace BNS.Service.Implement
                     this.jM_TeamRepository = new GenericRepository<JM_Team>(_context);
                 }
                 return jM_TeamRepository;
-            }
-        }
-        public IGenericRepository<JM_Sprint> JM_SprintRepository
-        {
-            get
-            {
-                if (this.jM_SprintRepository == null)
-                {
-                    this.jM_SprintRepository = new GenericRepository<JM_Sprint>(_context);
-                }
-                return jM_SprintRepository;
             }
         }
         #endregion

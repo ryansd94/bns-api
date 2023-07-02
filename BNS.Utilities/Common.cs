@@ -458,94 +458,6 @@ namespace BNS.Utilities
             return source.Provider.CreateQuery<TEntity>(queryExpr); ;
         }
 
-        public static IQueryable<TEntity> OrderBy2<TEntity>(this IQueryable<TEntity> source, string orderByStrValues) where TEntity : class
-        {
-            var queryExpr = source.Expression;
-            var methodAsc = "OrderBy";
-            var methodDesc = "OrderByDescending";
-
-            var orderByValues = orderByStrValues.Trim().Split(',').Select(x => x.Trim()).ToList();
-
-            foreach (var orderPairCommand in orderByValues)
-            {
-                var command = orderPairCommand.ToUpper().EndsWith("DESC") ? methodDesc : methodAsc;
-
-                //Get propertyname and remove optional ASC or DESC
-                var propertyName = orderPairCommand.Split(' ')[0].Trim();
-
-                var type = typeof(TEntity);
-                var parameter = Expression.Parameter(type, "p");
-
-                PropertyInfo property;
-                MemberExpression propertyAccess;
-
-                var p = Expression.Parameter(typeof(TEntity), "p");
-                var stack = new Stack<Node>();
-                Expression body = p;
-                if (propertyName.Contains('.'))
-                {
-                    // support to be sorted on child fields. 
-                    var childProperties = propertyName.Split('.');
-
-                    property = SearchProperty(typeof(TEntity), childProperties[0]);
-                    if (property == null)
-                        continue;
-
-
-                    for (int i = 0; i < childProperties.Length; i++)
-                    {
-                        if (body.Type.IsGenericType)
-                        {
-                            var genericArgs = body.Type.GetGenericArguments();
-                            if (genericArgs.Length == 1 && typeof(IEnumerable<>)
-                                .MakeGenericType(genericArgs)
-                                .IsAssignableFrom(body.Type))
-                            {
-                                stack.Push(new Node(p, body));
-                                p = Expression.Parameter(genericArgs[0], "s" + stack.Count);
-                                body = p;
-                            }
-                        }
-                        body = Expression.PropertyOrField(body, childProperties[i]);
-                    }
-
-                    while (stack.Count != 0)
-                    {
-                        var childFilter = Expression.Lambda(body, p);
-                        var parent = stack.Pop();
-
-                        var exp = Expression.Call(typeof(Enumerable),
-                            nameof(Enumerable.Any),
-                            new[] { p.Type },
-                            parent.Body,
-                            childFilter);
-
-                        body = exp;
-                        p = parent.Parameter;
-                    }
-                }
-                else
-                {
-                    property = null;
-                    property = SearchProperty(type, propertyName);
-
-                    if (property == null)
-                        continue;
-
-                    propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                }
-
-                var orderByExpression = Expression.Lambda(body, parameter);
-
-                queryExpr = Expression.Call(typeof(IQueryable), command, new Type[] { type, property.PropertyType }, queryExpr, Expression.Quote(orderByExpression));
-
-                methodAsc = "ThenBy";
-                methodDesc = "ThenByDescending";
-            }
-
-            return source.Provider.CreateQuery<TEntity>(queryExpr); ;
-        }
-
         private static PropertyInfo SearchProperty(Type type, string propertyName)
         {
             foreach (var item in type.GetProperties())
@@ -567,11 +479,6 @@ namespace BNS.Utilities
             EndsWith
         }
 
-        public class FilterCriteria : IFilterCriteria
-        {
-
-        }
-
         public class IFilterCriteria
         {
             public string PropertyToCompare { get; set; }
@@ -587,15 +494,6 @@ namespace BNS.Utilities
             Or
         }
 
-        public static class PivotTable
-        {
-            public static PivotTable<TRow, TColumn, TValue> Create<TRow, TColumn, TValue>(Dictionary<TRow, Dictionary<TColumn, TValue>> dictionary)
-            where TRow : IComparable, IEquatable<TRow>
-            where TColumn : IComparable, IEquatable<TColumn>
-            {
-                return new PivotTable<TRow, TColumn, TValue>(dictionary);
-            }
-        }
         public class PivotTable<TRow, TColumn, TValue>
             where TRow : IComparable, IEquatable<TRow>
             where TColumn : IComparable, IEquatable<TColumn>
@@ -616,28 +514,6 @@ namespace BNS.Utilities
             {
                 return _dictionary[row][col];
             }
-        }
-
-        public class Element
-        {
-            public string Name { get; set; }
-            public int Value { get; set; }
-        }
-
-        public static PivotTable<TRow, TColumn, TValue> ToPivot<TItem, TRow, TColumn, TValue>(
-            this IEnumerable<TItem> source,
-            Func<TItem, TRow> rowSelector,
-            Func<TItem, TColumn> colSelector,
-            Func<IEnumerable<TItem>, TValue> aggregatFunc
-        )
-            where TRow : IComparable, IEquatable<TRow>
-            where TColumn : IComparable, IEquatable<TColumn>
-        {
-            var dic = source
-                .GroupBy(rowSelector)
-                .ToDictionary(x => x.Key, x => x.GroupBy(colSelector).ToDictionary(y => y.Key, y => aggregatFunc(y)));
-
-            return PivotTable.Create(dic);
         }
 
         public sealed class ValueKey

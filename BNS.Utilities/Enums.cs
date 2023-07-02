@@ -134,6 +134,8 @@
             DatePicker,
             Number,
             DateTimePicker,
+            TransferList,
+            ListObject
         }
 
         public enum EColumnPosition
@@ -207,7 +209,44 @@
         public enum ENotifyObjectType
         {
             TaskCommentMention,
-            TaskAssigned
+            TaskAssigned,
+            TaskCommentReply
+        }
+
+        public enum EUserType
+        {
+            Individual = 1,
+            Team = 2,
+            Company = 3,
+            Organization = 4
+        }
+
+        public enum EScale
+        {
+            From1To50 = 1,
+            From50To200 = 2,
+            From200To1k = 3,
+            Over1k = 4
+        }
+
+        public enum EProjectType
+        {
+            Basic,
+            Phase
+        }
+
+        public enum ERowStatus
+        {
+            AddNew = 0,
+            Update = 1,
+            NoChange = 2,
+            Delete = 3
+        }
+
+        public enum EStatus
+        {
+            InActive = 0,
+            Active = 1
         }
     }
 }

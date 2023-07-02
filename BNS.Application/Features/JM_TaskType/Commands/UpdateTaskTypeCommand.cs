@@ -8,11 +8,10 @@ using Microsoft.Extensions.Localization;
 
 namespace BNS.Service.Features
 {
-    public class UpdateTaskTypeCommand : Implement.BaseImplement.UpdateRequestHandler<UpdateTaskTypeRequest, JM_TaskType>
+    public class UpdateTaskTypeCommand : UpdateRequestHandler<UpdateTaskTypeRequest, JM_TaskType>
     {
         public UpdateTaskTypeCommand(IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IStringLocalizer<SharedResource> sharedLocalizer) : base(unitOfWork, mapper,sharedLocalizer)
+            IMapper mapper) : base(unitOfWork, mapper)
         {
         }
     }

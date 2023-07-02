@@ -1,4 +1,5 @@
 ﻿using BNS.Domain.Commands;
+using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +21,14 @@ namespace BNS.Api.Controllers
 
         [HttpPost("validate-signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> ValidateSignup(ValidateAddUserRequest request)
+        public async Task<IActionResult> ValidateSignup(ValidateSignupRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost("validate-join")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ValidateJoin(ValidateAddUserRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -58,6 +66,13 @@ namespace BNS.Api.Controllers
         public async Task<IActionResult> ChangePasswordFirst(ChangePasswordFirstLoginRequest request)
         {
             request.UserId = UserId;
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost("check-organization")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckOrganization(CheckOrganizationRequest request)
+        {
             return Ok(await _mediator.Send(request));
         }
     }

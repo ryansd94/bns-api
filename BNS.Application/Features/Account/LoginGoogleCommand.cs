@@ -11,6 +11,7 @@ using BNS.Domain;
 using BNS.Domain.Responses;
 using BNS.Infrastructure;
 using BNS.Domain.Interface;
+using Newtonsoft.Json;
 
 namespace BNS.Service.Features
 {
@@ -20,17 +21,20 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly MyConfiguration _config;
         private static FirebaseAdmin.FirebaseApp _firebaseApp = null;
+        private readonly ICipherService _cipherService;
         private readonly IAccountService _accountService;
 
         public LoginGoogleCommand(
          IUnitOfWork unitOfWork,
          IOptions<MyConfiguration> config,
+         ICipherService CipherService,
          IStringLocalizer<SharedResource> sharedLocalizer,
          IAccountService accountService)
         {
             _unitOfWork = unitOfWork;
             _config = config.Value;
             _sharedLocalizer = sharedLocalizer;
+            _cipherService = CipherService;
             _accountService = accountService;
         }
         private FirebaseAdmin.FirebaseApp DefaultFirebaseApp
@@ -70,11 +74,15 @@ namespace BNS.Service.Features
             var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.Email.Equals(email), x => x.AccountCompanys);
             if (user == null)
             {
+                response.data.Token = _cipherService.EncryptString(JsonConvert.SerializeObject(new JoinTeamResponse
+                {
+                    EmailJoin = infoUser.email.ToString()
+                }));
                 response.errorCode = EErrorCode.UserNotRegister.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserNotRegister];
                 return response;
             }
-            
+
             response.data = await _accountService.GetUserLoginInfo(user);
             return response;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static BNS.Utilities.Enums;
 
 namespace BNS.Data.Entities.JM_Entities
 {
@@ -12,9 +13,10 @@ namespace BNS.Data.Entities.JM_Entities
         public string Icon { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public EProjectType Type { get; set; }
         public virtual IEnumerable<JM_ProjectTeam> JM_ProjectTeams { get; set; }
         public virtual IEnumerable<JM_ProjectMember> JM_ProjectMembers { get; set; }
-        public virtual IEnumerable<JM_Sprint> JM_Sprints { get; set; }
         public virtual IEnumerable<JM_Task> JM_Issues { get; set; }
+        public virtual IEnumerable<JM_ProjectPhase> Sprints { get; set; }
     }
 }

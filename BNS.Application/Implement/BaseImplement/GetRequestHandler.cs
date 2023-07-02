@@ -28,7 +28,7 @@ namespace BNS.Service.Features
 
         public virtual IQueryable<TEntity> GetQueryableData(CommandGetRequest<ApiResultList<TModel>> request)
         {
-            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.IsDelete == false).AsQueryable();
+            return _unitOfWork.Repository<TEntity>().AsNoTracking().Where(s => s.CompanyId == request.CompanyId && s.IsDelete == false).AsQueryable();
         }
 
         public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, CommandGetRequest<ApiResultList<TModel>> request)

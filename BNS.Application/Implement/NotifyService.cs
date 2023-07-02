@@ -1,50 +1,52 @@
-﻿using BNS.Domain;
+﻿using BNS.Data.Entities.JM_Entities;
+using BNS.Domain;
 using BNS.Domain.Interface;
 using BNS.Domain.Responses;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BNS.Service.Implement
 {
     public class NotifyService : INotifyService
     {
-        private readonly MyConfiguration _config;
+        protected readonly INotifyGateway _notifyGateway;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public NotifyService(IOptions<MyConfiguration> config)
+        public NotifyService(INotifyGateway notifyGateway,
+            IUnitOfWork unitOfWork)
         {
-            _config = config.Value;
+            _notifyGateway = notifyGateway;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task SendNotify(List<NotifyResponse> notifyResponses)
+        private async Task InsertDataBeforeSendNotify(List<NotifyResponse> lstNotify, Guid userId, Guid companyId)
         {
-            if (notifyResponses == null || notifyResponses.Count == 0)
-                return;
-            PostData(notifyResponses);
+            var listNotifycation = new List<JM_NotifycationUser>();
+            foreach (var item in lstNotify)
+            {
+                var notifycation = new JM_NotifycationUser
+                {
+                    Content = item.Content,
+                    ObjectId = item.ObjectId,
+                    Type = item.Type,
+                    CompanyId = companyId,
+                    UpdatedUserId = userId,
+                    CreatedUserId = userId,
+                    UserReceivedId = item.UserReceivedId
+                };
+                item.Id = notifycation.Id;
+                listNotifycation.Add(notifycation);
+            }
+            await _unitOfWork.Repository<JM_NotifycationUser>().AddRangeAsync(listNotifycation);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        private async Task PostData(object requestData)
+        public async Task SendNotify(List<NotifyResponse> lstNotify, Guid userId, Guid companyId)
         {
-            using var httpClient = new HttpClient();
-
-
-            // Chuyển đổi dữ liệu thành chuỗi JSON
-            var jsonContent = JsonSerializer.Serialize(requestData);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-            // Gửi yêu cầu POST
-            var response = await httpClient.PostAsync(string.Format("{0}/api/notify", _config.Default.NotifyUrl), content);
-
-            // Xử lý kết quả
-            if (response.IsSuccessStatusCode)
-            {
-            }
-            else
-            {
-            }
+            await InsertDataBeforeSendNotify(lstNotify, userId, companyId);
+            _notifyGateway.SendNotify(lstNotify);
         }
     }
 }

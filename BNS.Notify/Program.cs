@@ -27,6 +27,18 @@ string issuer = appSettings.Tokens.Issuer;
 string signingKey = appSettings.Tokens.Key;
 byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+         {
+             builder
+                 .AllowAnyOrigin()
+                 .AllowAnyHeader()
+                 .AllowAnyMethod()
+                 .AllowCredentials()
+                 .WithOrigins("http://localhost:3000", "http://103.121.89.96:8991", "http://103.121.89.96:8990");
+         });
+});
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -91,30 +103,19 @@ builder.Services.AddAuthentication(opt =>
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
 builder.Services.AddScoped<INotifytHub, NotifyHub>();
-builder.Services.AddScoped<INotifyService, NotifyService>();
+builder.Services.AddScoped<INotifyGateway, NotifyGateway>();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddScoped(typeof(IConnectionMapping<>), typeof(ConnectionMapping<>));
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-      options.Configuration = appSettings.ConnectionStrings.redisConnection;
+    options.Configuration = appSettings.ConnectionStrings.redisConnection;
 });
 builder.Services.AddSignalR();
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-        {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:5001")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        });
-});
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 app.MapGet("/", () => "Hello World!");
-
 app.UseStaticFiles();
-app.UseCors();
 app.UseMiddleware<NotifyMiddleware>();
 app.UseAuthentication();
 app.UseRouting();

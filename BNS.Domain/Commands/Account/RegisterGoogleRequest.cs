@@ -1,5 +1,6 @@
 ﻿using BNS.Domain.Responses;
 using System.ComponentModel.DataAnnotations;
+using static BNS.Utilities.Enums;
 
 namespace BNS.Domain.Commands
 {
@@ -14,5 +15,10 @@ namespace BNS.Domain.Commands
         public string Password { get; set; }
         [Required]
         public string Organization { get; set; }
+        [Required]
+        public string GoogleToken { get; set; }
+        [Required]
+        public EUserType UserType { get; set; }
+        public EScale Scale { get; set; }
     }
 }

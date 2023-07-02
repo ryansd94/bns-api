@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,24 +19,27 @@ namespace BNS.Service.Implement.BaseImplement
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         public UpdateRequestHandler(IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IStringLocalizer<SharedResource> sharedLocalizer)
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _sharedLocalizer = sharedLocalizer;
         }
 
-        public async Task<ApiResult<Guid>> Handle(CommandUpdateBase<ApiResult<Guid>> request, CancellationToken cancellationToken)
+        public virtual IQueryable<TEntity> GetQueryableData(CommandUpdateBase<ApiResult<Guid>> request)
+        {
+            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
+        }
+
+        public virtual async Task<ApiResult<Guid>> Handle(CommandUpdateBase<ApiResult<Guid>> request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.Repository<TEntity>().Where(s => s.Id == request.Id && s.CompanyId == request.CompanyId).FirstOrDefaultAsync();
+            var query = GetQueryableData(request);
+            var dataCheck = await query.FirstOrDefaultAsync();
             if (dataCheck == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
+                response.title = LocalizedBackendMessages.MSG_NotExistsData;
                 return response;
             }
             _mapper.Map(request, dataCheck);
@@ -46,5 +50,20 @@ namespace BNS.Service.Implement.BaseImplement
             response.data = (Guid)dataCheck.GetType().GetProperty("Id").GetValue(dataCheck, null);
             return response;
         }
+        
+        public static void UpdateEntity<T>(T entity, List<ChangeFieldItem> models)
+        {
+            foreach (var item in models)
+            {
+                item.Key = item.Key.Substring(0, 1).ToUpper() + item.Key.Substring(1, item.Key.Length - 1);
+                var entityName = entity.GetType().GetProperty(item.Key);
+                if (entityName != null && item.Type != EControlType.TransferList && item.Type != EControlType.ListObject)
+                {
+                    entityName.SetValue(entity, item.Value);
+                }
+            }
+        }
+
+
     }
 }

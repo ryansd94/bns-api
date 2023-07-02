@@ -9,8 +9,16 @@ namespace BNS.Domain.Responses
         public Guid Id { get; set; }
         public Guid? ObjectId { get; set; }
         public ENotifyObjectType Type { get; set; }
-        public object Content { get; set; }
-        public string AccountId { get; set; }
+        public string Content { get; set; }
+        public Guid UserReceivedId { get; set; }
+        public bool IsRead { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+    }
+
+    public class NotifyUserResponse
+    {
+        public List<NotifyResponse> Items { get; set; }
+        public int Unread { get; set; }
     }
 
     public class NotifyTaskMention

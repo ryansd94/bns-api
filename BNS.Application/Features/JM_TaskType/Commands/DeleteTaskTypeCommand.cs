@@ -17,15 +17,12 @@ namespace BNS.Service.Features
 {
     public class DeleteTaskTypeCommand : IRequestHandler<DeleteTaskTypeRequest, ApiResult<Guid>>
     {
-        protected readonly BNSDbContext _context;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteTaskTypeCommand(BNSDbContext context,
-         IStringLocalizer<SharedResource> sharedLocalizer,
+        public DeleteTaskTypeCommand(IStringLocalizer<SharedResource> sharedLocalizer,
          IUnitOfWork unitOfWork)
         {
-            _context = context;
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
         }
@@ -46,7 +43,7 @@ namespace BNS.Service.Features
                 item.UpdatedUserId = request.UserId;
                 _unitOfWork.Repository<JM_TaskType>().Update(item);
             }
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return response;
         }
     }

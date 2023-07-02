@@ -41,7 +41,13 @@ namespace BNS.Domain.AutoMapper
                     Id = s.TagId,
                     Name = s.Tag.Name,
                 }).ToArray() : null));
-            CreateMap<JM_Project, ProjectResponseItem>();
+
+            CreateMap<SprintRequest, JM_ProjectPhase>();
+            CreateMap<JM_ProjectPhase, SprintReponse>();
+            CreateMap<JM_Project, ProjectResponseItem>()
+                .ForMember(s => s.Teams, o => o.MapFrom(x => x.JM_ProjectTeams.Select(s => s.TeamId).ToList()))
+                .ForMember(s => s.Members, o => o.MapFrom(x => x.JM_ProjectMembers.Select(s => s.UserId).ToList()))
+                .ForMember(s => s.Sprints, o => o.MapFrom(x => x.Sprints.OrderBy(s => s.CreatedDate).Where(s => s.ParentId == null && s.IsDelete == false)));
             CreateMap<JM_Team, TeamResponseItem>()
                 .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.TeamParent != null ? u.TeamParent.Name : string.Empty));
@@ -87,6 +93,8 @@ namespace BNS.Domain.AutoMapper
                     Id = a.ObjectId,
                     ObjectType = a.ObjectType
                 }).ToList()));
+            CreateMap<JM_NotifycationUser, NotifyResponse>();
+            CreateMap<ReadNotifyRequest, JM_NotifycationUser>();
         }
     }
 }

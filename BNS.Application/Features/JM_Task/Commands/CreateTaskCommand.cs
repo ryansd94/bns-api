@@ -6,7 +6,6 @@ using BNS.Domain.Interface;
 using BNS.Domain.Responses;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
-using BNS.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -181,9 +180,6 @@ namespace BNS.Service.Features
             }
             #endregion
 
-
-            await _unitOfWork.SaveChangesAsync();
-
             #region Comments
             if (request.Comments != null && request.Comments.Count > 0)
             {
@@ -193,7 +189,6 @@ namespace BNS.Service.Features
                 }
             }
             #endregion
-
 
             //var project = await _context.JM_Projects.Where(s => s.Id == request.ProjectId).FirstOrDefaultAsync();
             //if (project == null)
@@ -208,15 +203,16 @@ namespace BNS.Service.Features
                 taskType.Color, taskType.Icon, ENotifyObjectType.TaskAssigned);
             if (notifyUserAssigns.Count > 0)
             {
-                _notifyService.SendNotify(notifyUserAssigns);
+                await _notifyService.SendNotify(notifyUserAssigns, request.UserId, request.CompanyId);
             }
             if (userMentionIds.Count > 0)
             {
-                var userAssignIds = notifyUserAssigns.Select(s => s.AccountId.ToString()).ToList();
+                var userAssignIds = notifyUserAssigns.Select(s => s.UserReceivedId.ToString()).ToList();
                 var userNotifyIds = userMentionIds.Where(s => !userAssignIds.Contains(s)).Select(s => Guid.Parse(s)).ToList();
                 var userMentions = await GetNotifyUsers(userNotifyIds, request.UserId, task, taskType.Color, taskType.Icon, ENotifyObjectType.TaskCommentMention);
-                _notifyService.SendNotify(userMentions);
+                await _notifyService.SendNotify(userMentions, request.UserId, request.CompanyId);
             }
+            await _unitOfWork.SaveChangesAsync();
             //response.data = data.Id;
             return response;
         }
@@ -228,13 +224,13 @@ namespace BNS.Service.Features
                 return notifyResponses;
             try
             {
-                var userMentions = await _unitOfWork.Repository<JM_Account>().AsNoTracking().Where(s => userMentionIds.Contains(s.Id)).ToListAsync();
-                var userCreated = await _unitOfWork.Repository<JM_Account>().AsNoTracking().Where(s => s.Id == userCreateId).FirstOrDefaultAsync();
-                if (userCreated != null && userMentions.Count > 0)
+                var userMentions = await _unitOfWork.Repository<JM_Account>().AsNoTracking().Where(s => userMentionIds.Contains(s.Id) && !s.Id.Equals(userCreateId)).ToListAsync();
+                if (userMentions.Count > 0)
                 {
+                    var userCreated = await _unitOfWork.Repository<JM_Account>().AsNoTracking().Where(s => s.Id == userCreateId).FirstOrDefaultAsync();
                     foreach (var item in userMentions)
                     {
-                        var notifyResponse = _taskService.GetNotifyTaskResponse(task.Id, item.Id.ToString(), userCreated, task, taskTypeColor, taskTypeIcon, notifyType);
+                        var notifyResponse = _taskService.GetNotifyTaskResponse(task.Id, item.Id, userCreated, task, taskTypeColor, taskTypeIcon, notifyType);
                         notifyResponses.Add(notifyResponse);
                     }
                 }

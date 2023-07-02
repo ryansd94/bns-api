@@ -29,14 +29,15 @@ namespace BNS.Service.Implement
 
         public virtual IQueryable<TEntity> GetQueryableData(CommandByIdRequest<ApiResult<TModel>> request)
         {
-            return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
+            return _unitOfWork.Repository<TEntity>().AsNoTracking().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
         }
         public async Task<ApiResult<TModel>> Handle(CommandByIdRequest<ApiResult<TModel>> request, CancellationToken cancellationToken)
         {
             var query = GetQueryableData(request);
             var response = new ApiResult<TModel>();
-            var data = await query.Select(s => _mapper.Map<TModel>(s))
-                .FirstOrDefaultAsync();
+            var xxx= query.Select(s => _mapper.Map<TModel>(s));
+            var data = await 
+                xxx.FirstOrDefaultAsync();
 
             if (data == null)
             {

@@ -11,8 +11,7 @@ namespace BNS.Service.Features
     public class UpdateTagCommand : UpdateRequestHandler<UpdateTagRequest, JM_Tag>
     {
         public UpdateTagCommand(IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IStringLocalizer<SharedResource> sharedLocalizer) : base(unitOfWork, mapper,sharedLocalizer)
+            IMapper mapper) : base(unitOfWork, mapper)
         {
         }
     }

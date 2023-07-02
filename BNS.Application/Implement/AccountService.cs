@@ -40,13 +40,15 @@ namespace BNS.Service.Implement
             var result = new LoginResponse();
             var userCompanys = await _unitOfWork.Repository<JM_AccountCompany>().Include(s => s.JM_Company).Where(s => s.UserId == user.Id && s.Status == EUserStatus.ACTIVE).ToListAsync();
             var userCompany = userCompanys.Where(s => s.IsDefault).FirstOrDefault();
-            var viewPermissions = await GetViewPermissionByUser(userCompany.Id, userCompany.TeamId);
-            //var projects = await _unitOfWork.Repository<JM_ProjectMember>().Include(s => s.JM_Project).Where(s => s.UserId == user.Id).Select(s => _mapper.Map<ProjectResponseItem>(s.JM_Project)).ToListAsync();
-            var roles = new List<string>();
-
-            var domain = JsonConvert.SerializeObject(userCompanys.Select(s => s.JM_Company.Organization).ToList());
-            var claims = new[]
+            if (userCompany != null)
             {
+                var viewPermissions = await GetViewPermissionByUser(userCompany.Id, userCompany.TeamId);
+                //var projects = await _unitOfWork.Repository<JM_ProjectMember>().Include(s => s.JM_Project).Where(s => s.UserId == user.Id).Select(s => _mapper.Map<ProjectResponseItem>(s.JM_Project)).ToListAsync();
+                var roles = new List<string>();
+
+                var domain = JsonConvert.SerializeObject(userCompanys.Select(s => s.JM_Company.Organization).ToList());
+                var claims = new[]
+                {
                 new Claim(ClaimTypes.GivenName, user.UserName),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(EClaimType.UserId.ToString(), user.Id.ToString()),
@@ -58,25 +60,26 @@ namespace BNS.Service.Implement
                 new Claim(EClaimType.Organization.ToString(), domain),
                 new Claim(EClaimType.IsMainAccount.ToString(), userCompany.IsMainAccount.ToString())
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_config.Tokens.Issuer
-                , _config.Tokens.Issuer
-                , claims
-                , expires: DateTime.UtcNow.AddDays(1)
-                , signingCredentials: creds
-                );
+                var token = new JwtSecurityToken(_config.Tokens.Issuer
+                    , _config.Tokens.Issuer
+                    , claims
+                    , expires: DateTime.UtcNow.AddDays(1)
+                    , signingCredentials: creds
+                    );
 
-            result.IsMainAccount = userCompany.IsMainAccount;
-            result.DefaultOrganization = userCompany?.JM_Company.Organization;
-            result.UserId = user.Id.ToString();
-            result.AccountCompanyId = userCompany.Id.ToString();
-            result.FullName = user.FullName;
-            result.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
-            result.Image = user.Image;
-            result.ViewPermissions = viewPermissions;
-            result.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                result.IsMainAccount = userCompany.IsMainAccount;
+                result.DefaultOrganization = userCompany?.JM_Company.Organization;
+                result.UserId = user.Id.ToString();
+                result.AccountCompanyId = userCompany.Id.ToString();
+                result.FullName = user.FullName;
+                result.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
+                result.Image = user.Image;
+                result.ViewPermissions = viewPermissions;
+                result.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            }
             return result;
         }
 
@@ -129,7 +132,7 @@ namespace BNS.Service.Implement
             var permissions = await GetViewPermissionByUser(accountCompanyId, teamId);
             if (permissions != null && permissions.Count > 0)
             {
-                var permissionByController = permissions.Where(s => s.View.Equals(controller)).FirstOrDefault();
+                var permissionByController = permissions.Where(s => s.View.ToLower().Equals(controller.ToLower())).FirstOrDefault();
                 if (permissionByController == null)
                     return false;
 

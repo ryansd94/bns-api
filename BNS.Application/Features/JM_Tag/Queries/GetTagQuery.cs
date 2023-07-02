@@ -55,7 +55,7 @@ namespace BNS.Service.Features
             if (!request.isGetAll)
                 query = query.Skip(request.start).Take(request.length);
 
-            var rs = await query.Select(d => _mapper.Map<TagResponseItem>(d)).ToListAsync();
+            var rs = await query.ToListAsync();
             response.data.Items = rs;
             return response;
         }

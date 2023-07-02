@@ -1,5 +1,4 @@
-﻿using BNS.Data.EntityContext;
-using BNS.Resource;
+﻿using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using BNS.Domain;
 using MediatR;
@@ -11,25 +10,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Service.Features
 {
     public class DeleteJM_SprintCommand : IRequestHandler<DeleteJM_SprintRequest, ApiResult<Guid>>
     {
-        protected readonly BNSDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public DeleteJM_SprintCommand(BNSDbContext context,
+        public DeleteJM_SprintCommand(IUnitOfWork unitOfWork,
          IStringLocalizer<SharedResource> sharedLocalizer)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _sharedLocalizer = sharedLocalizer;
         }
         public async Task<ApiResult<Guid>> Handle(DeleteJM_SprintRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataChecks = await _context.JM_Sprints.Where(s => request.ids.Contains(s.Id)).ToListAsync();
-            if (dataChecks == null || dataChecks.Count() ==0)
+            var dataChecks = await _unitOfWork.Repository<JM_ProjectPhase>().Where(s => request.ids.Contains(s.Id)).ToListAsync();
+            if (dataChecks == null || dataChecks.Count() == 0)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
@@ -40,9 +40,9 @@ namespace BNS.Service.Features
                 item.IsDelete = true;
                 item.UpdatedDate = DateTime.UtcNow;
                 item.UpdatedUserId = request.UserId;
-                _context.JM_Sprints.Update(item);
+                _unitOfWork.Repository<JM_ProjectPhase>().Update(item);
             }
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return response;
         }
 

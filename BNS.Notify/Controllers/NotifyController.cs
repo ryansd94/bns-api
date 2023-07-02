@@ -12,11 +12,18 @@ namespace BNS.Notify.Controllers
     public class NotifyController : ControllerBase
     {
         protected readonly INotifytHub _notifyHub;
-        protected readonly INotifyService _notifyService;
-        public NotifyController(INotifytHub notifyHub, INotifyService notifyService)
+        protected readonly INotifyGateway _notifyService;
+        public NotifyController(INotifytHub notifyHub, INotifyGateway notifyService)
         {
             _notifyHub = notifyHub;
             _notifyService = notifyService;
+        }
+
+        
+        [HttpGet]
+        public string Get()
+        {
+            return "aaaaaaa";
         }
 
         // POST api/<ValuesController>
@@ -25,7 +32,7 @@ namespace BNS.Notify.Controllers
         {
             foreach (var item in request)
             {
-                _notifyHub.SendNotify(item.AccountId, item);
+                _notifyHub.SendNotify(item.UserReceivedId.ToString(), item);
             }
         }
     }

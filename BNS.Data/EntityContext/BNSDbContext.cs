@@ -52,9 +52,8 @@ namespace BNS.Data.EntityContext
 
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectTeams);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
-            modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Sprints);
+            //modelBuilder.Entity<JM_Project>().HasMany(x => x.Sprints);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Issues);
-            modelBuilder.Entity<JM_Sprint>().HasMany(x => x.JM_Issues);
 
             modelBuilder.Entity<JM_Template>().HasMany(x => x.TemplateStatus);
 
@@ -110,9 +109,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<JM_Project> JM_Projects { get; set; }
         public virtual DbSet<JM_ProjectTeam> JM_ProjectTeams { get; set; }
         public virtual DbSet<JM_ProjectMember> JM_ProjectMembers { get; set; }
-        public virtual DbSet<JM_ProjectSprint> JM_ProjectSprints { get; set; }
         public virtual DbSet<JM_Template> JM_Templates { get; set; }
-        public virtual DbSet<JM_Sprint> JM_Sprints { get; set; }
         public virtual DbSet<JM_Task> JM_Tasks { get; set; }
         public virtual DbSet<JM_Company> JM_Companys { get; set; }
         public virtual DbSet<JM_AccountCompany> JM_AccountCompanys { get; set; }
@@ -134,5 +131,7 @@ namespace BNS.Data.EntityContext
         public virtual DbSet<SYS_ViewPermission> SYS_ViewPermissions { get; set; }
         public virtual DbSet<SYS_ViewPermissionAction> SYS_ViewPermissionActions { get; set; }
         public virtual DbSet<SYS_ViewPermissionActionDetail> SYS_ViewPermissionActionDetails { get; set; }
+        public virtual DbSet<JM_Notifycation> JM_Notifycations { get; set; }
+        public virtual DbSet<JM_NotifycationUser> JM_NotifycationUsers { get; set; }
     }
 }

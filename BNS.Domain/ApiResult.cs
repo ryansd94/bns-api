@@ -22,6 +22,7 @@ namespace BNS.Domain
         public int recordsTotal { get; set; }
         public T data { get; set; } = Activator.CreateInstance<T>();
     }
+
     public class ApiResultList<T>
     {
         public ApiResultList()
@@ -42,6 +43,10 @@ namespace BNS.Domain
 
     public class DynamicDataItem<T>
     {
+        public DynamicDataItem()
+        {
+            Items = new List<T>();
+        }
         public List<T> Items { get; set; }
     }
 }

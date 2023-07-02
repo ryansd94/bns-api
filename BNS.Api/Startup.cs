@@ -63,9 +63,9 @@ namespace BNS.Api
                         builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials()
-                        .WithOrigins("http://localhost:3000");
+                        .AllowAnyHeader();
+                        //.AllowCredentials()
+                        //.WithOrigins(appSettings.Default.WebUserDomain);
                     });
             });
             services.AddDbContext<BNSDbContext>(
@@ -191,12 +191,7 @@ namespace BNS.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(builder => builder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "http://localhost:54568"));
+            app.UseCors("AllowAll");
             var supportedCultures = new List<CultureInfo>
             {
                    new CultureInfo("vi-VN"),

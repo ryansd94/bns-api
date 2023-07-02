@@ -41,6 +41,7 @@ namespace BNS.Service.Features
                    Email = s.Account != null ? s.Account.Email : string.Empty,
                    Status = s.Status,
                    FullName = s.Account != null ? s.Account.FullName : string.Empty,
+                   Name = s.Account != null ? s.Account.FullName : string.Empty,
                    Id = s.Account.Id,
                    CreatedDate = s.CreatedDate,
                    IsMainAccount = s.IsMainAccount,

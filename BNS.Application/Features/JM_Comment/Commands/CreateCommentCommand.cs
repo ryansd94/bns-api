@@ -11,7 +11,6 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using BNS.Utilities;
 using System.Collections.Generic;
 using BNS.Domain.Interface;
 using BNS.Domain.Responses;
@@ -36,31 +35,58 @@ namespace BNS.Service.Features
             _notifyService = notifyService;
             _taskService = taskService;
         }
+
         public async Task<ApiResult<Guid>> Handle(CreateCommentRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.Repository<JM_Task>().FirstOrDefaultAsync(s => s.Id == request.TaskId && s.CompanyId == request.CompanyId);
-            if (dataCheck == null)
+            var dataTask = await _unitOfWork.Repository<JM_Task>().Include(s => s.TaskType).FirstOrDefaultAsync(s => s.Id == request.TaskId && s.CompanyId == request.CompanyId);
+            if (dataTask == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                 return response;
             }
 
+            var lstDataNotify = new List<NotifyResponse>();
             var lstNotify = await InsertComment(new TaskCommentRequest
             {
                 Id = request.Id,
                 Value = request.Value
             }, request.ParentId, request.CompanyId, request.UserId, request.TaskId);
 
+            #region send notify user if reply comment
+
+            if (request.ParentId != null)
+            {
+                var parentComment = await _unitOfWork.Repository<JM_Comment>().FirstOrDefaultAsync(s => s.Id == request.ParentId.Value && !s.IsDelete);
+                if (parentComment != null && parentComment.CreatedUserId != request.UserId)
+                {
+                    var userMenton = await _unitOfWork.Repository<JM_Account>().Where(s => s.Id == request.UserId).FirstOrDefaultAsync();
+                    var notifyReply = _taskService.GetNotifyTaskResponse(request.Id, parentComment.CreatedUserId, userMenton, dataTask, ENotifyObjectType.TaskCommentReply);
+                    lstDataNotify.Add(notifyReply);
+                }
+            }
+
+            #endregion
+
             if (lstNotify.Count > 0)
             {
-                _notifyService.SendNotify(lstNotify);
+                var userReceivedIds = lstDataNotify.Select(s => s.UserReceivedId).ToList();
+                lstDataNotify.AddRange(lstNotify.Where(s => !userReceivedIds.Contains(s.UserReceivedId)).ToList());
             }
+
+            #region send notify to users mention in comment
+
+            if (lstDataNotify.Count > 0)
+            {
+                await _notifyService.SendNotify(lstDataNotify, request.UserId, request.CompanyId);
+            }
+
+            #endregion
+
             response = await _unitOfWork.SaveChangesAsync();
             return response;
         }
-
 
         private async Task<List<NotifyResponse>> InsertComment(TaskCommentRequest commentRequest, Guid? parentId, Guid CompanyId, Guid userId, Guid taskID)
         {

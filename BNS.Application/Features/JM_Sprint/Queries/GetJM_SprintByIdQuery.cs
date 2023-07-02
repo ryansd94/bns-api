@@ -10,6 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Queries;
+using Microsoft.EntityFrameworkCore;
+using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Service.Features
 {
@@ -31,7 +33,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<SprintResponseItem>> Handle(GetJM_SprintByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<SprintResponseItem>();
-            var data = await _unitOfWork.JM_SprintRepository.FirstOrDefaultAsync(s => s.Id == request.Id &&
+            var data = await _unitOfWork.Repository<JM_ProjectPhase>().FirstOrDefaultAsync(s => s.Id == request.Id &&
              !s.IsDelete);
             if (data == null)
             {

@@ -18,6 +18,7 @@ using BNS.Domain.Responses;
 using BNS.Domain;
 using BNS.Infrastructure;
 using BNS.Utilities;
+using BNS.Domain.Interface;
 
 namespace BNS.Service.Features
 {
@@ -27,15 +28,18 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly MyConfiguration _config;
         private static FirebaseAdmin.FirebaseApp _firebaseApp = null;
+        private readonly IAccountService _accountService;
 
         public RegisterWithGoogleCommand(
          IUnitOfWork unitOfWork,
          IOptions<MyConfiguration> config,
-         IStringLocalizer<SharedResource> sharedLocalizer)
+         IStringLocalizer<SharedResource> sharedLocalizer,
+         IAccountService accountService)
         {
             _unitOfWork = unitOfWork;
             _config = config.Value;
             _sharedLocalizer = sharedLocalizer;
+            _accountService = accountService;
         }
         private FirebaseAdmin.FirebaseApp DefaultFirebaseApp
         {
@@ -62,7 +66,7 @@ namespace BNS.Service.Features
         {
             var response = new ApiResult<LoginResponse>();
 
-            var infoUser = await Firebase.CheckTokenGoogle(request.Token, DefaultFirebaseApp);
+            var infoUser = await Firebase.CheckTokenGoogle(request.GoogleToken, DefaultFirebaseApp);
             if (infoUser == null)
             {
                 response.errorCode = EErrorCode.Failed.ToString();
@@ -88,7 +92,9 @@ namespace BNS.Service.Features
                 IsDelete = false,
                 CreatedDate = DateTime.UtcNow,
                 Name = email.ToString().Split("@")[0],
-                Organization= request.Organization
+                Organization = request.Organization,
+                UserType = request.UserType,
+                Scale = request.Scale
             };
 
             user = new JM_Account
@@ -131,28 +137,8 @@ namespace BNS.Service.Features
             await _unitOfWork.JM_AccountCompanyRepository.AddAsync(accountCompany);
             await _unitOfWork.SaveChangesAsync();
 
-
-            var roles = new List<string>();
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.GivenName, user.UserName),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("UserId", user.Id.ToString()),
-                new Claim("CompanyId", companyId.ToString()),
-                new Claim("Role",string.Join(";",roles))
-                };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(_config.Tokens.Issuer
-                , _config.Tokens.Issuer
-                , claims
-                , expires: DateTime.UtcNow.AddDays(1)
-                , signingCredentials: creds
-                );
-            response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            response.data = await _accountService.GetUserLoginInfo(user);
             return response;
         }
-
     }
 }

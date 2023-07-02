@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
@@ -27,27 +28,26 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(CreateJM_SprintRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.JM_SprintRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name)
+            var dataCheck = await _unitOfWork.Repository<JM_ProjectPhase>().FirstOrDefaultAsync(s => s.Name.Equals(request.Name)
             && s.CompanyId == request.CompanyId
-            && s.JM_ProjectId == request.JM_ProjectId);
+            && s.ProjectId == request.JM_ProjectId);
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
                 return response;
             }
-            var data = new JM_Sprint
+            var data = new JM_ProjectPhase
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
-                Description = request.Description,
-                JM_ProjectId = request.JM_ProjectId,
+                ProjectId = request.JM_ProjectId,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUserId = request.UserId,
             };
-            await _unitOfWork.JM_SprintRepository.AddAsync(data);
+            await _unitOfWork.Repository<JM_ProjectPhase>().AddAsync(data);
             response = await _unitOfWork.SaveChangesAsync();
             return response;
         }

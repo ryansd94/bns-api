@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static BNS.Utilities.Enums;
 
 namespace BNS.Data.Entities.JM_Entities
 {
@@ -19,6 +20,8 @@ namespace BNS.Data.Entities.JM_Entities
         public string Address { get; set; }
         public double? Lat { get; set; }
         public double? Long { get; set; }
+        public EUserType UserType { get; set; }
+        public EScale Scale { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public Guid? UpdatedUser { get; set; }
         public DateTime CreatedDate { get; set; }

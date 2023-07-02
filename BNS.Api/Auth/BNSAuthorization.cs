@@ -75,6 +75,13 @@ namespace BNS.Api.Auth
                     query = query.Add("isMainAccount", isMainAccount.ToString());
                     context.HttpContext.Request.QueryString = query;
                 }
+                else if (method == "DELETE")
+                {
+                    var query = context.HttpContext.Request.QueryString;
+                    query = query.Add("CompanyId", companyId.Value);
+                    query = query.Add("UserId", userId.Value);
+                    context.HttpContext.Request.QueryString = query;
+                }
                 else if (method == "POST" || method == "PUT")
                 {
                     var bodyStr = "";
