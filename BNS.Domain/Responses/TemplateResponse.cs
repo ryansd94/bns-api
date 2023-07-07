@@ -1,4 +1,5 @@
 ﻿using BNS.Data.Entities.JM_Entities;
+using System;
 using System.Collections.Generic;
 
 namespace BNS.Domain.Responses
@@ -13,6 +14,6 @@ namespace BNS.Domain.Responses
         public string Description { get; set; }
         public string IssueType { get; set; }
         public string Content { get; set; }
-        public virtual ICollection<JM_Status> Status { get; set; }
+        public virtual List<Guid> Status { get; set; }
     }
 }

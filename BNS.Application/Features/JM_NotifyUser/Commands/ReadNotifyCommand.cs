@@ -20,7 +20,7 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
         }
 
-        public override IQueryable<JM_NotifycationUser> GetQueryableData(CommandUpdateBase<ApiResult<Guid>> request)
+        public override IQueryable<JM_NotifycationUser> GetQueryableData(ReadNotifyRequest request)
         {
             return _unitOfWork.Repository<JM_NotifycationUser>().Where(s => s.Id == request.Id && s.UserReceivedId == request.UserId);
         }

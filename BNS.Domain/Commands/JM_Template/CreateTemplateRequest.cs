@@ -10,7 +10,7 @@ namespace BNS.Domain.Commands
         public string Name { get; set; }
         public string Description { get; set; }
         public JM_ColumnItemRoot Content { get; set; }
-        public List<StatusItem> Status { get; set; }
+        public List<Guid> Status { get; set; }
     }
 
     public class StatusItem

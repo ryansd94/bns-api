@@ -7,10 +7,11 @@ using BNS.Data.Entities.JM_Entities;
 using BNS.Service.Implement;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetProjectByIdQuery : GetRequestByIdHandler<ProjectResponseItem, JM_Project>
+    public class GetProjectByIdQuery : GetRequestByIdHandler<ProjectResponseItem, JM_Project, GetProjectByIdRequest>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -22,7 +23,7 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
         }
 
-        public override IQueryable<JM_Project> GetQueryableData(CommandByIdRequest<ApiResult<ProjectResponseItem>> request)
+        public override IQueryable<JM_Project> GetQueryableData(GetProjectByIdRequest request)
         {
             return _unitOfWork.Repository<JM_Project>()
                 .Include(s => s.Sprints)

@@ -21,7 +21,7 @@ namespace BNS.Domain.Commands
         public bool @default { get; set; }
         public string prefix { get; set; }
         public bool defaultReadonly { get; set; }
-        public bool required { get; set; }
+        public bool? required { get; set; }
         public bool isHidenWhenCreate { get; set; }
         public List<JM_ColumnItem> items { get; set; }
     }

@@ -52,23 +52,8 @@ namespace BNS.Service.Features
             if (request.Status != null && request.Status.Count > 0)
             {
                 var templateStatusOrder = 0;
-                foreach (var item in request.Status)
+                foreach (var statusId in request.Status)
                 {
-                    var statusId = item.Id;
-                    if (item.IsNew == true)
-                    {
-                        var status = new JM_Status
-                        {
-                            Id = Guid.NewGuid(),
-                            Name = item.Name,
-                            Color = item.Color,
-                            CreatedDate = DateTime.UtcNow,
-                            CreatedUserId = request.UserId,
-                            CompanyId = request.CompanyId,
-                        };
-                        statusId = status.Id;
-                        await _unitOfWork.Repository<JM_Status>().AddAsync(status);
-                    }
                     var templateStatus = new JM_TemplateStatus
                     {
                         Id = Guid.NewGuid(),
@@ -178,7 +163,6 @@ namespace BNS.Service.Features
                                             Name = child.label
                                         };
                                         await _unitOfWork.Repository<JM_CustomColumn>().AddAsync(column);
-                                        //await _unitOfWork.SaveChangesAsync();
                                     }
 
                                     var templateChildDetail = new JM_TemplateDetail
@@ -206,13 +190,13 @@ namespace BNS.Service.Features
                     }
                 }
 
-                var xxxx = new JM_ColumnItemRoot
+                var content = new JM_ColumnItemRoot
                 {
                     column1 = columnObjects.Where(s => s.ColumnPosition == EColumnPosition.Column1).FirstOrDefault()?.Column,
                     column2 = columnObjects.Where(s => s.ColumnPosition == EColumnPosition.Column2).FirstOrDefault()?.Column,
                     column3 = columnObjects.Where(s => s.ColumnPosition == EColumnPosition.Column3).FirstOrDefault()?.Column,
                 };
-                template.Content = Newtonsoft.Json.JsonConvert.SerializeObject(xxxx);
+                template.Content = Newtonsoft.Json.JsonConvert.SerializeObject(content);
             }
             //return response;
             await _unitOfWork.Repository<JM_Template>().AddAsync(template);

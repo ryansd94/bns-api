@@ -13,7 +13,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Implement.BaseImplement
 {
-    public class DeleteRequestHandler<TModel, TEntity> : IRequestHandler<CommandDeleteBase<ApiResult<Guid>>, ApiResult<Guid>> where TEntity : BaseJMEntity
+    public class DeleteRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest, ApiResult<Guid>> where TEntity : BaseJMEntity where TRequest : CommandDeleteBase<ApiResult<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -24,7 +24,7 @@ namespace BNS.Service.Implement.BaseImplement
             _sharedLocalizer = sharedLocalizer;
         }
 
-        public async Task<ApiResult<Guid>> Handle(CommandDeleteBase<ApiResult<Guid>> request, CancellationToken cancellationToken)
+        public async Task<ApiResult<Guid>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var dataChecks = await _unitOfWork.Repository<TEntity>().Where(s => request.ids.Contains(s.Id) && s.CompanyId == request.CompanyId).ToListAsync();

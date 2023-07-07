@@ -11,7 +11,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Features
 {
-    public class GetRequestHandler<TModel, TEntity> : IRequestHandler<CommandGetRequest<ApiResultList<TModel>>, ApiResultList<TModel>> where TEntity : BaseJMEntity
+    public class GetRequestHandler<TModel, TEntity, TRequest> : IRequestHandler<TRequest, ApiResultList<TModel>> where TEntity : BaseJMEntity where TRequest : CommandGetRequest<ApiResultList<TModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -26,12 +26,12 @@ namespace BNS.Service.Features
             return query.Select(s => _mapper.Map<TModel>(s));
         }
 
-        public virtual IQueryable<TEntity> GetQueryableData(CommandGetRequest<ApiResultList<TModel>> request)
+        public virtual IQueryable<TEntity> GetQueryableData(TRequest request)
         {
             return _unitOfWork.Repository<TEntity>().AsNoTracking().Where(s => s.CompanyId == request.CompanyId && s.IsDelete == false).AsQueryable();
         }
 
-        public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, CommandGetRequest<ApiResultList<TModel>> request)
+        public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, TRequest request)
         {
             var response = new ApiResultList<TModel>();
             response.data = new DynamicDataItem<TModel>();
@@ -45,7 +45,7 @@ namespace BNS.Service.Features
             return response;
         }
 
-        public async Task<ApiResultList<TModel>> Handle(CommandGetRequest<ApiResultList<TModel>> request, CancellationToken cancellationToken)
+        public async Task<ApiResultList<TModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var query = GetQueryableData(request);
             query = query.WhereOr(request.filters, request.defaultFilters);
@@ -63,6 +63,5 @@ namespace BNS.Service.Features
             var rs = await ReturnData(query, request);
             return rs;
         }
-
     }
 }

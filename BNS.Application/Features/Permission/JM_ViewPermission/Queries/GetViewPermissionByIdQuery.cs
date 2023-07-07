@@ -7,10 +7,11 @@ using BNS.Data.Entities.JM_Entities;
 using BNS.Service.Implement;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using BNS.Domain.Queries;
 
 namespace BNS.Service.Features
 {
-    public class GetViewPermissionByIdQuery : GetRequestByIdHandler<ViewPermissionByIdResponse, SYS_ViewPermission>
+    public class GetViewPermissionByIdQuery : GetRequestByIdHandler<ViewPermissionByIdResponse, SYS_ViewPermission, GetViewPermissionByIdRequest>
     {
         private readonly IUnitOfWork _unitOfWork;
         public GetViewPermissionByIdQuery(
@@ -21,7 +22,7 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
         }
 
-        public override IQueryable<SYS_ViewPermission> GetQueryableData(CommandByIdRequest<ApiResult<ViewPermissionByIdResponse>> request)
+        public override IQueryable<SYS_ViewPermission> GetQueryableData(GetViewPermissionByIdRequest request)
         {
             var query = _unitOfWork.Repository<SYS_ViewPermission>()
                     .Include(s => s.ViewPermissionObjects)

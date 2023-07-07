@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
-using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +13,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Implement.BaseImplement
 {
-    public class UpdateRequestHandler<TModel, TEntity> : IRequestHandler<CommandUpdateBase<ApiResult<Guid>>, ApiResult<Guid>> where TEntity : BaseJMEntity
+    public class UpdateRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest, ApiResult<Guid>> where TEntity : BaseJMEntity where TRequest: CommandUpdateBase<ApiResult<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -26,12 +24,12 @@ namespace BNS.Service.Implement.BaseImplement
             _mapper = mapper;
         }
 
-        public virtual IQueryable<TEntity> GetQueryableData(CommandUpdateBase<ApiResult<Guid>> request)
+        public virtual IQueryable<TEntity> GetQueryableData(TRequest request)
         {
             return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
         }
 
-        public virtual async Task<ApiResult<Guid>> Handle(CommandUpdateBase<ApiResult<Guid>> request, CancellationToken cancellationToken)
+        public virtual async Task<ApiResult<Guid>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var query = GetQueryableData(request);

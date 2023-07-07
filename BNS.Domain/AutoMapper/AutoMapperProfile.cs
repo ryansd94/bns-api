@@ -51,7 +51,7 @@ namespace BNS.Domain.AutoMapper
             CreateMap<JM_Team, TeamResponseItem>()
                 .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.TeamParent != null ? u.TeamParent.Name : string.Empty));
-            CreateMap<JM_Template, TemplateResponseItem>().ForMember(s => s.Status, d => d.MapFrom(u => u.TemplateStatus.Select(r => r.Status)));
+            CreateMap<JM_Template, TemplateResponseItem>().ForMember(s => s.Status, d => d.MapFrom(u => u.TemplateStatus.Select(r => r.StatusId)));
             CreateMap<JM_TaskType, TaskTypeItem>().ForMember(a => a.Template, opt => opt.MapFrom(src => src.Template));
             CreateMap<JM_AccountCompany, UserResponseItem>().ForMember
     (dest => dest.FullName, opt => opt.MapFrom(src => src.Status == Utilities.Enums.EUserStatus.WAILTING_CONFIRM_MAIL ? string.Empty : src.Account.FullName)); ;

@@ -44,20 +44,7 @@ namespace BNS.Api
             services.AddScoped<INotifyGateway, NotifyGateway>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IRequestHandler<GetTaskRequest, ApiResultList<TaskItem>>, GetTaskQuery>();
             
-            services.AddScoped<IRequestHandler<UpdateProjectRequest, ApiResult<Guid>>, UpdateProjectCommand>();
-            services.AddScoped<IRequestHandler<UpdateTaskTypeRequest, ApiResult<Guid>>, UpdateTaskTypeCommand>();
-            services.AddScoped<IRequestHandler<UpdateStatusRequest, ApiResult<Guid>>, UpdateStatusCommand>();
-            services.AddScoped<IRequestHandler<UpdateTagRequest, ApiResult<Guid>>, UpdateTagCommand>();
-            services.AddScoped<IRequestHandler<UpdatePriorityRequest, ApiResult<Guid>>, UpdatePriorityCommand>();
-            services.AddScoped<IRequestHandler<ReadNotifyRequest, ApiResult<Guid>>, ReadNotifyCommand>();
-
-            services.AddScoped<IRequestHandler<DeletePriorityRequest, ApiResult<Guid>>, DeletePriorityCommand>();
-            services.AddScoped<IRequestHandler<GetProjectByUserIdRequest, ApiResultList<ProjectResponseItem>>, GetProjectByUserIdQuery>();
-            services.AddScoped<IRequestHandler<GetProjectByIdRequest, ApiResult<ProjectResponseItem>>, GetProjectByIdQuery>();
-            services.AddScoped<IRequestHandler<GetViewPermissionRequest, ApiResultList<ViewPermissionResponseItem>>, GetViewPermissionQuery>();
-            services.AddScoped<IRequestHandler<GetViewPermissionByIdRequest, ApiResult<ViewPermissionByIdResponse>>, GetViewPermissionByIdQuery>();
             services.AddTransient<BNSDbContext>();
             services.AddDbContext<BNSDbContext>();
             services.AddScoped(typeof(IConnectionMapping<>), typeof(ConnectionMapping<>));

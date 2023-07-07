@@ -13,7 +13,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Implement
 {
-    public class GetRequestByIdHandler<TModel, TEntity> : IRequestHandler<CommandByIdRequest<ApiResult<TModel>>, ApiResult<TModel>> where TEntity : BaseJMEntity
+    public class GetRequestByIdHandler<TModel, TEntity, TRequest> : IRequestHandler<TRequest, ApiResult<TModel>> where TEntity : BaseJMEntity where TRequest : CommandByIdRequest<ApiResult<TModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,11 +27,11 @@ namespace BNS.Service.Implement
             _sharedLocalizer = sharedLocalizer;
         }
 
-        public virtual IQueryable<TEntity> GetQueryableData(CommandByIdRequest<ApiResult<TModel>> request)
+        public virtual IQueryable<TEntity> GetQueryableData(TRequest request)
         {
             return _unitOfWork.Repository<TEntity>().AsNoTracking().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
         }
-        public async Task<ApiResult<TModel>> Handle(CommandByIdRequest<ApiResult<TModel>> request, CancellationToken cancellationToken)
+        public async Task<ApiResult<TModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var query = GetQueryableData(request);
             var response = new ApiResult<TModel>();

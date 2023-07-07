@@ -1,7 +1,6 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Resource.LocalizationResources;
 using BNS.Domain;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -32,7 +31,7 @@ namespace BNS.Service.Features
             _projectService = projectService;
         }
 
-        public override async Task<ApiResult<Guid>> Handle(CommandUpdateBase<ApiResult<Guid>> request, CancellationToken cancellationToken)
+        public override async Task<ApiResult<Guid>> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.Repository<JM_Project>().Where(s => s.Id == request.Id).FirstOrDefaultAsync();
@@ -83,7 +82,7 @@ namespace BNS.Service.Features
 
             if (member != null)
             {
-                var value = (ChangeFieldTransferItem)member.Value;
+                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem>(member.Value.ToString());
                 foreach (var item in value.AddValues)
                 {
                     await _unitOfWork.Repository<JM_ProjectMember>().AddAsync(new JM_ProjectMember

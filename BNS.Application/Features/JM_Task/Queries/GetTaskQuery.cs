@@ -3,6 +3,7 @@ using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Domain.Commands;
+using BNS.Domain.Queries;
 using BNS.Domain.Responses;
 using BNS.Resource;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BNS.Service.Features
 {
-    public class GetTaskQuery : GetRequestHandler<TaskItem, JM_Task>
+    public class GetTaskQuery : GetRequestHandler<TaskItem, JM_Task, GetTaskRequest>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IMapper _mapper;
@@ -71,7 +72,7 @@ namespace BNS.Service.Features
             return queryData;
         }
 
-        public override IQueryable<JM_Task> GetQueryableData(CommandGetRequest<ApiResultList<TaskItem>> request)
+        public override IQueryable<JM_Task> GetQueryableData(GetTaskRequest request)
         {
             var query = _unitOfWork.Repository<JM_Task>()
                 .Include(s => s.TaskUsers)
