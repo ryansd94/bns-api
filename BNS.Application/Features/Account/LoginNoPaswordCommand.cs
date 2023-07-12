@@ -18,6 +18,7 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using BNS.Domain.Responses;
 using Newtonsoft.Json;
+using BNS.Domain.Interface;
 
 namespace BNS.Service.Features
 {
@@ -26,14 +27,18 @@ namespace BNS.Service.Features
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
         protected readonly MyConfiguration _config;
+        private readonly IAccountService _accountService;
+
         public LoginNoPaswordCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
-         IUnitOfWork unitOfWork)
+         IUnitOfWork unitOfWork,
+         IAccountService accountService)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
             _config = config.Value;
+            _accountService = accountService;
         }
         public async Task<ApiResult<LoginResponse>> Handle(LoginNoPasswordRequest request, CancellationToken cancellationToken)
         {
@@ -80,9 +85,8 @@ namespace BNS.Service.Features
                 , expires: DateTime.UtcNow.AddDays(1)
                 , signingCredentials: creds
                 );
-            response.data.DefaultOrganization = userCompany?.JM_Company.Organization;
-            response.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
-            response.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
+
+            response.data = await _accountService.GetUserLoginInfo(user);
             return response;
         }
     }

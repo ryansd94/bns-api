@@ -7,6 +7,7 @@ using BNS.Resource;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,6 +38,24 @@ namespace BNS.Service.Features
              (request.IsDelete == null || (request.IsDelete != null && s.IsDelete == request.IsDelete.Value)) && s.CompanyId == request.CompanyId);
 
             var rs = _mapper.Map<TaskTypeItem>(query);
+
+            var statusApplyAll = await _unitOfWork.Repository<JM_Status>().Where(s => !s.IsDelete && s.IsActive && s.IsApplyAll).Select(s => _mapper.Map<StatusItemResponse>(s)).ToListAsync();
+            if (statusApplyAll.Any())
+            {
+                if (rs.Template != null && rs.Template.Status != null)
+                {
+                    var statusIds = rs.Template.Status.Select(s => s.Id);
+                    rs.Template.Status.AddRange(statusApplyAll.Where(s => !statusIds.Contains(s.Id)));
+                }
+                else
+                {
+                    rs.Template.Status = statusApplyAll;
+                }
+            }
+            if (rs.Template != null && rs.Template.Status != null)
+            {
+                rs.Template.Status = rs.Template.Status.OrderByDescending(s => s.IsStatusStart).OrderBy(s => s.IsStatusEnd).ToList();
+            }
             response.data = rs;
             return response;
         }

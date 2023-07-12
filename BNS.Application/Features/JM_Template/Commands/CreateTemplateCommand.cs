@@ -1,11 +1,10 @@
-﻿using BNS.Data.Entities.JM_Entities;
+﻿using AutoMapper;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Domain.Commands;
-using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +17,14 @@ namespace BNS.Service.Features
     public class CreateTemplateCommand : IRequestHandler<CreateTemplateRequest, ApiResult<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IMapper _mapper;
 
         public CreateTemplateCommand(
-         IStringLocalizer<SharedResource> sharedLocalizer,
+         IMapper mapper,
          IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _sharedLocalizer = sharedLocalizer;
+            _mapper = mapper;
         }
         public async Task<ApiResult<Guid>> Handle(CreateTemplateRequest request, CancellationToken cancellationToken)
         {
@@ -35,31 +34,22 @@ namespace BNS.Service.Features
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
+                response.title = LocalizedBackendMessages.MSG_ExistsData;
                 return response;
             }
-            var template = new JM_Template
-            {
-                Id = Guid.NewGuid(),
-                Name = request.Name,
-                Description = request.Description,
-                CreatedDate = DateTime.UtcNow,
-                CreatedUserId = request.UserId,
-                CompanyId = request.CompanyId,
-            };
-
+            var data = _mapper.Map<JM_Template>(request);
 
             if (request.Status != null && request.Status.Count > 0)
             {
                 var templateStatusOrder = 0;
-                foreach (var statusId in request.Status)
+                foreach (var item in request.Status)
                 {
                     var templateStatus = new JM_TemplateStatus
                     {
                         Id = Guid.NewGuid(),
                         CompanyId = request.CompanyId,
-                        TemplateId = template.Id,
-                        StatusId = statusId,
+                        TemplateId = data.Id,
+                        StatusId = item.Id,
                         Order = templateStatusOrder
                     };
                     await _unitOfWork.Repository<JM_TemplateStatus>().AddAsync(templateStatus);
@@ -70,19 +60,19 @@ namespace BNS.Service.Features
             if (request.Content != null)
             {
                 var contenObjects = request.Content;
-                var columnObjects = new List<JM_ColumnObject>();
+                var columnObjects = new List<ColumnObject>();
 
-                columnObjects.Add(new JM_ColumnObject
+                columnObjects.Add(new ColumnObject
                 {
                     ColumnPosition = EColumnPosition.Column1,
                     Column = contenObjects.column1
                 });
-                columnObjects.Add(new JM_ColumnObject
+                columnObjects.Add(new ColumnObject
                 {
                     ColumnPosition = EColumnPosition.Column2,
                     Column = contenObjects.column2
                 });
-                columnObjects.Add(new JM_ColumnObject
+                columnObjects.Add(new ColumnObject
                 {
                     ColumnPosition = EColumnPosition.Column3,
                     Column = contenObjects.column3
@@ -128,7 +118,7 @@ namespace BNS.Service.Features
                                 CreatedDate = DateTime.UtcNow,
                                 CreatedUserId = request.UserId,
                                 IsDelete = false,
-                                TemplateId = template.Id,
+                                TemplateId = data.Id,
                                 ColumnName = item.name,
                                 ColumnTitle = item.label,
                                 Order = i
@@ -177,7 +167,7 @@ namespace BNS.Service.Features
                                         ParentId = templateDetailId,
                                         ColumnName = child.name,
                                         ColumnTitle = child.label,
-                                        TemplateId = template.Id,
+                                        TemplateId = data.Id,
                                         Order = orderChild
                                     };
                                     child.id = String.Format("{0}@{1}", templateChildDetail.Id, templateDetail.Id);
@@ -190,18 +180,18 @@ namespace BNS.Service.Features
                     }
                 }
 
-                var content = new JM_ColumnItemRoot
+                var content = new ColumnItemRoot
                 {
                     column1 = columnObjects.Where(s => s.ColumnPosition == EColumnPosition.Column1).FirstOrDefault()?.Column,
                     column2 = columnObjects.Where(s => s.ColumnPosition == EColumnPosition.Column2).FirstOrDefault()?.Column,
                     column3 = columnObjects.Where(s => s.ColumnPosition == EColumnPosition.Column3).FirstOrDefault()?.Column,
                 };
-                template.Content = Newtonsoft.Json.JsonConvert.SerializeObject(content);
+                data.Content = Newtonsoft.Json.JsonConvert.SerializeObject(content);
             }
             //return response;
-            await _unitOfWork.Repository<JM_Template>().AddAsync(template);
+            await _unitOfWork.Repository<JM_Template>().AddAsync(data);
             await _unitOfWork.SaveChangesAsync();
-            response.data = template.Id;
+            response.data = data.Id;
             return response;
         }
 

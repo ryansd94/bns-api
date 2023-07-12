@@ -4,14 +4,16 @@ using BNS.Data.EntityContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    partial class BNSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230709102728_UpdateJM_StatusAddActive")]
+    partial class UpdateJM_StatusAddActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,9 +326,6 @@ namespace BNS.Data.Migrations
 
                     b.Property<double?>("Long")
                         .HasColumnType("float");
-
-                    b.Property<int>("ManagementType")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasMaxLength(500)
@@ -1915,7 +1914,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "Project")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_ProjectMembers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1929,7 +1928,7 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_Account");
 
-                    b.Navigation("Project");
+                    b.Navigation("JM_Project");
 
                     b.Navigation("User");
                 });
@@ -1967,7 +1966,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "Project")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
                         .WithMany("JM_ProjectTeams")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1979,9 +1978,9 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Team");
+                    b.Navigation("JM_Project");
 
-                    b.Navigation("Project");
+                    b.Navigation("JM_Team");
 
                     b.Navigation("User");
                 });

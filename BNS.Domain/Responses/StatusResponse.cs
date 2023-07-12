@@ -13,6 +13,9 @@ namespace BNS.Domain.Responses
         public string Color { get; set; }
         public bool IsStatusStart { get; set; }
         public bool IsStatusEnd { get; set; }
+        public bool IsAutomaticAdd { get; set; }
+        public bool IsApplyAll { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class StatusCheckResponse

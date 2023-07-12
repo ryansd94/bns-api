@@ -1,4 +1,5 @@
-﻿using static BNS.Utilities.Enums;
+﻿using System;
+using static BNS.Utilities.Enums;
 
 namespace BNS.Domain.Responses
 {

@@ -71,7 +71,12 @@ namespace BNS.Service.Implement
                     );
 
                 result.IsMainAccount = userCompany.IsMainAccount;
-                result.DefaultOrganization = userCompany?.JM_Company.Organization;
+                result.DefaultOrganization = new CompanyResponse
+                {
+                    Code = userCompany?.JM_Company.Organization,
+                    Name = userCompany?.JM_Company.Name,
+                    ManagementType = EManagementType.ProjectBasedWork
+                };
                 result.UserId = user.Id.ToString();
                 result.AccountCompanyId = userCompany.Id.ToString();
                 result.FullName = user.FullName;
@@ -79,6 +84,7 @@ namespace BNS.Service.Implement
                 result.Image = user.Image;
                 result.ViewPermissions = viewPermissions;
                 result.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                result.Projects = await GetProjectByUser(userCompany);
             }
             return result;
         }
@@ -152,6 +158,46 @@ namespace BNS.Service.Implement
             {
                 _cacheService.RemoveFromCache(_cacheService.GetCacheKey(EControllerKey.Permission, id));
             }
+        }
+
+        private async Task<List<ProjectUserResponse>> GetProjectByUser(JM_AccountCompany userCompany)
+        {
+            var result = new List<ProjectUserResponse>();
+            if (userCompany.TeamId != null)
+            {
+                var projectTeams = await _unitOfWork.Repository<JM_ProjectTeam>()
+                    .Where(s => !s.IsDelete && s.TeamId.Equals(userCompany.TeamId.Value) && s.CompanyId == userCompany.CompanyId)
+                    .Include(s => s.Project)
+                    .Select(s => new ProjectUserResponse
+                    {
+                        Name = s.Project.Name,
+                        Id = s.ProjectId
+                    }).ToListAsync();
+                result.AddRange(projectTeams);
+            }
+
+            var projectMembers = await _unitOfWork.Repository<JM_ProjectMember>()
+                    .Where(s => !s.IsDelete && s.UserId.Equals(userCompany.UserId) && s.CompanyId == userCompany.CompanyId)
+                    .Include(s => s.Project)
+                    .Select(s => new ProjectUserResponse
+                    {
+                        Name = s.Project.Name,
+                        Id = s.ProjectId
+                    }).ToListAsync();
+
+            var projectCreatedByUser = await _unitOfWork.Repository<JM_Project>()
+                    .Where(s => !s.IsDelete && s.CreatedUserId.Equals(userCompany.UserId) && s.CompanyId == userCompany.CompanyId)
+                    .Select(s => new ProjectUserResponse
+                    {
+                        Name = s.Name,
+                        Id = s.Id
+                    }).ToListAsync();
+            var projectTeamIds = result.Select(s => s.Id);
+
+            result.AddRange(projectMembers.Where(s => !projectTeamIds.Contains(s.Id)));
+            var projectIds = result.Select(s => s.Id);
+            result.AddRange(projectCreatedByUser.Where(s => !projectIds.Contains(s.Id)));
+            return result;
         }
     }
 }

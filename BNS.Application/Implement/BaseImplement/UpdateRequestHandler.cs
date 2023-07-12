@@ -13,7 +13,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Implement.BaseImplement
 {
-    public class UpdateRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest, ApiResult<Guid>> where TEntity : BaseJMEntity where TRequest: CommandUpdateBase<ApiResult<Guid>>
+    public class UpdateRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest, ApiResult<Guid>> where TEntity : BaseJMEntity where TRequest : CommandUpdateBase<ApiResult<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -40,7 +40,7 @@ namespace BNS.Service.Implement.BaseImplement
                 response.title = LocalizedBackendMessages.MSG_NotExistsData;
                 return response;
             }
-            _mapper.Map(request, dataCheck);
+            UpdateEntity<TEntity>(dataCheck, request.ChangeFields, request.UserId);
             dataCheck.UpdatedDate = DateTime.UtcNow;
             dataCheck.UpdatedUserId = request.UserId;
             _unitOfWork.Repository<TEntity>().Update(dataCheck);
@@ -48,18 +48,44 @@ namespace BNS.Service.Implement.BaseImplement
             response.data = (Guid)dataCheck.GetType().GetProperty("Id").GetValue(dataCheck, null);
             return response;
         }
-        
-        public static void UpdateEntity<T>(T entity, List<ChangeFieldItem> models)
+
+        public static void UpdateEntity<T>(T entity, List<ChangeFieldItem> models, Guid userId) where T : BaseJMEntity
         {
-            foreach (var item in models)
+            var modelEntities = models.Where(s => s.IsEntity == true).ToList();
+            if (modelEntities.Count == 0) return;
+            foreach (var item in modelEntities)
             {
                 item.Key = item.Key.Substring(0, 1).ToUpper() + item.Key.Substring(1, item.Key.Length - 1);
                 var entityName = entity.GetType().GetProperty(item.Key);
+                var type = entityName.PropertyType;
                 if (entityName != null && item.Type != EControlType.TransferList && item.Type != EControlType.ListObject)
                 {
-                    entityName.SetValue(entity, item.Value);
+                    if (type == typeof(string))
+                    {
+                        entityName.SetValue(entity, item.Value);
+                    }
+                    else if (type == typeof(Guid?) || type == typeof(Guid))
+                    {
+                        if (item.Value != null)
+                        {
+                            entityName.SetValue(entity, Guid.Parse(item.Value.ToString()));
+                        }
+                        else
+                        {
+                            if (type == typeof(Guid?))
+                            {
+                                entityName.SetValue(entity, null);
+                            }
+                            else
+                            {
+                                entityName.SetValue(entity, Guid.Empty);
+                            }
+                        }
+                    }
                 }
             }
+            entity.UpdatedDate = DateTime.UtcNow;
+            entity.UpdatedUserId = userId;
         }
 
 

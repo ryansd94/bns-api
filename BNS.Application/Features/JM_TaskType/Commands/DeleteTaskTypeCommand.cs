@@ -1,50 +1,14 @@
 ﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Data.EntityContext;
 using BNS.Domain;
 using BNS.Domain.Commands;
-using BNS.Resource;
-using BNS.Resource.LocalizationResources;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using static BNS.Utilities.Enums;
+using BNS.Service.Implement.BaseImplement;
 
 namespace BNS.Service.Features
 {
-    public class DeleteTaskTypeCommand : IRequestHandler<DeleteTaskTypeRequest, ApiResult<Guid>>
+    public class DeleteTaskTypeCommand : DeleteRequestHandler<DeleteTaskTypeRequest, JM_TaskType>
     {
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public DeleteTaskTypeCommand(IStringLocalizer<SharedResource> sharedLocalizer,
-         IUnitOfWork unitOfWork)
+        public DeleteTaskTypeCommand(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _sharedLocalizer = sharedLocalizer;
-            _unitOfWork = unitOfWork;
-        }
-        public async Task<ApiResult<Guid>> Handle(DeleteTaskTypeRequest request, CancellationToken cancellationToken)
-        {
-            var response = new ApiResult<Guid>();
-            var dataChecks = await _unitOfWork.Repository<JM_TaskType>().Where(s => request.ids.Contains(s.Id)).ToListAsync();
-            if (dataChecks == null || dataChecks.Count() == 0)
-            {
-                response.errorCode = EErrorCode.NotExistsData.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
-                return response;
-            }
-            foreach (var item in dataChecks)
-            {
-                item.IsDelete = true;
-                item.UpdatedDate = DateTime.UtcNow;
-                item.UpdatedUserId = request.UserId;
-                _unitOfWork.Repository<JM_TaskType>().Update(item);
-            }
-            await _unitOfWork.SaveChangesAsync();
-            return response;
         }
     }
 }

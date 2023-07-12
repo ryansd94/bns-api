@@ -3,13 +3,13 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Domain.Commands
 {
-    public class JM_ColumnItemRoot
+    public class ColumnItemRoot
     {
-        public List<JM_ColumnItem> column1 { get; set; }
-        public List<JM_ColumnItem> column2 { get; set; }
-        public List<JM_ColumnItem> column3 { get; set; }
+        public List<ColumnItem> column1 { get; set; }
+        public List<ColumnItem> column2 { get; set; }
+        public List<ColumnItem> column3 { get; set; }
     }
-    public class JM_ColumnItem
+    public class ColumnItem
     {
         public string id { get; set; }
         public string customColumnId { get; set; }
@@ -23,11 +23,11 @@ namespace BNS.Domain.Commands
         public bool defaultReadonly { get; set; }
         public bool? required { get; set; }
         public bool isHidenWhenCreate { get; set; }
-        public List<JM_ColumnItem> items { get; set; }
+        public List<ColumnItem> items { get; set; }
     }
-    public class JM_ColumnObject
+    public class ColumnObject
     {
         public EColumnPosition ColumnPosition { get; set; }
-        public List<JM_ColumnItem> Column { get; set; }
+        public List<ColumnItem> Column { get; set; }
     }
 }

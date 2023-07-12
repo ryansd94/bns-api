@@ -9,16 +9,12 @@ namespace BNS.Domain.Commands
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public JM_ColumnItemRoot Content { get; set; }
-        public List<Guid> Status { get; set; }
+        public ColumnItemRoot Content { get; set; }
+        public List<StatusItemRequest> Status { get; set; }
     }
 
-    public class StatusItem
+    public class StatusItemRequest
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Color { get; set; }
-        public bool IsNew { get; set; } = false;
-        public bool IsDelete { get; set; }
     }
 }

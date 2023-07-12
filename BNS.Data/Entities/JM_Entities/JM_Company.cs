@@ -22,6 +22,7 @@ namespace BNS.Data.Entities.JM_Entities
         public double? Long { get; set; }
         public EUserType UserType { get; set; }
         public EScale Scale { get; set; }
+        public EManagementType ManagementType { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public Guid? UpdatedUser { get; set; }
         public DateTime CreatedDate { get; set; }

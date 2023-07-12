@@ -35,10 +35,7 @@ namespace BNS.Service.Implement
         {
             var query = GetQueryableData(request);
             var response = new ApiResult<TModel>();
-            var xxx= query.Select(s => _mapper.Map<TModel>(s));
-            var data = await 
-                xxx.FirstOrDefaultAsync();
-
+            var data = await query.Select(s => _mapper.Map<TModel>(s)).FirstOrDefaultAsync();
             if (data == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

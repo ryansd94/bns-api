@@ -51,8 +51,9 @@ namespace BNS.Domain.AutoMapper
             CreateMap<JM_Team, TeamResponseItem>()
                 .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.TeamParent != null ? u.TeamParent.Name : string.Empty));
-            CreateMap<JM_Template, TemplateResponseItem>().ForMember(s => s.Status, d => d.MapFrom(u => u.TemplateStatus.Select(r => r.StatusId)));
-            CreateMap<JM_TaskType, TaskTypeItem>().ForMember(a => a.Template, opt => opt.MapFrom(src => src.Template));
+            CreateMap<JM_Template, TemplateResponseItem>().ForMember(s => s.Status, d => d.MapFrom(u => u.TemplateStatus.OrderByDescending(s => s.Status.IsStatusStart).OrderBy(s => s.Status.IsStatusEnd).Select(r => new StatusItemResponse { Id = r.StatusId, Name = r.Status.Name, Color = r.Status.Color, IsStatusEnd = r.Status.IsStatusEnd, IsStatusStart = r.Status.IsStatusStart })));
+            CreateMap<JM_TaskType, TaskTypeItem>()
+                .ForMember(a => a.Template, opt => opt.MapFrom(src => src.Template));
             CreateMap<JM_AccountCompany, UserResponseItem>().ForMember
     (dest => dest.FullName, opt => opt.MapFrom(src => src.Status == Utilities.Enums.EUserStatus.WAILTING_CONFIRM_MAIL ? string.Empty : src.Account.FullName)); ;
             CreateMap<JM_Status, StatusResponseItem>();
@@ -95,6 +96,10 @@ namespace BNS.Domain.AutoMapper
                 }).ToList()));
             CreateMap<JM_NotifycationUser, NotifyResponse>();
             CreateMap<ReadNotifyRequest, JM_NotifycationUser>();
+            CreateMap<CreateTemplateRequest, JM_Template>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<CreateProjectRequest, JM_Project>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<CreateStatusRequest, JM_Status>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<JM_Status, StatusItemResponse>();
         }
     }
 }

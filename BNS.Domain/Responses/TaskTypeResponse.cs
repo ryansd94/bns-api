@@ -17,6 +17,6 @@ namespace BNS.Domain.Responses
         public int? Order { get; set; }
         public Guid? TemplateId { get; set; }
         public string TemplateName { get; set; }
-        public virtual JM_Template Template { get; set; }
+        public TemplateResponseItem Template { get; set; }
     }
 }

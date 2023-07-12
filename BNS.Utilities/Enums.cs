@@ -135,7 +135,9 @@
             Number,
             DateTimePicker,
             TransferList,
-            ListObject
+            ListObject,
+            ListId,
+            Other
         }
 
         public enum EColumnPosition
@@ -219,6 +221,12 @@
             Team = 2,
             Company = 3,
             Organization = 4
+        }
+
+        public enum EManagementType
+        {
+            DailyWork = 0,
+            ProjectBasedWork = 1,
         }
 
         public enum EScale

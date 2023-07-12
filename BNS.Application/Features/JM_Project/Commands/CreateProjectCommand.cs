@@ -1,8 +1,6 @@
 ﻿using BNS.Data.Entities.JM_Entities;
-using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +8,6 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using BNS.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using AutoMapper;
 using BNS.Domain.Interface;
 
@@ -19,17 +16,14 @@ namespace BNS.Service.Features
     public class CreateProjectCommand : IRequestHandler<CreateProjectRequest, ApiResult<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly IProjectService _projectService;
         private readonly IMapper _mapper;
 
         public CreateProjectCommand(IUnitOfWork unitOfWork,
-            IStringLocalizer<SharedResource> sharedLocalizer,
             IMapper mapper,
             IProjectService projectService)
         {
             _unitOfWork = unitOfWork;
-            _sharedLocalizer = sharedLocalizer;
             _mapper = mapper;
             _projectService = projectService;
         }
@@ -40,22 +34,10 @@ namespace BNS.Service.Features
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ObjectNotExists];
+                response.title = LocalizedBackendMessages.MSG_ObjectNotExists;
                 return response;
             }
-            var project = new JM_Project
-            {
-                Id = Guid.NewGuid(),
-                Code = request.Code,
-                Name = request.Name,
-                Description = request.Description,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                Type = request.Type,
-                CreatedDate = DateTime.UtcNow,
-                CreatedUserId = request.UserId,
-                CompanyId = request.CompanyId
-            };
+            var data = _mapper.Map<JM_Project>(request);
 
             #region Add teams and members
 
@@ -66,7 +48,7 @@ namespace BNS.Service.Features
                     await _unitOfWork.Repository<JM_ProjectTeam>().AddAsync(new JM_ProjectTeam
                     {
                         Id = Guid.NewGuid(),
-                        ProjectId = project.Id,
+                        ProjectId = data.Id,
                         TeamId = team,
                         CreatedDate = DateTime.UtcNow,
                         CreatedUserId = request.UserId,
@@ -80,7 +62,7 @@ namespace BNS.Service.Features
                     await _unitOfWork.Repository<JM_ProjectMember>().AddAsync(new JM_ProjectMember
                     {
                         Id = Guid.NewGuid(),
-                        ProjectId = project.Id,
+                        ProjectId = data.Id,
                         UserId = team,
                         CreatedDate = DateTime.UtcNow,
                         CreatedUserId = request.UserId,
@@ -95,7 +77,7 @@ namespace BNS.Service.Features
             await _unitOfWork.Repository<JM_ProjectMember>().AddAsync(new JM_ProjectMember
             {
                 Id = Guid.NewGuid(),
-                ProjectId = project.Id,
+                ProjectId = data.Id,
                 UserId = request.UserId,
                 IsCreated = true,
                 CreatedDate = DateTime.UtcNow,
@@ -112,7 +94,7 @@ namespace BNS.Service.Features
                 {
                     var phase = new JM_ProjectPhase
                     {
-                        ProjectId = project.Id,
+                        ProjectId = data.Id,
                         CreatedUserId = request.UserId,
                         Name = item.Name,
                         StartDate = item.StartDate,
@@ -120,7 +102,7 @@ namespace BNS.Service.Features
                         CompanyId = request.CompanyId
                     };
                     await _unitOfWork.Repository<JM_ProjectPhase>().AddAsync(phase);
-                    var childs = _projectService.GetAllChilds(phase.Id, item, request.UserId, project.Id, request.CompanyId);
+                    var childs = _projectService.GetAllChilds(phase.Id, item, request.UserId, data.Id, request.CompanyId);
                     if (childs.Count > 0)
                     {
                         await _unitOfWork.Repository<JM_ProjectPhase>().AddRangeAsync(childs);
@@ -130,9 +112,9 @@ namespace BNS.Service.Features
 
             #endregion
 
-            await _unitOfWork.Repository<JM_Project>().AddAsync(project);
+            await _unitOfWork.Repository<JM_Project>().AddAsync(data);
             await _unitOfWork.SaveChangesAsync();
-            response.data = project.Id;
+            response.data = data.Id;
             return response;
         }
     }

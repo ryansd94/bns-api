@@ -16,7 +16,14 @@ namespace BNS.Domain.Responses
         public string UserId { get; set; }
         public string AccountCompanyId { get; set; }
         public bool IsMainAccount { get; set; }
-        public string DefaultOrganization { get; set; }
-        public List<ViewPermissionAction> ViewPermissions{ get; set; }
+        public CompanyResponse DefaultOrganization { get; set; }
+        public List<ViewPermissionAction> ViewPermissions { get; set; }
+        public List<ProjectUserResponse> Projects { get; set; }
+    }
+
+    public class ProjectUserResponse
+    {
+        public string Name { get; set; }
+        public Guid Id { get; set; }
     }
 }

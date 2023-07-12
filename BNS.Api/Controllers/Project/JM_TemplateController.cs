@@ -54,7 +54,9 @@ namespace BNS.Api.Controllers.Project
         public async Task<IActionResult> Delete(Guid id)
         {
             var request = new DeleteTemplateRequest();
-            request.ids.Add(id);
+            request.Ids.Add(id);
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
     }

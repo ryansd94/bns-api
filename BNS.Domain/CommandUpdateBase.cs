@@ -17,11 +17,12 @@ namespace BNS.Domain
         public string Key { get; set; }
         public object Value { get; set; }
         public EControlType Type { get; set; }
+        public bool IsEntity { get; set; } = true;
     }
 
-    public class ChangeFieldTransferItem
+    public class ChangeFieldTransferItem<T>
     {
-        public List<Guid> AddValues { get; set; }
-        public List<Guid> DeleteValues { get; set; }
+        public List<T> AddValues { get; set; }
+        public List<T> DeleteValues { get; set; }
     }
 }

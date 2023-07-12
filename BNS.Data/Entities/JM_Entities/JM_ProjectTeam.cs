@@ -12,6 +12,6 @@ namespace BNS.Data.Entities.JM_Entities
         [ForeignKey("TeamId")]
         public virtual JM_Team JM_Team { get; set; }
         [ForeignKey("ProjectId")]
-        public virtual JM_Project JM_Project { get; set; }
+        public virtual JM_Project Project { get; set; }
     }
 }

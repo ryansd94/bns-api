@@ -1,29 +1,28 @@
 ﻿using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
-using BNS.Resource;
 using BNS.Resource.LocalizationResources;
 using MediatR;
-using Microsoft.Extensions.Localization;
-using Nest;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace BNS.Service.Features
 {
     public class CreateStatusCommand : IRequestHandler<CreateStatusRequest, ApiResult<Guid>>
     {
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
         public CreateStatusCommand(
-         IStringLocalizer<SharedResource> sharedLocalizer,
+         IMapper mapper,
          IUnitOfWork unitOfWork)
         {
-            _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<ApiResult<Guid>> Handle(CreateStatusRequest request, CancellationToken cancellationToken)
         {
@@ -32,22 +31,11 @@ namespace BNS.Service.Features
             if (dataCheck != null)
             {
                 response.errorCode = EErrorCode.IsExistsData.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
+                response.title = LocalizedBackendMessages.MSG_ExistsData;
                 return response;
             }
-            var team = new JM_Status
-            {
-                Id = Guid.NewGuid(),
-                Color = request.Color,
-                Name = request.Name,
-                CreatedDate = DateTime.UtcNow,
-                CreatedUserId = request.UserId,
-                CompanyId = request.CompanyId,
-                IsStatusStart = request.IsStatusStart,
-                IsStatusEnd = request.IsStatusEnd,
-                IsDelete = false
-            };
-            await _unitOfWork.Repository<JM_Status>().AddAsync(team);
+            var data = _mapper.Map<JM_Status>(request);
+            await _unitOfWork.Repository<JM_Status>().AddAsync(data);
             response = await _unitOfWork.SaveChangesAsync();
             return response;
         }

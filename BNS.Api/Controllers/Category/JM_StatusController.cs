@@ -52,7 +52,9 @@ namespace BNS.Api.Controllers.Category
         public async Task<IActionResult> Delete(Guid id)
         {
             var request = new DeleteStatusRequest();
-            request.ids.Add(id);
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
+            request.Ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 

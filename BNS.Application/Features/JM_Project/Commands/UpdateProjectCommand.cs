@@ -50,17 +50,17 @@ namespace BNS.Service.Features
             //    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
             //    return response;
             //}
-            UpdateEntity<JM_Project>(dataCheck, request.ChangeFields);
+            UpdateEntity<JM_Project>(dataCheck, request.ChangeFields, request.UserId);
             //dataCheck.UpdatedDate = DateTime.UtcNow;
             //dataCheck.UpdatedUserId = request.UserId;
 
-            var team = request.ChangeFields.Where(s => s.Key.Equals("Teams")).FirstOrDefault();
-            var member = request.ChangeFields.Where(s => s.Key.Equals("Members")).FirstOrDefault();
-            var sprint = request.ChangeFields.Where(s => s.Key.Equals("Sprints")).FirstOrDefault();
+            var team = request.ChangeFields.Where(s => s.Key.Equals("teams")).FirstOrDefault();
+            var member = request.ChangeFields.Where(s => s.Key.Equals("members")).FirstOrDefault();
+            var sprint = request.ChangeFields.Where(s => s.Key.Equals("sprints")).FirstOrDefault();
 
             if (team != null)
             {
-                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem>(team.Value.ToString());
+                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem<Guid>>(team.Value.ToString());
                 foreach (var item in value.AddValues)
                 {
                     await _unitOfWork.Repository<JM_ProjectTeam>().AddAsync(new JM_ProjectTeam
@@ -82,7 +82,7 @@ namespace BNS.Service.Features
 
             if (member != null)
             {
-                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem>(member.Value.ToString());
+                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem<Guid>>(member.Value.ToString());
                 foreach (var item in value.AddValues)
                 {
                     await _unitOfWork.Repository<JM_ProjectMember>().AddAsync(new JM_ProjectMember
