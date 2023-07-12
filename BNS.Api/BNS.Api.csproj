@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>12bf71c7-a11c-410f-a797-1931d25fc98c</UserSecretsId>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+	<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
