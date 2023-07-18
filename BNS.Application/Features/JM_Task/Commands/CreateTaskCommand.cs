@@ -199,6 +199,7 @@ namespace BNS.Service.Features
             //}
 
             //await _context.JM_Tasks.AddAsync(data);
+            await _unitOfWork.SaveChangesAsync();
             var notifyUserAssigns = await GetNotifyUsers(request.DefaultData.UsersAssignId, request.UserId, task,
                 taskType.Color, taskType.Icon, ENotifyObjectType.TaskAssigned);
             if (notifyUserAssigns.Count > 0)
@@ -212,7 +213,6 @@ namespace BNS.Service.Features
                 var userMentions = await GetNotifyUsers(userNotifyIds, request.UserId, task, taskType.Color, taskType.Icon, ENotifyObjectType.TaskCommentMention);
                 await _notifyService.SendNotify(userMentions, request.UserId, request.CompanyId);
             }
-            await _unitOfWork.SaveChangesAsync();
             //response.data = data.Id;
             return response;
         }

@@ -171,7 +171,8 @@ namespace BNS.Service.Implement
                     .Select(s => new ProjectUserResponse
                     {
                         Name = s.Project.Name,
-                        Id = s.ProjectId
+                        Id = s.ProjectId,
+                        Code = s.Project.Code
                     }).ToListAsync();
                 result.AddRange(projectTeams);
             }
@@ -182,7 +183,8 @@ namespace BNS.Service.Implement
                     .Select(s => new ProjectUserResponse
                     {
                         Name = s.Project.Name,
-                        Id = s.ProjectId
+                        Id = s.ProjectId,
+                        Code = s.Project.Code
                     }).ToListAsync();
 
             var projectCreatedByUser = await _unitOfWork.Repository<JM_Project>()
@@ -190,7 +192,8 @@ namespace BNS.Service.Implement
                     .Select(s => new ProjectUserResponse
                     {
                         Name = s.Name,
-                        Id = s.Id
+                        Id = s.Id,
+                        Code = s.Code
                     }).ToListAsync();
             var projectTeamIds = result.Select(s => s.Id);
 

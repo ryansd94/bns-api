@@ -25,5 +25,6 @@ namespace BNS.Domain.Responses
     {
         public string Name { get; set; }
         public Guid Id { get; set; }
+        public string Code { get; set; }
     }
 }
