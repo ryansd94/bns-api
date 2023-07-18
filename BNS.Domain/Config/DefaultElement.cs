@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BNS.Domain
+﻿namespace BNS.Domain
 {
     public class DefaultElement
     {
@@ -12,5 +8,6 @@ namespace BNS.Domain
         public string WebUserDomain { get; set; } = "https://bns-user-test.herokuapp.com";
         public string CipherKey { get; set; } = "BNS Key";
         public string NotifyUrl { get; set; }
+        public string[] Origins { get; set; }
     }
 }

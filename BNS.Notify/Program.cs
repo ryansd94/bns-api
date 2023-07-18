@@ -36,7 +36,7 @@ builder.Services.AddCors(options =>
                  .AllowAnyHeader()
                  .AllowAnyMethod()
                  .AllowCredentials()
-                 .WithOrigins("http://localhost:3000", "http://103.121.89.96:8991", "http://103.121.89.96:8990");
+                 .WithOrigins(appSettings.Default.Origins);
          });
 });
 builder.Services.AddControllers();
