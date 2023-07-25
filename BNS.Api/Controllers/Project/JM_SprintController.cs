@@ -37,7 +37,7 @@ namespace BNS.Api.Controllers.Project
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIndex(Guid id)
         {
-            var request = new GetJM_TeamByIdRequest();
+            var request = new GetTeamByIdRequest();
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }

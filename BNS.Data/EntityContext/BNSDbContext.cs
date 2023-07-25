@@ -54,6 +54,7 @@ namespace BNS.Data.EntityContext
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_ProjectMembers);
             //modelBuilder.Entity<JM_Project>().HasMany(x => x.Sprints);
             modelBuilder.Entity<JM_Project>().HasMany(x => x.JM_Issues);
+            modelBuilder.Entity<JM_Team>().HasMany(x => x.Childs);
 
             modelBuilder.Entity<JM_Template>().HasMany(x => x.TemplateStatus);
 

@@ -43,14 +43,16 @@ namespace BNS.Domain.AutoMapper
                 }).ToArray() : null));
 
             CreateMap<SprintRequest, JM_ProjectPhase>();
-            CreateMap<JM_ProjectPhase, SprintReponse>();
+            CreateMap<JM_ProjectPhase, SprintResponseItem>();
             CreateMap<JM_Project, ProjectResponseItem>()
                 .ForMember(s => s.Teams, o => o.MapFrom(x => x.JM_ProjectTeams.Select(s => s.TeamId).ToList()))
                 .ForMember(s => s.Members, o => o.MapFrom(x => x.JM_ProjectMembers.Select(s => s.UserId).ToList()))
                 .ForMember(s => s.Sprints, o => o.MapFrom(x => x.Sprints.OrderBy(s => s.CreatedDate).Where(s => s.ParentId == null && s.IsDelete == false)));
             CreateMap<JM_Team, TeamResponseItem>()
+                .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty));
+            CreateMap<JM_Team, TeamResponseItemById>()
                 .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
-                .ForMember(s => s.ParentName, d => d.MapFrom(u => u.TeamParent != null ? u.TeamParent.Name : string.Empty));
+                .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty));
             CreateMap<JM_Template, TemplateResponseItem>().ForMember(s => s.Status, d => d.MapFrom(u => u.TemplateStatus.OrderByDescending(s => s.Status.IsStatusStart).OrderBy(s => s.Status.IsStatusEnd).Select(r => new StatusItemResponse { Id = r.StatusId, Name = r.Status.Name, Color = r.Status.Color, IsStatusEnd = r.Status.IsStatusEnd, IsStatusStart = r.Status.IsStatusStart })));
             CreateMap<JM_TaskType, TaskTypeItem>()
                 .ForMember(a => a.Template, opt => opt.MapFrom(src => src.Template));
@@ -97,7 +99,8 @@ namespace BNS.Domain.AutoMapper
             CreateMap<JM_NotifycationUser, NotifyResponse>();
             CreateMap<ReadNotifyRequest, JM_NotifycationUser>();
             CreateMap<CreateTemplateRequest, JM_Template>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
-            CreateMap<CreateProjectRequest, JM_Project>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
+            CreateMap<CreateProjectRequest, JM_Project>()
+                .ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
             CreateMap<CreateStatusRequest, JM_Status>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
             CreateMap<JM_Status, StatusItemResponse>();
         }

@@ -35,7 +35,7 @@ namespace BNS.Api.Controllers
 
         [HttpPost("signup")]
         [AllowAnonymous]
-        public async Task<IActionResult> Signup(AddUserRequest request)
+        public async Task<IActionResult> Signup(SignupRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

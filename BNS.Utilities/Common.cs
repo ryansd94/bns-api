@@ -157,6 +157,15 @@ namespace BNS.Utilities
             public Expression Body { get; }
         }
 
+        public static string ToUpperFirstChar(this string value)
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            return char.ToUpper(value[0]) + value.Substring(1);
+        }
+
         public static class FilterExtensions
         {
             public static Expression<Func<T, bool>> BuildFilter<T>(List<SearchCriteria> keys)
@@ -180,21 +189,25 @@ namespace BNS.Utilities
                     Expression childCondition = null;
                     foreach (var item in childItems)
                     {
+                        var column = item.Column;
+                        if (item.IsCustom == false)
+                        {
+                            column = column.ToUpperFirstChar();
+                        }
                         var stack = new Stack<Node>();
                         Expression body = p;
                         MemberExpression memberAccess = null;
-                        if (item.Column.Contains('.'))
+                        if (column.Contains('.'))
                         {
                             memberAccess = MemberExpression.Property
-                            (memberAccess ?? (p as Expression), item.Column.Split('.')[0]);
+                            (memberAccess ?? (p as Expression), column.Split('.')[0]);
                         }
                         else
                         {
                             memberAccess = MemberExpression.Property
-                            (memberAccess ?? (p as Expression), item.Column);
+                            (memberAccess ?? (p as Expression), column);
                         }
-                        var xxxxx = MemberExpression.GetActionType();
-                        foreach (string member in item.Column.Split('.'))
+                        foreach (string member in column.Split('.'))
                         {
                             if (body.Type.IsGenericType)
                             {
@@ -212,9 +225,9 @@ namespace BNS.Utilities
                             body = Expression.PropertyOrField(body, member);
                         }
 
-                        if (item.Column.Contains('.') && parentItem.IsCustom)
+                        if (column.Contains('.') && parentItem.IsCustom)
                         {
-                            if (item.Column.Split('.')[1].Equals("CustomColumnId"))
+                            if (column.Split('.')[1].Equals("CustomColumnId"))
                             {
                                 var constant = Expression.Constant(Guid.Parse(item.Value.ToString()), typeof(Guid));
                                 body = Expression.Call(body, nameof(Guid.Equals), null, constant);

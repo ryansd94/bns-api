@@ -11,9 +11,10 @@ namespace BNS.Domain.Responses
     public class SprintResponseItem : BaseResponseModel
     {
         public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public bool IsComplete { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public Guid? ParentId { get; set; }
+        public bool Active { get; set; }
+        public List<SprintResponseItem> Childs { get; set; }
     }
 }

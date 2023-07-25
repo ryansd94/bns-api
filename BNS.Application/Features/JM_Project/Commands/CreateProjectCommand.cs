@@ -38,7 +38,7 @@ namespace BNS.Service.Features
                 return response;
             }
             var data = _mapper.Map<JM_Project>(request);
-
+            data.Sprints = null;
             #region Add teams and members
 
             if (request.Teams != null && request.Teams.Count > 0)
@@ -99,7 +99,8 @@ namespace BNS.Service.Features
                         Name = item.Name,
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
-                        CompanyId = request.CompanyId
+                        CompanyId = request.CompanyId,
+                        Active = item.Active
                     };
                     await _unitOfWork.Repository<JM_ProjectPhase>().AddAsync(phase);
                     var childs = _projectService.GetAllChilds(phase.Id, item, request.UserId, data.Id, request.CompanyId);

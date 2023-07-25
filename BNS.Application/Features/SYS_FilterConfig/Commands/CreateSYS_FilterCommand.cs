@@ -3,7 +3,6 @@ using BNS.Domain;
 using BNS.Resource;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using Nest;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

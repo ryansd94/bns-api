@@ -12,7 +12,8 @@ namespace BNS.Data.Entities.JM_Entities
         public Guid? ParentId { get; set; }
 
         [ForeignKey("ParentId")]
-        public JM_Team TeamParent { get; set; }
+        public JM_Team Parent { get; set; }
+        public virtual IEnumerable<JM_Team> Childs { get; set; }
 
         public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
     }

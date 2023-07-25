@@ -38,18 +38,7 @@ namespace BNS.Service.Features
             response.data = new TaskTypeResponse();
 
             var query = _unitOfWork.Repository<JM_TaskType>().Where(s => !s.IsDelete && s.CompanyId == request.CompanyId)
-                .OrderBy(d => d.CreatedDate).Select(s => new TaskTypeItem
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Description = s.Description,
-                    Order = s.Order,
-                    Icon = s.Icon,
-                    Color = s.Color,
-                    ColorFilter = s.ColorFilter,
-                    CreatedDate = s.CreatedDate,
-                    TemplateName = s.Template != null ? s.Template.Name : null,
-                });
+                .OrderBy(d => d.CreatedDate).Select(s => _mapper.Map<TaskTypeItem>(s));
             if (!string.IsNullOrEmpty(request.fieldSort))
             {
                 var columnSort = request.fieldSort;

@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
-    public class GetJM_TeamByIdQuery : IRequestHandler<GetJM_TeamByIdRequest, ApiResult<TeamResponseItem>>
+    public class GetJM_TeamByIdQuery : IRequestHandler<GetTeamByIdRequest, ApiResult<TeamResponseItemById>>
     {
         private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -30,9 +30,9 @@ namespace BNS.Service.Features
             _sharedLocalizer = sharedLocalizer;
             _mapper = mapper;
         }
-        public async Task<ApiResult<TeamResponseItem>> Handle(GetJM_TeamByIdRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<TeamResponseItemById>> Handle(GetTeamByIdRequest request, CancellationToken cancellationToken)
         {
-            var response = new ApiResult<TeamResponseItem>();
+            var response = new ApiResult<TeamResponseItemById>();
             var data = await _unitOfWork.Repository<JM_Team>().Include(s=>s.JM_AccountCompanys).FirstOrDefaultAsync(s => s.Id == request.Id &&
             !s.IsDelete &&
             s.CompanyId == request.CompanyId);
@@ -42,7 +42,7 @@ namespace BNS.Service.Features
                 response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
                 return response;
             }
-            var rs = _mapper.Map<TeamResponseItem>(data);
+            var rs = _mapper.Map<TeamResponseItemById>(data);
             response.data = rs;
             return response;
         }

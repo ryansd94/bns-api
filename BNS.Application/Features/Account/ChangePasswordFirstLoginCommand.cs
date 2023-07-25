@@ -6,7 +6,6 @@ using BNS.Resource.LocalizationResources;
 using BNS.Utilities;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using Nest;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

@@ -9,7 +9,6 @@ using BNS.Domain.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Nest;
 using System;
 using System.Linq;
 using System.Threading;

@@ -19,18 +19,18 @@ namespace BNS.Infrastructure.Messaging
         {
             var options = new RawRabbitConfiguration();
             configuration.GetSection("DefaultConfig:RabbitMq").Bind(options);
-            //var client = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
-            //{
-            //    ClientConfiguration = options,
-            //    Plugins = p => p
-            //        .UseGlobalExecutionId()
-            //        .UseHttpContext()
-            //        .UseMessageContext(c => new MessageContext { GlobalRequestId = Guid.NewGuid() })
-            //});
+            var client = RawRabbitFactory.CreateSingleton(new RawRabbitOptions
+            {
+                ClientConfiguration = options,
+                Plugins = p => p
+                    .UseGlobalExecutionId()
+                    .UseHttpContext()
+                    .UseMessageContext(c => new MessageContext { GlobalRequestId = Guid.NewGuid() })
+            });
 
-            //services.AddSingleton<IBusClient>(_ => client);
+            services.AddSingleton<IBusClient>(_ => client);
 
-            //services.AddScoped<IBusPublisher, BusPublisher>();
+            services.AddScoped<IBusPublisher, BusPublisher>();
 
             return services;
         }

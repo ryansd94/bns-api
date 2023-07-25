@@ -23,7 +23,7 @@ namespace BNS.Api.Controllers.Project
 
         [HttpPost("add-user")]
         [BNSAuthorization]
-        public async Task<IActionResult> SendMailAddUser(SendMailAddUserRequest request)
+        public async Task<IActionResult> AddUsers(CreateUsersRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

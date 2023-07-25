@@ -91,7 +91,7 @@ namespace BNS.Service.Features
             response.data.Task = taskItem;
             response.data.TaskType = taskType.data;
             response.data.Task.TaskParent = _mapper.Map<TaskItem>(task.JM_TaskParent);
-            response.data.Task.TaskChilds = taskChilds;
+            response.data.Task.Childs = taskChilds;
             response.data.Comments = GetComments(comments);
             return response;
         }

@@ -30,7 +30,7 @@ namespace BNS.Api.Controllers.Category
 
         [HttpGet(Name = "get-team")]
         [BNSAuthorization]
-        public async Task<IActionResult> GetAllData([FromQuery] GetJM_TeamRequest request)
+        public async Task<IActionResult> GetAllData([FromQuery] GetTeamRequest request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -39,7 +39,7 @@ namespace BNS.Api.Controllers.Category
         [BNSAuthorization]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var request = new GetJM_TeamByIdRequest();
+            var request = new GetTeamByIdRequest();
             request.Id = id;
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));

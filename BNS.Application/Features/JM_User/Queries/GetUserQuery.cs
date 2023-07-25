@@ -9,7 +9,6 @@ using BNS.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Nest;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
@@ -52,6 +51,7 @@ namespace BNS.Service.Features
                    TeamName = s.JM_Team != null ? s.JM_Team.Name : string.Empty,
                    TeamId = s.TeamId,
                    Image = s.Account != null ? s.Account.Image : string.Empty,
+                   UserId = s.Id
                });
 
             if (!string.IsNullOrEmpty(request.fieldSort))

@@ -46,5 +46,6 @@ namespace BNS.Data.Entities.JM_Entities
         public virtual ICollection<JM_TaskUser> TaskUsers { get; set; }
         public virtual ICollection<JM_TaskTag> TaskTags { get; set; }
         public virtual ICollection<JM_CommentTask> CommentTasks { get; set; }
+        public virtual ICollection<JM_Task> Childs { get; set; }
     }
 }

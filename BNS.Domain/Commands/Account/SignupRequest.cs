@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BNS.Domain.Commands
 {
-    public class AddUserRequest : CommandBase<ApiResult<LoginResponse>>
+    public class SignupRequest : CommandBase<ApiResult<LoginResponse>>
     {
 
         [Required]

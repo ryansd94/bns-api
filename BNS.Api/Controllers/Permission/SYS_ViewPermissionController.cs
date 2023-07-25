@@ -54,7 +54,7 @@ namespace BNS.Api.Controllers.Permission
 
         [HttpGet("teams", Name = "get-team-view-permission")]
         [BNSAuthorization(false)]
-        public async Task<IActionResult> GetAllTeams([FromQuery] GetJM_TeamRequest request)
+        public async Task<IActionResult> GetAllTeams([FromQuery] GetTeamRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -23,7 +23,8 @@ namespace BNS.Service.Implement
                         StartDate = child.StartDate,
                         EndDate = child.EndDate,
                         ParentId = parentId,
-                        CompanyId = companyId
+                        CompanyId = companyId,
+                        Active = child.Active
                     };
                     childs.Add(phase);
                     childs.AddRange(GetAllChilds(phase.Id, child, userId, projectId, companyId));

@@ -5,7 +5,6 @@ using BNS.Utilities;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Nest;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ using BNS.Domain.Responses;
 
 namespace BNS.Service.Features
 {
-    public class AddUserCommand : IRequestHandler<AddUserRequest, ApiResult<LoginResponse>>
+    public class SignupCommand : IRequestHandler<SignupRequest, ApiResult<LoginResponse>>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         //protected readonly IElasticClient _elasticClient;
@@ -23,7 +22,7 @@ namespace BNS.Service.Features
         private readonly ICipherService _cipherService;
         private readonly IUnitOfWork _unitOfWork;
         private IMediator _mediator;
-        public AddUserCommand(
+        public SignupCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
          IOptions<MyConfiguration> config,
         ICipherService CipherService,
@@ -36,7 +35,7 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
             _mediator = mediator;
         }
-        public async Task<ApiResult<LoginResponse>> Handle(AddUserRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<LoginResponse>> Handle(SignupRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<LoginResponse>();
             var data = JsonConvert.DeserializeObject<JoinTeamResponse>(await _cipherService.DecryptString(request.Token));
@@ -88,7 +87,5 @@ namespace BNS.Service.Features
             var rs = await _mediator.Send(loginRequest);
             return rs;
         }
-
     }
-
 }

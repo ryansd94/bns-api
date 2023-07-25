@@ -11,11 +11,11 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Features
 {
-    public class GetRequestHandler<TModel, TEntity, TRequest> : IRequestHandler<TRequest, ApiResultList<TModel>> where TEntity : BaseJMEntity where TRequest : CommandGetRequest<ApiResultList<TModel>>
+    public class bk<TModel, TEntity, TRequest> : IRequestHandler<TRequest, ApiResultList<TModel>> where TEntity : BaseJMEntity where TRequest : CommandGetRequest<ApiResultList<TModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public GetRequestHandler(IUnitOfWork unitOfWork,
+        public bk(IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -26,12 +26,15 @@ namespace BNS.Service.Features
             return query.Select(s => _mapper.Map<TModel>(s));
         }
 
-        public virtual IQueryable<TEntity> GetQueryableData(TRequest request)
+        public virtual IQueryable<TModel> GetQueryableData(TRequest request)
         {
-            return _unitOfWork.Repository<TEntity>().AsNoTracking().Where(s => s.CompanyId == request.CompanyId && s.IsDelete == false).AsQueryable();
+            return _unitOfWork.Repository<TEntity>().AsNoTracking()
+                .Where(s => s.CompanyId == request.CompanyId && s.IsDelete == false)
+                .Select(s => _mapper.Map<TModel>(s))
+                .AsQueryable();
         }
 
-        public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TEntity> query, TRequest request)
+        public virtual async Task<ApiResultList<TModel>> ReturnData(IQueryable<TModel> query, TRequest request)
         {
             var response = new ApiResultList<TModel>();
             response.data = new DynamicDataItem<TModel>();
@@ -39,16 +42,14 @@ namespace BNS.Service.Features
 
             if (!request.isGetAll)
                 query = query.Skip(request.start).Take(request.length);
-            var queryItem = GetItemData(query);
-            var rs = await queryItem.ToListAsync();
+            var rs = await query.ToListAsync();
             response.data.Items = rs;
             return response;
         }
 
-        public virtual async Task<ApiResultList<TModel>> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResultList<TModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var query = GetQueryableData(request);
-            query = query.WhereOr(request.filters, request.defaultFilters);
 
             if (!string.IsNullOrEmpty(request.fieldSort))
             {
@@ -57,9 +58,10 @@ namespace BNS.Service.Features
                 if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
                 {
                     var sort = request.sort == ESortEnum.desc.ToString() ? " DESC" : " ASC";
-                    query = query.OrderBy(columnSort + sort);
+                    //query = query.OrderBy(columnSort + sort);
                 }
             }
+            query = query.WhereOr(request.filters, request.defaultFilters);
             var rs = await ReturnData(query, request);
             return rs;
         }

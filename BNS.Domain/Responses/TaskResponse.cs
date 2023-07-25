@@ -47,7 +47,7 @@ namespace BNS.Domain.Responses
         public User CreatedUser { get; set; }
         public ICollection<TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
         public List<TagItem> Tags { get; set; }
-        public List<TaskItem> TaskChilds { get; set; }
+        public List<TaskItem> Childs { get; set; }
         public TaskItem TaskParent { get; set; }
         public List<FileUpload> Files { get; set; }
     }
