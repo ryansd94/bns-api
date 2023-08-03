@@ -159,7 +159,7 @@ namespace BNS.Utilities
 
         public static string ToUpperFirstChar(this string value)
         {
-            if(string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
             {
                 return value;
             }
@@ -470,6 +470,25 @@ namespace BNS.Utilities
 
             return source.Provider.CreateQuery<TEntity>(queryExpr); ;
         }
+
+
+        public static List<TEntity> OrderByList<TEntity>(this List<TEntity> source, string orderByStrValues) where TEntity : class
+        {
+            var orderByValues = orderByStrValues.Trim().Split(',')[0];
+            var parameter = Expression.Parameter(typeof(TEntity), "x");
+            var property = Expression.Property(parameter, orderByValues.Split(' ')[0]);
+            var lambda = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(property, typeof(object)), parameter);
+
+            if (orderByValues.ToUpper().EndsWith("ASC"))
+            {
+                return source.AsQueryable().OrderBy(lambda).ToList();
+            }
+            else
+            {
+                return source.AsQueryable().OrderByDescending(lambda).ToList();
+            }
+        }
+
 
         private static PropertyInfo SearchProperty(Type type, string propertyName)
         {

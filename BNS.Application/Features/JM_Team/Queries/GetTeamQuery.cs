@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using static BNS.Utilities.Enums;
 using System.Threading;
+using System.Linq.Expressions;
+using System;
 
 namespace BNS.Service.Features
 {
@@ -27,6 +29,20 @@ namespace BNS.Service.Features
             _mapper = mapper;
         }
 
+        public override IQueryable<JM_Team> GetQueryableData(GetTeamRequest request)
+        {
+            var query = _unitOfWork.Repository<JM_Team>()
+               .Include(s => s.Childs)
+               .ThenInclude(s => s.Childs)
+               .ThenInclude(s => s.Childs)
+               .ThenInclude(s => s.Childs)
+               .OrderBy(d => d.CreatedDate)
+               .Where(s => !s.IsDelete && s.CompanyId == request.CompanyId &&
+               (request.IsParentChild == false || (request.IsParentChild != false && !s.ParentId.HasValue)));
+
+            return query;
+        }
+
         public override async Task<ApiResultList<TeamResponseItem>> Handle(GetTeamRequest request, CancellationToken cancellationToken)
         {
             if (!string.IsNullOrEmpty(request.filters))
@@ -35,7 +51,7 @@ namespace BNS.Service.Features
             }
             else
             {
-                return await GetData(request);
+                return await base.Handle(request, cancellationToken);
             }
         }
 
@@ -44,21 +60,51 @@ namespace BNS.Service.Features
             var response = new ApiResultList<TeamResponseItem>();
             response.data = new DynamicDataItem<TeamResponseItem>();
             var queryGroup = _unitOfWork.Repository<JM_Team>()
-                .Include(s => s.Parent)
                .Where(s => !s.IsDelete && s.CompanyId == request.CompanyId &&
                !s.ParentId.HasValue);
 
-            queryGroup = queryGroup.WhereOr<JM_Team>(request.filters, request.defaultFilters);
-
+            queryGroup = queryGroup.WhereOr(request.filters, request.defaultFilters);
 
             var query = _unitOfWork.Repository<JM_Team>()
-                //.Include(s => s.Parent)
                .Where(s => !s.IsDelete && s.CompanyId == request.CompanyId &&
                s.ParentId.HasValue);
 
-            query = query.WhereOr<JM_Team>(request.filters, request.defaultFilters);
+            query = query.WhereOr(request.filters, request.defaultFilters);
+
+            var combinedQuery = queryGroup.Union(query);
+
+            //if (!string.IsNullOrEmpty(request.fieldSort))
+            //{
+            //    var columnSort = request.fieldSort;
+            //    var sortType = request.sort;
+            //    if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
+            //    {
+            //        var sort = request.sort == ESortEnum.desc.ToString() ? " DESC" : " ASC";
+            //        combinedQuery = combinedQuery.OrderBy(columnSort + sort);
+            //    }
+            //}
+
+            var items = await combinedQuery
+                .Include(s => s.Parent)
+                .ThenInclude(s => s.Parent)
+                .ThenInclude(s => s.Parent)
+                .ThenInclude(s => s.Parent)
+                .Select(s => _mapper.Map<TeamResponseItem>(s)).ToListAsync();
 
 
+            var parents = new List<TeamResponseItem>();
+            var parentsRoot = new List<TeamResponseItem>();
+            parentsRoot.AddRange(items.Where(s => !s.ParentId.HasValue).ToList());
+            var itemsHasGroup = items.Where(s => s.ParentId.HasValue).ToList();
+            foreach (var item in itemsHasGroup)
+            {
+                GetRecursiveParents(item, ref parents, ref parentsRoot);
+            }
+
+            var result = new List<TeamResponseItem>();
+            //result.AddRange(parents);
+            result.AddRange(parentsRoot);
+            response.recordsTotal = result.Count;
             if (!string.IsNullOrEmpty(request.fieldSort))
             {
                 var columnSort = request.fieldSort;
@@ -66,39 +112,20 @@ namespace BNS.Service.Features
                 if (!string.IsNullOrEmpty(columnSort) && !request.isAdd && !request.isEdit)
                 {
                     var sort = request.sort == ESortEnum.desc.ToString() ? " DESC" : " ASC";
-                    queryGroup = queryGroup.OrderBy(columnSort + sort);
-                    query = query.OrderBy(columnSort + sort);
+                    result = result.OrderByList(columnSort + sort);
                 }
             }
-            var groupIds = queryGroup.Select(s => s.Id).Distinct();
-
-            var itemsNotHasGroup = await queryGroup.ToListAsync();
-            var itemsHasGroup = await query.ToListAsync();
-
-            var uuu = await query.Select(s => _mapper.Map<TeamResponseItem>(s)).ToListAsync();
-
-            var parents = new List<JM_Team>();
-            var parentsRoot = new List<JM_Team>();
-            parentsRoot.AddRange(itemsNotHasGroup);
-            foreach (var item in itemsHasGroup)
-            {
-                GetRecursiveParents(item, ref parents, ref parentsRoot);
-            }
-
-            var result = new List<JM_Team>();
-            //result.AddRange(parents);
-            result.AddRange(parentsRoot);
-            response.recordsTotal = result.Count;
+            
             if (!request.isGetAll)
                 result.Skip(request.start).Take(request.length);
 
-            response.data.Items = result.Select(s => _mapper.Map<TeamResponseItem>(s)).ToList();
+            response.data.Items = result;
 
             return response;
         }
 
         // Hàm đệ quy để lấy danh sách đệ quy cha
-        static void GetRecursiveParents(JM_Team category, ref List<JM_Team> parents, ref List<JM_Team> parentsRoot)
+        static void GetRecursiveParents(TeamResponseItem category, ref List<TeamResponseItem> parents, ref List<TeamResponseItem> parentsRoot)
         {
             if (category.Parent != null)
             {
@@ -125,30 +152,6 @@ namespace BNS.Service.Features
                     parentsRoot.Add(category);
                 }
             }
-        }
-
-        public async Task<ApiResultList<TeamResponseItem>> GetData(GetTeamRequest request)
-        {
-            var response = new ApiResultList<TeamResponseItem>();
-            response.data = new DynamicDataItem<TeamResponseItem>();
-            var query = _unitOfWork.Repository<JM_Team>()
-                .Include(s => s.Parent)
-               .Include(s => s.Childs)
-               .ThenInclude(s => s.Childs)
-               .ThenInclude(s => s.Childs)
-               .ThenInclude(s => s.Childs)
-               .OrderBy(d => d.CreatedDate)
-               .Where(s => !s.IsDelete && s.CompanyId == request.CompanyId &&
-               (request.IsParentChild == false || (request.IsParentChild != false && !s.ParentId.HasValue)))
-               .Select(s => _mapper.Map<TeamResponseItem>(s));
-
-            response.recordsTotal = await query.CountAsync();
-            if (!request.isGetAll)
-                query = query.Skip(request.start).Take(request.length);
-
-            response.data.Items = await query.ToListAsync();
-
-            return response;
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using BNS.Domain.Responses;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

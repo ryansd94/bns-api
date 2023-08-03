@@ -50,9 +50,7 @@ namespace BNS.Service.Features
             //    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
             //    return response;
             //}
-            UpdateEntity<JM_Project>(dataCheck, request.ChangeFields, request.UserId);
-            //dataCheck.UpdatedDate = DateTime.UtcNow;
-            //dataCheck.UpdatedUserId = request.UserId;
+            UpdateEntity(dataCheck, request.ChangeFields, request.UserId);
 
             var team = request.ChangeFields.Where(s => s.Key.Equals("teams")).FirstOrDefault();
             var member = request.ChangeFields.Where(s => s.Key.Equals("members")).FirstOrDefault();
@@ -137,7 +135,7 @@ namespace BNS.Service.Features
                             var valueUpdate = valuesUpdate.Where(s => s.Id.Value == item.Id).FirstOrDefault();
                             if (valueUpdate != null)
                             {
-                                _mapper.Map<SprintRequest, JM_ProjectPhase>(valueUpdate, item);
+                                _mapper.Map(valueUpdate, item);
                             }
                         }
                         _unitOfWork.Repository<JM_ProjectPhase>().UpdateRange(updatesData);

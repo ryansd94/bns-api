@@ -1,4 +1,4 @@
-﻿namespace BNS.Domain
+﻿namespace BNS.Data
 {
     public class DefaultElement
     {

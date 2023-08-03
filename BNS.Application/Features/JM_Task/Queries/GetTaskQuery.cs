@@ -78,6 +78,7 @@ namespace BNS.Service.Features
                 .Include(s => s.TaskType)
                 .Include(s => s.Status)
                 .Include(s => s.Childs)
+                .ThenInclude(s => s.Childs)
                 .Include(s => s.TaskTags)
                 .Include(s => s.TaskCustomColumnValues)
                 .Include(s => s.User)

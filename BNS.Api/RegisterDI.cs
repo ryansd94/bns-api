@@ -1,15 +1,13 @@
-﻿using BNS.Data.Entities;
+﻿using BNS.Data;
+using BNS.Data.Entities;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Data.EntityContext;
 using BNS.Domain;
 using BNS.Domain.Commands;
 using BNS.Domain.Interface;
-using BNS.Domain.Queries;
-using BNS.Domain.Responses;
 using BNS.Service.Features;
 using BNS.Service.Hubs;
 using BNS.Service.Implement;
-using BNS.Service.Notify;
 using BNS.Utilities.Implement;
 using BNS.Utilities.Interface;
 using MediatR;

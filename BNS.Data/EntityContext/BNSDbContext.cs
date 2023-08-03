@@ -3,6 +3,8 @@ using System;
 using BNS.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using BNS.Data.Entities.JM_Entities;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace BNS.Data.EntityContext
 {
@@ -20,7 +22,7 @@ namespace BNS.Data.EntityContext
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Data Source=103.121.89.96,1433;Initial Catalog=bns;User ID=admkin;Password=123456A@a");
+                options.UseSqlServer("Server=tcp:bns-server.database.windows.net,1433;Initial Catalog=bns;Persist Security Info=False;User ID=ryansd994;Password=123456A@a;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
         public virtual DbSet<T> Repository<T>() where T : class
@@ -94,7 +96,7 @@ namespace BNS.Data.EntityContext
             {
                 e.Property(p => p.Value).HasColumnType("ntext");
             });
-            
+
             modelBuilder.Entity<JM_Comment>(e =>
             {
                 e.Property(p => p.Value).HasColumnType("ntext");

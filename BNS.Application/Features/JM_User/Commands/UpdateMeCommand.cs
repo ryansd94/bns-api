@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using BNS.Domain.Responses;
 using BNS.Utilities;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

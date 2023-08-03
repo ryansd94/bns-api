@@ -1,4 +1,5 @@
-﻿using BNS.Data.Entities.JM_Entities;
+﻿using BNS.Data;
+using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Domain.Commands;
 using BNS.Domain.Interface;

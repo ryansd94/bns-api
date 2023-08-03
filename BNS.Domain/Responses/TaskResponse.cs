@@ -48,8 +48,17 @@ namespace BNS.Domain.Responses
         public ICollection<TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
         public List<TagItem> Tags { get; set; }
         public List<TaskItem> Childs { get; set; }
-        public TaskItem TaskParent { get; set; }
+        public TaskChildItem TaskParent { get; set; }
         public List<FileUpload> Files { get; set; }
+    }
+
+    public class TaskChildItem
+    {
+        public Guid Id { get; set; }
+        public TaskType TaskType { get; set; }
+        public string Title { get; set; }
+        public StatusResponseItem Status { get; set; }
+        public DateTimeOffset UpdatedDate { get; set; }
     }
 
     public class TaskCustomColumnValue

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using BNS.Domain.AutoMapper;
 using BNS.Service.Notify;
+using BNS.Data;
 
 namespace BNS.Api
 {

@@ -41,6 +41,10 @@ namespace BNS.Service.Features
             var response = new ApiResult<TaskByIdResponse>();
             var task = await _unitOfWork.Repository<JM_Task>()
                 .Where(s => s.Id == request.Id && !s.IsDelete)
+                .Include(s => s.TaskType)
+                .ThenInclude(s => s.Template)
+                .ThenInclude(s => s.TemplateStatus)
+                .ThenInclude(s => s.Status)
                 .Include(s => s.TaskUsers)
                 .Include(s => s.User)
                 .Include(s => s.JM_TaskParent)
@@ -77,20 +81,15 @@ namespace BNS.Service.Features
                  }).ToDictionaryAsync(r => r.id, r => r.value);
             taskItem.DynamicData = dynamicData;
             taskItem.Files = files;
-            var taskTypeRequest = new GetTaskTypeByIdRequest
-            {
-                Id = task.TaskTypeId,
-                CompanyId = request.CompanyId,
-                IsDelete = null
-            };
-            var taskType = await _mediator.Send(taskTypeRequest);
-            var taskChilds = await _unitOfWork.Repository<JM_Task>().Where(s => s.ParentId != null && s.ParentId == task.Id
-              && !s.IsDelete).Select(s => _mapper.Map<TaskItem>(s)).ToListAsync();
+            var taskChilds = await _unitOfWork.Repository<JM_Task>()
+                .Where(s => s.ParentId != null && s.ParentId == task.Id && !s.IsDelete)
+                .Select(s => _mapper.Map<TaskItem>(s))
+                .ToListAsync();
             var comments = task.CommentTasks.Select(s => s.Comment).ToList();
 
             response.data.Task = taskItem;
-            response.data.TaskType = taskType.data;
-            response.data.Task.TaskParent = _mapper.Map<TaskItem>(task.JM_TaskParent);
+            response.data.TaskType = _mapper.Map<TaskTypeItem>(task.TaskType);
+            response.data.Task.TaskParent = _mapper.Map<TaskChildItem>(task.JM_TaskParent);
             response.data.Task.Childs = taskChilds;
             response.data.Comments = GetComments(comments);
             return response;

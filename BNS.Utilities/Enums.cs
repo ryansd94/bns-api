@@ -137,7 +137,8 @@
             TransferList,
             ListObject,
             ListId,
-            Other
+            Other,
+            MultiSelect
         }
 
         public enum EColumnPosition

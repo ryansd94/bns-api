@@ -19,6 +19,7 @@ using BNS.Domain.Commands;
 using BNS.Domain.Responses;
 using Newtonsoft.Json;
 using BNS.Domain.Interface;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

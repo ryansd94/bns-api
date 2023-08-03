@@ -1,4 +1,5 @@
-﻿using BNS.Domain;
+﻿using BNS.Data;
+using BNS.Domain;
 using BNS.Domain.Interface;
 using BNS.Domain.Responses;
 using Microsoft.Extensions.Options;

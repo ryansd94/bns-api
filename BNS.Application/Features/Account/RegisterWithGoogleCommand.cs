@@ -19,6 +19,7 @@ using BNS.Domain;
 using BNS.Infrastructure;
 using BNS.Utilities;
 using BNS.Domain.Interface;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

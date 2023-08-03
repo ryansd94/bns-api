@@ -1,4 +1,5 @@
-﻿using BNS.Domain;
+﻿using BNS.Data;
+using BNS.Domain;
 using BNS.Domain.Interface;
 using BNS.Notify;
 using BNS.Service.Hubs;

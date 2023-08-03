@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BNS.Data.Entities.JM_Entities
 {
-    public partial class JM_Team : BaseJMEntity
+    public partial class JM_Team : BaseJMEntityActive
     {
         public string Name { get; set; }
         public string Code { get; set; }

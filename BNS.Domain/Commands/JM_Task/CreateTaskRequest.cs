@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static BNS.Utilities.Enums;
 
 namespace BNS.Domain.Commands
 {
@@ -43,6 +44,7 @@ namespace BNS.Domain.Commands
         public string Name { get; set; }
         public bool IsAddNew { get; set; }
         public bool IsDelete { get; set; }
+        public ERowStatus? RowStatus { get; set; }
     }
 
     public class TaskCommentRequest

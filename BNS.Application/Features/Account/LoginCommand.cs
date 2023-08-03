@@ -11,6 +11,7 @@ using BNS.Domain.Commands;
 using BNS.Utilities;
 using BNS.Domain.Responses;
 using BNS.Domain.Interface;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

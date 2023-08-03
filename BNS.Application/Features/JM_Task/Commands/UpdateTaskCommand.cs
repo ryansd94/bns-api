@@ -14,261 +14,259 @@ using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using System.Collections.Generic;
 using BNS.Domain.Interface;
+using BNS.Service.Implement.BaseImplement;
+using Newtonsoft.Json;
 
 namespace BNS.Service.Features
 {
-    public class UpdateTaskCommand : IRequestHandler<UpdateTaskRequest, ApiResult<Guid>>
+    public class UpdateTaskCommand : UpdateRequestHandler<UpdateTaskRequest, JM_Task>
     {
-        protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAttachedFileService _attachedFileService;
 
         public UpdateTaskCommand(IMapper mapper,
             IUnitOfWork unitOfWork,
-            IStringLocalizer<SharedResource> sharedLocalizer,
-            IAttachedFileService attachedFileService)
+            IAttachedFileService attachedFileService) : base(unitOfWork, mapper)
         {
             _mapper = mapper;
-            _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
             _attachedFileService = attachedFileService;
         }
-        public async Task<ApiResult<Guid>> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
+        public override async Task<ApiResult<Guid>> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.Repository<JM_Task>()
-                .Include(s => s.TaskType).ThenInclude(s => s.Template).ThenInclude(s => s.TemplateDetails)
+            var dataCheck = await _unitOfWork.Repository<JM_Task>().AsNoTracking()
+                .Include(s => s.TaskType)
+                .ThenInclude(s => s.Template).ThenInclude(s => s.TemplateDetails)
                 .Include(s => s.TaskCustomColumnValues)
                 .Include(s => s.TaskTags)
+                .Include(s => s.Childs)
+                .Include(s => s.TaskUsers)
                 .Where(s => s.Id == request.Id).FirstOrDefaultAsync();
             if (dataCheck == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_NotExistsData];
+                response.title = LocalizedBackendMessages.MSG_ObjectNotExists;
                 return response;
             }
 
-            if (request.UserId != dataCheck.ReporterId)
+            var assignUserIds = dataCheck.TaskUsers.Select(s => s.UserId).ToList();
+
+            if (request.UserId != dataCheck.ReporterId && (dataCheck.AssignUserId != request.UserId && !assignUserIds.Contains(request.UserId)))
             {
-                if (dataCheck.TaskTypeId != request.DefaultData.TaskTypeId)
-                {
-                    response.errorCode = EErrorCode.Failed.ToString();
-                    response.title = _sharedLocalizer[LocalizedBackendMessages.Message.MSG_NotPermissionEdit];
-                    return response;
-                }
+                //if (dataCheck.TaskTypeId != request.DefaultData.TaskTypeId)
+                //{
+                response.errorCode = EErrorCode.Failed.ToString();
+                response.title = LocalizedBackendMessages.Message.MSG_NotPermissionEdit;
+                return response;
+                //}
             }
-
-            _mapper.Map(request.DefaultData, dataCheck);
-
-            dataCheck.UpdatedDate = DateTime.UtcNow;
-            dataCheck.UpdatedUserId = request.UserId;
-
-            #region Assign user
-
-            if (request.DefaultData.UsersAssignId != null && request.DefaultData.UsersAssignId.Count > 0)
+            UpdateEntity(dataCheck, request.ChangeFields.DefaultData, request.UserId);
+            if (request.ChangeFields.DefaultData != null && request.ChangeFields.DefaultData.Count > 0)
             {
-                if (request.DefaultData.UsersAssignId.Count == 1)
+                var usersAssignIds = request.ChangeFields.DefaultData.Where(s => s.Key.Equals("usersAssignIds")).FirstOrDefault();
+                var tags = request.ChangeFields.DefaultData.Where(s => s.Key.Equals("tags")).FirstOrDefault();
+                var childIds = request.ChangeFields.DefaultData.Where(s => s.Key.Equals("childIds")).FirstOrDefault();
+
+                #region Assign user
+
+                if (usersAssignIds != null)
                 {
-                    if (dataCheck.AssignUserId != request.DefaultData.UsersAssignId[0])
+                    var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem<Guid>>(usersAssignIds.Value.ToString());
+                    if (value.DeleteValues != null && value.DeleteValues.Count > 0)
                     {
-                        dataCheck.AssignUserId = request.DefaultData.UsersAssignId[0];
-                    }
-                }
-                else
-                {
-                    var taskUsersId = dataCheck.TaskUsers?.Select(s => s.Id).ToList();
-                    if (taskUsersId.Any())
-                    {
-                        var taskUserDeletes = dataCheck.TaskUsers.Where(s => !request.DefaultData.UsersAssignId.Contains(s.Id)).ToList();
-                        _unitOfWork.Repository<JM_TaskUser>().RemoveRange(taskUserDeletes);
-                    }
-                    for (int i = 0; i < request.DefaultData.UsersAssignId.Count; i++)
-                    {
-                        if (taskUsersId.Any(s => s == request.DefaultData.UsersAssignId[i]))
-                            continue;
-                        var taskUser = new JM_TaskUser
+                        if (dataCheck.AssignUserId.HasValue && value.DeleteValues.Contains(dataCheck.AssignUserId.Value))
                         {
-                            Id = Guid.NewGuid(),
-                            TaskId = dataCheck.Id,
-                            UserId = request.DefaultData.UsersAssignId[i],
-                            IsDelete = false,
-                            CompanyId = request.CompanyId,
-                            CreatedDate = DateTime.UtcNow,
-                            CreatedUserId = request.UserId,
-                        };
-                        _unitOfWork.Repository<JM_TaskUser>().Add(taskUser);
-                    }
-                }
-            }
-
-            #endregion
-
-            #region Dynamic task data
-
-            var templateDetails = dataCheck.TaskType.Template?.TemplateDetails.ToList();
-            var dataDynamics = request.DynamicData;
-
-            if (templateDetails != null && templateDetails.Count > 0)
-            {
-                var taskCustomColumnValues = dataCheck.TaskCustomColumnValues != null ? dataCheck.TaskCustomColumnValues.ToList() : new List<JM_TaskCustomColumnValue>();
-                foreach (var value in dataDynamics)
-                {
-                    var templateDetail = templateDetails.Where(s => s.Id.Equals(value.Key)).FirstOrDefault();
-                    if (templateDetail != null)
-                    {
-                        var taskCustomColumnValue = taskCustomColumnValues.Where(s => s.CustomColumnId == templateDetail.CustomColumnId).FirstOrDefault();
-                        if (taskCustomColumnValue != null)
+                            dataCheck.AssignUserId = null;
+                        }
+                        var taskUsersDelete = dataCheck.TaskUsers.Where(s => value.DeleteValues.Contains(s.UserId)).ToList();
+                        if (taskUsersDelete.Count > 0)
                         {
-                            taskCustomColumnValue.Value = value.Value.ToString();
-                            taskCustomColumnValue.UpdatedDate = DateTime.UtcNow;
-                            taskCustomColumnValue.UpdatedUserId = request.UserId;
-                            _unitOfWork.Repository<JM_TaskCustomColumnValue>().Update(taskCustomColumnValue);
+                            taskUsersDelete.ForEach(s => s.IsDelete = false);
+                            _unitOfWork.Repository<JM_TaskUser>().RemoveRange(taskUsersDelete);
+                        }
+                    }
+                    if (value.AddValues != null && value.AddValues.Count > 0)
+                    {
+                        var addValues = value.AddValues;
+                        if (!dataCheck.AssignUserId.HasValue && addValues.Count == 1)
+                        {
+                            dataCheck.AssignUserId = addValues[0];
                         }
                         else
                         {
-                            var taskCustomColumns = new JM_TaskCustomColumnValue
+                            addValues.ForEach(s => _unitOfWork.Repository<JM_TaskUser>().Add(new JM_TaskUser
                             {
                                 TaskId = dataCheck.Id,
-                                CustomColumnId = templateDetail.CustomColumnId.Value,
-                                TemplateDetailId = templateDetail.Id,
-                                CreatedDate = DateTime.UtcNow,
-                                CreatedUserId = request.UserId,
-                                IsDelete = false,
+                                UserId = s,
                                 CompanyId = request.CompanyId,
-                                Value = value.Value.ToString(),
-                            };
-                            _unitOfWork.Repository<JM_TaskCustomColumnValue>().Add(taskCustomColumns);
+                                CreatedUserId = request.UserId,
+                            }));
                         }
                     }
                 }
-            }
 
-            #endregion
+                #endregion
 
-            #region Tags
-            if (request.DefaultData.Tags != null && request.DefaultData.Tags.Count > 0)
-            {
-                var tagOld = dataCheck.TaskTags?.ToList();
-                foreach (var tag in request.DefaultData.Tags)
+                #region Tags
+                if (tags != null)
                 {
-                    if (!tag.IsDelete)
+                    var tagOld = dataCheck.TaskTags?.ToList();
+                    var value = JsonConvert.DeserializeObject<List<TagItem>>(tags.Value.ToString());
+                    if (value != null && value.Count > 0)
                     {
-                        if (tag.IsAddNew)
+                        var deleteIds = value.Where(s => s.RowStatus == ERowStatus.Delete).Select(s => s.Id).ToList();
+                        var addNewDataRows = value.Where(s => s.IsAddNew == true).ToList();
+                        var addNewIds = value.Where(s => s.IsAddNew != true).ToList();
+                        if (deleteIds.Count > 0)
+                        {
+                            var datasDelete = dataCheck.TaskTags?.Where(s => deleteIds.Contains(s.TagId));
+                            _unitOfWork.Repository<JM_TaskTag>().RemoveRange(datasDelete);
+                        }
+                        foreach (var item in addNewDataRows)
                         {
                             _unitOfWork.Repository<JM_Tag>().Add(new JM_Tag
                             {
                                 CompanyId = request.CompanyId,
-                                CreatedDate = DateTime.UtcNow,
                                 CreatedUserId = request.UserId,
-                                Id = tag.Id.Value,
-                                Name = tag.Name,
-                                IsDelete = false,
+                                Id = item.Id.Value,
+                                Name = item.Name,
+                            });
+
+                            _unitOfWork.Repository<JM_TaskTag>().Add(new JM_TaskTag
+                            {
+                                TagId = item.Id.Value,
+                                TaskId = dataCheck.Id,
+                                CompanyId = request.CompanyId,
+                                CreatedUserId = request.UserId,
                             });
                         }
-                        else
+
+                        foreach (var item in addNewIds)
                         {
-                            var checkTag = tagOld.Where(s => s.TagId == tag.Id).FirstOrDefault();
-                            if (checkTag != null)
-                                continue;
+                            _unitOfWork.Repository<JM_TaskTag>().Add(new JM_TaskTag
+                            {
+                                TagId = item.Id.Value,
+                                TaskId = dataCheck.Id,
+                                CompanyId = request.CompanyId,
+                                CreatedUserId = request.UserId,
+                            });
                         }
-
-                        _unitOfWork.Repository<JM_TaskTag>().Add(new JM_TaskTag
-                        {
-                            IsDelete = false,
-                            Id = Guid.NewGuid(),
-                            TagId = tag.Id.Value,
-                            TaskId = dataCheck.Id,
-                            CompanyId = request.CompanyId,
-                            CreatedDate = DateTime.UtcNow,
-                            CreatedUserId = request.UserId,
-                        });
                     }
-                    else
+                }
+                #endregion
+
+                #region Task Childs
+                if (childIds != null)
+                {
+                    var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem<Guid>>(childIds.Value.ToString());
+                    if (value.DeleteValues != null && value.DeleteValues.Count > 0)
                     {
-                        var checkTag = tagOld.Where(s => s.TagId == tag.Id).FirstOrDefault();
-                        if (checkTag == null)
-                            continue;
-                        checkTag.IsDelete = true;
+                        var taskChildDeletes = dataCheck.Childs.Where(s => value.DeleteValues.Contains(s.Id)).ToList();
+                        foreach (var item in taskChildDeletes)
+                        {
+                            item.ParentId = null;
+                            item.JM_TaskParent = null;
+                            item.UpdatedDate = DateTime.UtcNow;
+                            item.UpdatedUserId = request.UserId;
+                        }
+                        _unitOfWork.Repository<JM_Task>().UpdateRange(taskChildDeletes);
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+                }
+                #endregion
+            }
 
-                        _unitOfWork.Repository<JM_TaskTag>().Update(checkTag);
+            #region Dynamic task data
+
+            var templateDetails = dataCheck.TaskType.Template?.TemplateDetails.ToList();
+
+            if (templateDetails != null && templateDetails.Count > 0)
+            {
+                var dataDynamics = request.ChangeFields.DynamicData;
+                if (dataDynamics != null && dataDynamics.Count > 0)
+                {
+                    var taskCustomColumnValues = dataCheck.TaskCustomColumnValues != null ? dataCheck.TaskCustomColumnValues.ToList() : new List<JM_TaskCustomColumnValue>();
+                    foreach (var value in dataDynamics)
+                    {
+                        var templateDetail = templateDetails.Where(s => s.Id.Equals(Guid.Parse(value.Key))).FirstOrDefault();
+                        if (templateDetail != null)
+                        {
+                            var taskCustomColumnValue = taskCustomColumnValues.Where(s => s.CustomColumnId == templateDetail.CustomColumnId).FirstOrDefault();
+                            if (taskCustomColumnValue != null)
+                            {
+                                taskCustomColumnValue.Value = value.Value.ToString();
+                                taskCustomColumnValue.UpdatedDate = DateTime.UtcNow;
+                                taskCustomColumnValue.UpdatedUserId = request.UserId;
+                                _unitOfWork.Repository<JM_TaskCustomColumnValue>().Update(taskCustomColumnValue);
+                            }
+                            else
+                            {
+                                var taskCustomColumns = new JM_TaskCustomColumnValue
+                                {
+                                    TaskId = dataCheck.Id,
+                                    CustomColumnId = templateDetail.CustomColumnId.Value,
+                                    TemplateDetailId = templateDetail.Id,
+                                    CreatedUserId = request.UserId,
+                                    CompanyId = request.CompanyId,
+                                    Value = value.Value.ToString(),
+                                };
+                                _unitOfWork.Repository<JM_TaskCustomColumnValue>().Add(taskCustomColumns);
+                            }
+                        }
                     }
                 }
             }
+
             #endregion
 
-            #region Task child delete
-            if (request.DefaultData.TaskChildDelete != null && request.DefaultData.TaskChildDelete.Count > 0)
-            {
-                var taskChildDeletes = await _unitOfWork.Repository<JM_Task>().Where(s => request.DefaultData.TaskChildDelete.Contains(s.Id)).ToListAsync();
-                foreach (var item in taskChildDeletes)
-                {
-                    item.ParentId = null;
-                    item.UpdatedDate = DateTime.UtcNow;
-                    item.UpdatedUserId = request.UserId;
-                    _unitOfWork.Repository<JM_Task>().Update(item);
-                }
-            }
-            #endregion
 
-            #region Task child add
-            if (request.DefaultData.TaskChild != null && request.DefaultData.TaskChild.Count > 0)
-            {
-                var taskChildDeletes = await _unitOfWork.Repository<JM_Task>().Where(s => request.DefaultData.TaskChild.Contains(s.Id)).ToListAsync();
-                foreach (var item in taskChildDeletes)
-                {
-                    item.ParentId = dataCheck.Id;
-                    item.UpdatedDate = DateTime.UtcNow;
-                    item.UpdatedUserId = request.UserId;
-                    _unitOfWork.Repository<JM_Task>().Update(item);
-                }
-            }
-            #endregion
-
-            #region Files
-            if (request.DefaultData.Files != null && request.DefaultData.Files.Count > 0)
-            {
-                var fileAddNew = request.DefaultData.Files.Where(s => s.IsAddNew).Select(s => new CreateAttachedFilesRequest
-                {
-                    EntityId = dataCheck.Id,
-                    CompanyId = request.CompanyId,
-                    Url = s.Url,
-                    UserId = request.UserId,
-                    File = s.File,
-                }).ToList();
-                await _attachedFileService.AddAttachedFiles(fileAddNew);
-
-                var fileDelete = request.DefaultData.Files.Where(s => s.IsDelete).Select(s => s.Id).ToList();
-                if (fileDelete != null && fileDelete.Count > 0)
-                {
-                    await _attachedFileService.RemoveAttachedFiles(fileDelete);
-                }
-            }
-            #endregion
-
-            //#region Comments
-            //var comments = request.Comments != null ? request.Comments.Where(s => s.IsAddNew).ToList() : null;
-            //if (comments != null && comments.Count > 0)
+            //#region Task child delete
+            //if (request.DefaultData.TaskChildDelete != null && request.DefaultData.TaskChildDelete.Count > 0)
             //{
-            //    foreach (var item in comments)
+            //    var taskChildDeletes = await _unitOfWork.Repository<JM_Task>().Where(s => request.DefaultData.TaskChildDelete.Contains(s.Id)).ToListAsync();
+            //    foreach (var item in taskChildDeletes)
             //    {
-            //        var comment = new JM_Comment
-            //        {
-            //            Value = item.Value,
-            //            Id = Guid.NewGuid(),
-            //            CompanyId = request.CompanyId,
-            //            CreatedUserId = request.UserId,
-            //            UpdatedUserId = request.UserId,
-            //        };
-            //        _unitOfWork.Repository<JM_Comment>().Add(comment);
-            //        _unitOfWork.Repository<JM_CommentTask>().Add(new JM_CommentTask
-            //        {
-            //            TaskId = dataCheck.Id,
-            //            CommentId = comment.Id,
-            //            CreatedUserId = request.UserId,
-            //            CompanyId = request.CompanyId,
-            //            UpdatedUserId = request.UserId,
-            //        });
+            //        item.ParentId = null;
+            //        item.UpdatedDate = DateTime.UtcNow;
+            //        item.UpdatedUserId = request.UserId;
+            //        _unitOfWork.Repository<JM_Task>().Update(item);
+            //    }
+            //}
+            //#endregion
+
+            //#region Task child add
+            //if (request.DefaultData.TaskChild != null && request.DefaultData.TaskChild.Count > 0)
+            //{
+            //    var taskChildDeletes = await _unitOfWork.Repository<JM_Task>().Where(s => request.DefaultData.TaskChild.Contains(s.Id)).ToListAsync();
+            //    foreach (var item in taskChildDeletes)
+            //    {
+            //        item.ParentId = dataCheck.Id;
+            //        item.UpdatedDate = DateTime.UtcNow;
+            //        item.UpdatedUserId = request.UserId;
+            //        _unitOfWork.Repository<JM_Task>().Update(item);
+            //    }
+            //}
+            //#endregion
+
+            //#region Files
+            //if (request.DefaultData.Files != null && request.DefaultData.Files.Count > 0)
+            //{
+            //    var fileAddNew = request.DefaultData.Files.Where(s => s.IsAddNew).Select(s => new CreateAttachedFilesRequest
+            //    {
+            //        EntityId = dataCheck.Id,
+            //        CompanyId = request.CompanyId,
+            //        Url = s.Url,
+            //        UserId = request.UserId,
+            //        File = s.File,
+            //    }).ToList();
+            //    await _attachedFileService.AddAttachedFiles(fileAddNew);
+
+            //    var fileDelete = request.DefaultData.Files.Where(s => s.IsDelete).Select(s => s.Id).ToList();
+            //    if (fileDelete != null && fileDelete.Count > 0)
+            //    {
+            //        await _attachedFileService.RemoveAttachedFiles(fileDelete);
             //    }
             //}
             //#endregion

@@ -51,6 +51,8 @@ namespace BNS.Service.Implement.BaseImplement
 
         public static void UpdateEntity<T>(T entity, List<ChangeFieldItem> models, Guid userId) where T : BaseJMEntity
         {
+            if (models == null || models.Count == 0)
+                return;
             var modelEntities = models.Where(s => s.IsEntity == true).ToList();
             if (modelEntities.Count == 0) return;
             foreach (var item in modelEntities)

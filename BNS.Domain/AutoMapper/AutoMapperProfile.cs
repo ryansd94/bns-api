@@ -49,7 +49,8 @@ namespace BNS.Domain.AutoMapper
                 .ForMember(s => s.Members, o => o.MapFrom(x => x.JM_ProjectMembers.Select(s => s.UserId).ToList()))
                 .ForMember(s => s.Sprints, o => o.MapFrom(x => x.Sprints.OrderBy(s => s.CreatedDate).Where(s => s.ParentId == null && s.IsDelete == false)));
             CreateMap<JM_Team, TeamResponseItem>()
-                .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty));
+                .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty))
+                .ForMember(s => s.Childs, d => d.MapFrom(u => u.Childs));
             CreateMap<JM_Team, TeamResponseItemById>()
                 .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty));
@@ -103,6 +104,13 @@ namespace BNS.Domain.AutoMapper
                 .ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
             CreateMap<CreateStatusRequest, JM_Status>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
             CreateMap<JM_Status, StatusItemResponse>();
+            CreateMap<JM_Task, TaskChildItem>()
+               .ForMember(s => s.TaskType, d => d.MapFrom(e => new TaskType
+               {
+                   Name = e.TaskType.Name,
+                   Color = e.TaskType.Color,
+                   Icon = e.TaskType.Icon,
+               }));
         }
     }
 }

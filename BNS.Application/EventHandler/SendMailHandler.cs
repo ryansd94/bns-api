@@ -19,6 +19,7 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using MailKit.Security;
 using static Google.Apis.Gmail.v1.GmailService;
+using BNS.Data;
 
 namespace BNS.Service.EventHandler
 {

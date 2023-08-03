@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    [Migration("20230725111955_updateEntity")]
+    [Migration("20230725115231_updateEntity")]
     partial class updateEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

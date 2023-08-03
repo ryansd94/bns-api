@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

@@ -16,7 +16,7 @@ namespace BNS.Domain.Responses
         public string Description { get; set; }
         public Guid? ParentId { get; set; }
         public TeamResponseItem Parent { get; set; }
-        public List<TeamResponseItem> Childs { get; set; }
+        public IEnumerable<TeamResponseItem> Childs { get; set; }
     }
 
     public class TeamResponseItemById  : TeamResponseItem

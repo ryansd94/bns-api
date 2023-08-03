@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using BNS.Service.Subcriber;
+using BNS.Data;
 
 namespace BNS.Service.Features
 {

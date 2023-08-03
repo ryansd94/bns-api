@@ -1,4 +1,5 @@
-﻿using BNS.Domain;
+﻿using BNS.Data;
+using BNS.Domain;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
