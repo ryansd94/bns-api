@@ -5,7 +5,6 @@ using BNS.Service.Middleware;
 using BNS.Service.Subcriber;
 using BNS.Data.EntityContext;
 using BNS.Infrastructure.Messaging;
-using BNS.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using BNS.Domain.AutoMapper;
-using BNS.Service.Notify;
 using BNS.Data;
 
 namespace BNS.Api
@@ -251,8 +249,9 @@ namespace BNS.Api
                     builder.UseStaticFiles();
                     builder.UseIpRateLimiting();
 
-                    builder.UseRabbitMq().SubscribeEvent<CreateJM_TeamSubcriberMQ>();
-                    builder.UseRabbitMq().SubscribeEvent<SendMailSubcriberMQ>();
+                    builder.UseRabbitMq().SubscribeEvent<CreateTeamSubcriberMQ>();
+                    builder.UseRabbitMq().SubscribeEvent<SendMailSubcriber>();
+                    builder.UseRabbitMq().SubscribeEvent<SetTaskNumberSubcriber>();
 
                     next(builder);
                 };

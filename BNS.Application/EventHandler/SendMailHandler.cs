@@ -1,5 +1,4 @@
 ﻿using BNS.Service.Subcriber;
-using BNS.Domain;
 using BNS.Resource;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -9,7 +8,6 @@ using System.Net.Mail;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text;
-using MimeKit;
 using System.IO;
 using System;
 using Google.Apis.Gmail.v1.Data;
@@ -17,13 +15,11 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using MailKit.Security;
-using static Google.Apis.Gmail.v1.GmailService;
 using BNS.Data;
 
 namespace BNS.Service.EventHandler
 {
-    public class SendMailHandler : IRequestHandler<SendMailSubcriberMQ>
+    public class SendMailHandler : IRequestHandler<SendMailSubcriber>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         protected readonly MyConfiguration _config;
@@ -97,9 +93,7 @@ namespace BNS.Service.EventHandler
             }
         }
 
-
-
-        public async Task<Unit> Handle(SendMailSubcriberMQ request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SendMailSubcriber request, CancellationToken cancellationToken)
         {
             using (var smtpClient = new SmtpClient())
             {

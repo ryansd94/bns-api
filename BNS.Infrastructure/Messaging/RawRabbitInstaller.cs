@@ -30,7 +30,7 @@ namespace BNS.Infrastructure.Messaging
 
             services.AddSingleton<IBusClient>(_ => client);
 
-            services.AddScoped<IBusPublisher, BusPublisher>();
+            services.AddSingleton<IBusPublisher, BusPublisher>();
 
             return services;
         }

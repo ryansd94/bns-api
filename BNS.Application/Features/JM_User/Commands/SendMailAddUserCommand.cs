@@ -18,6 +18,7 @@ using static BNS.Utilities.Enums;
 using BNS.Domain.Commands;
 using BNS.Service.Subcriber;
 using BNS.Data;
+using BNS.Domain.Messaging;
 
 namespace BNS.Service.Features
 {
@@ -27,7 +28,7 @@ namespace BNS.Service.Features
         protected readonly MyConfiguration _config;
         private readonly ICipherService _cipherService;
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly IBusPublisher _busPublisher;
+        private readonly IBusPublisher _busPublisher;
         private IMediator _mediator;
         public SendMailAddUserCommand(
          IStringLocalizer<SharedResource> sharedLocalizer,
@@ -66,7 +67,7 @@ namespace BNS.Service.Features
             .Select(s => s.Account.Email).Contains(s)).ToList();
 
             var accounts = await _unitOfWork.JM_AccountRepository.GetAsync(s => !s.IsDelete && emails.Contains(s.Email));
-            var sendMailItems = new List<SendMailSubcriberMQItem>();
+            var sendMailItems = new List<SendMailSubcriberItem>();
             foreach (var email in emails)
             {
                 var account = accounts.Where(s => s.Email.Equals(email)).FirstOrDefault();
@@ -127,7 +128,7 @@ namespace BNS.Service.Features
                 };
                 var token = _cipherService.EncryptString(JsonConvert.SerializeObject(joinTeam));
                 var body = string.Format(rootBody, $"{_config.Default.WebUserDomain}/signup/jointeam?token={token}");
-                sendMailItems.Add(new SendMailSubcriberMQItem
+                sendMailItems.Add(new SendMailSubcriberItem
                 {
                     Body = body,
                     Email = email,
@@ -135,7 +136,7 @@ namespace BNS.Service.Features
                 });
             }
             await _unitOfWork.SaveChangesAsync();
-            var sendMailRequest = new SendMailSubcriberMQ
+            var sendMailRequest = new SendMailSubcriber
             {
                 Items = sendMailItems
             };

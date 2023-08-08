@@ -3,12 +3,15 @@ using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
 using BNS.Domain.Commands;
 using BNS.Domain.Interface;
+using BNS.Domain.Messaging;
 using BNS.Domain.Responses;
 using BNS.Resource;
 using BNS.Resource.LocalizationResources;
+using BNS.Service.Subcriber;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using RawRabbit.Enrichers.MessageContext.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +29,8 @@ namespace BNS.Service.Features
         private readonly IAttachedFileService _attachedFileService;
         protected readonly INotifyService _notifyService;
         protected readonly ITaskService _taskService;
+        private IMediator _mediator;
+        private readonly IBusPublisher _busPublisher;
 
         public CreateTaskCommand(
             IStringLocalizer<SharedResource> sharedLocalizer,
@@ -33,7 +38,9 @@ namespace BNS.Service.Features
             IMapper mapper,
             IAttachedFileService attachedFileService,
             INotifyService notifyService,
-            ITaskService taskService)
+            ITaskService taskService,
+            IMediator mediator,
+            IBusPublisher busPublisher)
         {
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
@@ -41,7 +48,19 @@ namespace BNS.Service.Features
             _attachedFileService = attachedFileService;
             _notifyService = notifyService;
             _taskService = taskService;
+            _mediator = mediator;
+            _busPublisher = busPublisher;
         }
+
+        private async Task SetTaskBumber(CreateTaskRequest request, JM_Task task)
+        {
+            await _busPublisher.PublishAsync(new SetTaskNumberSubcriber
+            {
+                CompanyId = request.CompanyId,
+                Task = task
+            });
+        }
+
         public async Task<ApiResult<Guid>> Handle(CreateTaskRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
@@ -65,7 +84,6 @@ namespace BNS.Service.Features
             task.CreatedDate = DateTime.UtcNow;
             task.CreatedUserId = request.UserId;
             task.ReporterId = request.UserId;
-
             _unitOfWork.Repository<JM_Task>().Add(task);
 
             #region Assign user
@@ -213,6 +231,7 @@ namespace BNS.Service.Features
                 var userMentions = await GetNotifyUsers(userNotifyIds, request.UserId, task, taskType.Color, taskType.Icon, ENotifyObjectType.TaskCommentMention);
                 await _notifyService.SendNotify(userMentions, request.UserId, request.CompanyId);
             }
+            await SetTaskBumber(request, task);
             //response.data = data.Id;
             return response;
         }

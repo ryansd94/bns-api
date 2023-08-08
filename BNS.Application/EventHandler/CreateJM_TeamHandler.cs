@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using static BNS.Utilities.Enums;
 namespace BNS.Service.EventHandler
 {
-    public class CreateJM_TeamHandler : IRequestHandler<CreateJM_TeamSubcriberMQ>
+    public class CreateJM_TeamHandler : IRequestHandler<CreateTeamSubcriberMQ>
     {
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,7 +22,7 @@ namespace BNS.Service.EventHandler
             _sharedLocalizer = sharedLocalizer;
             _unitOfWork = unitOfWork;
         }
-        public async Task<Unit> Handle(CreateJM_TeamSubcriberMQ request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateTeamSubcriberMQ request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var dataCheck = await _unitOfWork.JM_TeamRepository.FirstOrDefaultAsync(s => s.Name.Equals(request.Name) && s.CompanyId == request.CompanyId);

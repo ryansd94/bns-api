@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using BNS.Domain.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -21,35 +22,35 @@ namespace BNS.Infrastructure.RabbitMq
             _busClient = _serviceProvider?.GetService<IBusClient>();
         }
 
-        public IBusSubscriber SubscribeEvent<TEvent>() where TEvent : IEvent, IRequest
+        public async Task<IBusSubscriber> SubscribeEvent<TEvent>() where TEvent : IEvent, IRequest
         {
             if (_busClient != null)
             {
-                _busClient.SubscribeAsync<TEvent>(async (@event) =>
-                {
-                    try
-                    {
-                        using var scope = _serviceProvider.CreateScope();
-                        var handler = scope.ServiceProvider.GetService<IMediator>();
-                        await handler.Send(@event);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Erro ao processar mensagem");
-                        throw;
-                    }
+                await _busClient.SubscribeAsync<TEvent>(async (@event) =>
+                 {
+                     try
+                     {
+                         using var scope = _serviceProvider.CreateScope();
+                         var handler = scope.ServiceProvider.GetService<IMediator>();
+                         await handler.Send(@event);
+                     }
+                     catch (Exception ex)
+                     {
+                         Log.Error(ex, "Erro ao processar mensagem");
+                         throw;
+                     }
 
-                }, ctx => ctx.UseSubscribeConfiguration(cfg => cfg
-                    .Consume(c => c.WithRoutingKey(typeof(TEvent).Name))
-                    .FromDeclaredQueue(q => q
-                        .WithName(GetQueueName<TEvent>())
-                        .WithDurability()
-                        .WithAutoDelete(false))
-                    .OnDeclaredExchange(e => e
-                      .WithName("sample-rabbitmq-publish")
-                      .WithType(ExchangeType.Topic)
-                      .WithArgument("key", typeof(TEvent).Name.ToLower()))
-                ));
+                 }, ctx => ctx.UseSubscribeConfiguration(cfg => cfg
+                     .Consume(c => c.WithRoutingKey(typeof(TEvent).Name))
+                     .FromDeclaredQueue(q => q
+                         .WithName(GetQueueName<TEvent>())
+                         .WithDurability()
+                         .WithAutoDelete(false))
+                     .OnDeclaredExchange(e => e
+                       .WithName("sample-rabbitmq-publish")
+                       .WithType(ExchangeType.Topic)
+                       .WithArgument("key", typeof(TEvent).Name.ToLower()))
+                 ));
                 return this;
             }
             else return null;
