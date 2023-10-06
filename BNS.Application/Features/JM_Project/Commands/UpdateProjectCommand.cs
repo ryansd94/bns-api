@@ -31,27 +31,8 @@ namespace BNS.Service.Features
             _projectService = projectService;
         }
 
-        public override async Task<ApiResult<Guid>> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)
+        public override async Task OtherHandle(UpdateProjectRequest request, JM_Project entity)
         {
-            var response = new ApiResult<Guid>();
-            var dataCheck = await _unitOfWork.Repository<JM_Project>().Where(s => s.Id == request.Id).FirstOrDefaultAsync();
-            if (dataCheck == null)
-            {
-                response.errorCode = EErrorCode.NotExistsData.ToString();
-                response.title = LocalizedBackendMessages.MSG_ObjectNotExists;
-                return response;
-            }
-
-            //var checkDuplicate = await _context.JM_Projects.Where(s => s.Name.Equals(request.Name)
-            //&& s.Id != request.Id).FirstOrDefaultAsync();
-            //if (checkDuplicate != null)
-            //{
-            //    response.errorCode = EErrorCode.IsExistsData.ToString();
-            //    response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
-            //    return response;
-            //}
-            UpdateEntity(dataCheck, request.ChangeFields, request.UserId);
-
             var team = request.ChangeFields.Where(s => s.Key.Equals("teams")).FirstOrDefault();
             var member = request.ChangeFields.Where(s => s.Key.Equals("members")).FirstOrDefault();
             var sprint = request.ChangeFields.Where(s => s.Key.Equals("sprints")).FirstOrDefault();
@@ -76,7 +57,6 @@ namespace BNS.Service.Features
                     _unitOfWork.Repository<JM_ProjectTeam>().RemoveRange(removeData);
                 }
             }
-
 
             if (member != null)
             {
@@ -112,9 +92,9 @@ namespace BNS.Service.Features
                         var projectPhase = _mapper.Map<JM_ProjectPhase>(item);
                         projectPhase.CreatedUserId = request.UserId;
                         projectPhase.CompanyId = request.CompanyId;
-                        projectPhase.ProjectId = dataCheck.Id;
+                        projectPhase.ProjectId = entity.Id;
                         await _unitOfWork.Repository<JM_ProjectPhase>().AddAsync(projectPhase);
-                        var childs = _projectService.GetAllChilds(projectPhase.Id, item, request.UserId, dataCheck.Id, request.CompanyId);
+                        var childs = _projectService.GetAllChilds(projectPhase.Id, item, request.UserId, entity.Id, request.CompanyId);
                         if (childs.Count > 0)
                         {
                             await _unitOfWork.Repository<JM_ProjectPhase>().AddRangeAsync(childs);
@@ -142,13 +122,6 @@ namespace BNS.Service.Features
                     }
                 }
             }
-
-            _unitOfWork.Repository<JM_Project>().Update(dataCheck);
-            await _unitOfWork.SaveChangesAsync();
-            response.data = dataCheck.Id;
-            return response;
         }
-
     }
-
 }

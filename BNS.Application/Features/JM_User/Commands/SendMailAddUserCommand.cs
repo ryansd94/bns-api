@@ -57,11 +57,10 @@ namespace BNS.Service.Features
             {
                 rootBody = reader.ReadToEnd();
             }
-            var emails = request.Emails.Distinct().ToList();
+            var emails = request.Users.Select(s => s.Email).Distinct().ToList();
             var userActive = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => !s.IsDelete
               && s.CompanyId == request.CompanyId
               && emails.Contains(s.Account.Email), null, s => s.Account);
-
 
             emails = emails.Where(s => !userActive.Where(s => s.Status == EUserStatus.ACTIVE)
             .Select(s => s.Account.Email).Contains(s)).ToList();
@@ -70,6 +69,7 @@ namespace BNS.Service.Features
             var sendMailItems = new List<SendMailSubcriberItem>();
             foreach (var email in emails)
             {
+                var user = request.Users.Where(s => s.Email.Equals(email)).FirstOrDefault();
                 var account = accounts.Where(s => s.Email.Equals(email)).FirstOrDefault();
                 if (account == null)
                 {
@@ -86,6 +86,8 @@ namespace BNS.Service.Features
                         TwoFactorEnabled = false,
                         LockoutEnabled = false,
                         AccessFailedCount = 0,
+                        FirstName = user?.FirstName,
+                        LastName = user?.LastName
                     };
                     await _unitOfWork.JM_AccountRepository.AddAsync(account);
                 }
@@ -140,7 +142,7 @@ namespace BNS.Service.Features
             {
                 Items = sendMailItems
             };
-            await _mediator.Send(sendMailRequest);
+            _mediator.Send(sendMailRequest);
             return response;
         }
 

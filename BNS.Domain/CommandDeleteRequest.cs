@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BNS.Domain
 {
-    public class CommandDeleteBase<T> : CommandBase<T> where T : class
+    public class CommandDeleteRequest: CommandBase<ApiResult<Guid>>
     {
-        public CommandDeleteBase()
+        public CommandDeleteRequest()
         {
             Ids = new List<Guid>();
         }

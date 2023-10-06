@@ -2,7 +2,7 @@
 
 namespace BNS.Domain.Commands
 {
-    public class DeletePriorityRequest : CommandDeleteBase<ApiResult<Guid>>
+    public class DeletePriorityRequest : CommandDeleteRequest
     {
     }
 }

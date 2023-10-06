@@ -56,6 +56,8 @@ namespace BNS.Api.Controllers.Project
         [BNSAuthorization]
         public async Task<IActionResult> GetAllData([FromQuery] GetTaskRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 

@@ -50,7 +50,9 @@ namespace BNS.Service.Features
                         CompanyId = request.CompanyId,
                         TemplateId = data.Id,
                         StatusId = item.Id,
-                        Order = templateStatusOrder
+                        Order = templateStatusOrder,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedUserId = request.UserId,
                     };
                     await _unitOfWork.Repository<JM_TemplateStatus>().AddAsync(templateStatus);
                     templateStatusOrder += 1;

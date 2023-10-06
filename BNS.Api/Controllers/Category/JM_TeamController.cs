@@ -32,6 +32,8 @@ namespace BNS.Api.Controllers.Category
         [BNSAuthorization]
         public async Task<IActionResult> GetAllData([FromQuery] GetTeamRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -44,14 +46,11 @@ namespace BNS.Api.Controllers.Category
             request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
-
-        [HttpDelete("{id}")]
+        
+        [HttpPut]
         [BNSAuthorization]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(DeleteTeamRequest request)
         {
-            var request = new DeleteTeamRequest();
-            request.ids.Add(id);
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -83,6 +82,7 @@ namespace BNS.Api.Controllers.Category
         [BNSAuthorization(false)]
         public async Task<IActionResult> GetAllUsers([FromQuery] GetUserRequest request)
         {
+            request.isHasNotTeam = true;
             return Ok(await _mediator.Send(request));
         }
     }

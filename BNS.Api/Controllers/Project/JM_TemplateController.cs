@@ -31,6 +31,8 @@ namespace BNS.Api.Controllers.Project
         [HttpGet(Name = "get-template")]
         public async Task<IActionResult> GetAllData([FromQuery] GetTemplateRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -49,14 +51,10 @@ namespace BNS.Api.Controllers.Project
             request.Id = id;
             return Ok(await _mediator.Send(request));
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        
+        [HttpPut(Name = "delete-template")]
+        public async Task<IActionResult> Delete(DeleteTemplateRequest request)
         {
-            var request = new DeleteTemplateRequest();
-            request.Ids.Add(id);
-            request.CompanyId = CompanyId;
-            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
     }

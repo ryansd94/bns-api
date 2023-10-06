@@ -43,6 +43,9 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -64,6 +67,9 @@ namespace BNS.Data.Migrations
 
                     b.Property<Guid?>("JM_TaskId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -923,21 +929,21 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignUserId");
-
                     b.HasIndex("CreatedUserId");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex(new[] { "AssignUserId" }, "Nidx_JM_Task_AssignUserId");
 
-                    b.HasIndex("PriorityId");
+                    b.HasIndex(new[] { "ParentId" }, "Nidx_JM_Task_ParentId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex(new[] { "PriorityId" }, "Nidx_JM_Task_PriorityId");
 
-                    b.HasIndex("SprintId");
+                    b.HasIndex(new[] { "ProjectId" }, "Nidx_JM_Task_ProjectId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex(new[] { "SprintId" }, "Nidx_JM_Task_SprintId");
 
-                    b.HasIndex("TaskTypeId");
+                    b.HasIndex(new[] { "StatusId" }, "Nidx_JM_Task_StatusId");
+
+                    b.HasIndex(new[] { "TaskTypeId" }, "Nidx_JM_Task_TaskTypeId");
 
                     b.ToTable("JM_Tasks");
                 });
@@ -1762,7 +1768,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "JM_Team")
-                        .WithMany("JM_AccountCompanys")
+                        .WithMany("Members")
                         .HasForeignKey("TeamId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "Account")
@@ -2396,7 +2402,7 @@ namespace BNS.Data.Migrations
                 {
                     b.Navigation("Childs");
 
-                    b.Navigation("JM_AccountCompanys");
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>

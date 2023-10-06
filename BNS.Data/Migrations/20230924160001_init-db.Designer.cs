@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    [Migration("20230418163426_AddSYS_ViewPermissionAction")]
-    partial class AddSYS_ViewPermissionAction
+    [Migration("20230924160001_init-db")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,8 +179,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -194,8 +194,8 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -221,8 +221,8 @@ namespace BNS.Data.Migrations
                     b.Property<int>("CountReply")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -236,8 +236,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -266,8 +266,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -278,8 +278,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -327,6 +327,9 @@ namespace BNS.Data.Migrations
                     b.Property<double?>("Long")
                         .HasColumnType("float");
 
+                    b.Property<int>("ManagementType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -335,11 +338,17 @@ namespace BNS.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("Scale")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedUser")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -358,8 +367,8 @@ namespace BNS.Data.Migrations
                     b.Property<int>("ControlType")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -373,8 +382,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -395,8 +404,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -416,8 +425,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -432,6 +441,94 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_Files");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Notifycation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ObjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.ToTable("JM_Notifycations");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_NotifycationUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ObjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserReceivedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex("UserReceivedId");
+
+                    b.ToTable("JM_NotifycationUsers");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Priority", b =>
                 {
                     b.Property<Guid>("Id")
@@ -444,8 +541,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -459,8 +556,8 @@ namespace BNS.Data.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -487,8 +584,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -511,8 +608,11 @@ namespace BNS.Data.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -533,8 +633,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -548,8 +648,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -568,17 +668,20 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_ProjectMembers");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectSprint", b =>
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -592,14 +695,17 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -608,7 +714,11 @@ namespace BNS.Data.Migrations
 
                     b.HasIndex("CreatedUserId");
 
-                    b.ToTable("JM_ProjectSprints");
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("JM_ProjectPhase");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectTeam", b =>
@@ -620,8 +730,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -635,8 +745,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -652,57 +762,6 @@ namespace BNS.Data.Migrations
                     b.ToTable("JM_ProjectTeams");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Sprint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("JM_ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedUserId");
-
-                    b.HasIndex("JM_ProjectId");
-
-                    b.ToTable("JM_Sprints");
-                });
-
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Status", b =>
                 {
                     b.Property<Guid>("Id")
@@ -715,11 +774,20 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApplyAll")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAutomaticAdd")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
@@ -733,8 +801,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -755,8 +823,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -767,8 +835,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -792,8 +860,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -815,6 +883,9 @@ namespace BNS.Data.Migrations
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
@@ -846,29 +917,29 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignUserId");
-
                     b.HasIndex("CreatedUserId");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex(new[] { "AssignUserId" }, "Nidx_JM_Task_AssignUserId");
 
-                    b.HasIndex("PriorityId");
+                    b.HasIndex(new[] { "ParentId" }, "Nidx_JM_Task_ParentId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex(new[] { "PriorityId" }, "Nidx_JM_Task_PriorityId");
 
-                    b.HasIndex("SprintId");
+                    b.HasIndex(new[] { "ProjectId" }, "Nidx_JM_Task_ProjectId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex(new[] { "SprintId" }, "Nidx_JM_Task_SprintId");
 
-                    b.HasIndex("TaskTypeId");
+                    b.HasIndex(new[] { "StatusId" }, "Nidx_JM_Task_StatusId");
+
+                    b.HasIndex(new[] { "TaskTypeId" }, "Nidx_JM_Task_TaskTypeId");
 
                     b.ToTable("JM_Tasks");
                 });
@@ -882,8 +953,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -900,8 +971,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TemplateDetailId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -931,8 +1002,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -946,8 +1017,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -981,8 +1052,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1005,8 +1076,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("TemplateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1026,11 +1097,11 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1041,8 +1112,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1051,6 +1122,8 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("TaskId");
 
@@ -1071,14 +1144,17 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
@@ -1089,8 +1165,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1116,8 +1192,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1134,8 +1210,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1165,8 +1241,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1186,8 +1262,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TemplateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1212,8 +1288,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1230,8 +1306,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TemplateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1256,8 +1332,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1271,8 +1347,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1301,8 +1377,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1316,8 +1392,8 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1335,14 +1411,14 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Action")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Controller")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1350,8 +1426,8 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1374,14 +1450,11 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ActionType")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1389,11 +1462,11 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("SYS_ViewPermissionActionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Key")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1408,11 +1481,51 @@ namespace BNS.Data.Migrations
 
                     b.HasIndex("CreatedUserId");
 
-                    b.HasIndex("SYS_ViewPermissionActionId");
-
                     b.HasIndex(new[] { "ViewPermissionActionId" }, "Nidx_SYS_ViewPermissionActionDetail_ViewPermissionActionId");
 
                     b.ToTable("SYS_ViewPermissionActionDetails");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionObject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ObjectType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ViewPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex(new[] { "ViewPermissionId" }, "Nidx_SYS_ViewPermissionObject_ViewPermissionId");
+
+                    b.ToTable("SYS_ViewPermissionObject");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.SYS_VersionConfig", b =>
@@ -1651,7 +1764,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "JM_Team")
-                        .WithMany("JM_AccountCompanys")
+                        .WithMany("Members")
                         .HasForeignKey("TeamId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "Account")
@@ -1752,6 +1865,36 @@ namespace BNS.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Notifycation", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_NotifycationUser", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "UserReceived")
+                        .WithMany()
+                        .HasForeignKey("UserReceivedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserReceived");
+                });
+
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Priority", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
@@ -1782,7 +1925,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "Project")
                         .WithMany("JM_ProjectMembers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1796,18 +1939,32 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_Account");
 
-                    b.Navigation("JM_Project");
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectSprint", b =>
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", b =>
                 {
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
                         .HasForeignKey("CreatedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", "PhaseParent")
+                        .WithMany("Childs")
+                        .HasForeignKey("ParentId");
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
+                        .WithMany("Sprints")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JM_Project");
+
+                    b.Navigation("PhaseParent");
 
                     b.Navigation("User");
                 });
@@ -1820,7 +1977,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "Project")
                         .WithMany("JM_ProjectTeams")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1832,28 +1989,9 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Project");
-
                     b.Navigation("JM_Team");
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Sprint", b =>
-                {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
-                        .WithMany()
-                        .HasForeignKey("CreatedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
-                        .WithMany("JM_Sprints")
-                        .HasForeignKey("JM_ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JM_Project");
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -1893,7 +2031,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "JM_TaskParent")
-                        .WithMany()
+                        .WithMany("Childs")
                         .HasForeignKey("ParentId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Priority", "Priority")
@@ -1904,8 +2042,8 @@ namespace BNS.Data.Migrations
                         .WithMany("JM_Issues")
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Sprint", "JM_Sprint")
-                        .WithMany("JM_Issues")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", "JM_ProjectPhase")
+                        .WithMany()
                         .HasForeignKey("SprintId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Status", "Status")
@@ -1924,7 +2062,7 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_Project");
 
-                    b.Navigation("JM_Sprint");
+                    b.Navigation("JM_ProjectPhase");
 
                     b.Navigation("JM_TaskParent");
 
@@ -2018,13 +2156,19 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskUser", b =>
                 {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
                         .WithMany("TaskUsers")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "UserAccount")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2033,6 +2177,8 @@ namespace BNS.Data.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserAccount");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
@@ -2043,11 +2189,11 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "TeamParent")
-                        .WithMany()
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "Parent")
+                        .WithMany("Childs")
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("TeamParent");
+                    b.Navigation("Parent");
 
                     b.Navigation("User");
                 });
@@ -2154,7 +2300,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", "ViewPermission")
-                        .WithMany()
+                        .WithMany("ViewPermissionActions")
                         .HasForeignKey("ViewPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2173,12 +2319,33 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionAction", "ViewPermissionAction")
-                        .WithMany()
-                        .HasForeignKey("SYS_ViewPermissionActionId");
+                        .WithMany("ViewPermissionActionDetails")
+                        .HasForeignKey("ViewPermissionActionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
 
                     b.Navigation("ViewPermissionAction");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionObject", b =>
+                {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", "ViewPermission")
+                        .WithMany("ViewPermissionObjects")
+                        .HasForeignKey("ViewPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("ViewPermission");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Account", b =>
@@ -2206,16 +2373,18 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_ProjectTeams");
 
-                    b.Navigation("JM_Sprints");
+                    b.Navigation("Sprints");
                 });
 
-            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Sprint", b =>
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", b =>
                 {
-                    b.Navigation("JM_Issues");
+                    b.Navigation("Childs");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
+                    b.Navigation("Childs");
+
                     b.Navigation("CommentTasks");
 
                     b.Navigation("TaskCustomColumnValues");
@@ -2227,7 +2396,9 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
                 {
-                    b.Navigation("JM_AccountCompanys");
+                    b.Navigation("Childs");
+
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>
@@ -2235,6 +2406,18 @@ namespace BNS.Data.Migrations
                     b.Navigation("TemplateDetails");
 
                     b.Navigation("TemplateStatus");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermission", b =>
+                {
+                    b.Navigation("ViewPermissionActions");
+
+                    b.Navigation("ViewPermissionObjects");
+                });
+
+            modelBuilder.Entity("BNS.Data.Entities.JM_Entities.SYS_ViewPermissionAction", b =>
+                {
+                    b.Navigation("ViewPermissionActionDetails");
                 });
 #pragma warning restore 612, 618
         }

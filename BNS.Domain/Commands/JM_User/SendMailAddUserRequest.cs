@@ -7,6 +7,6 @@ namespace BNS.Domain.Commands
     public class SendMailAddUserRequest : CommandBase<ApiResult<Guid>>
     {
         [Required]
-        public List<string> Emails { get; set; }
+        public List<CreateUsersRequestItem> Users { get; set; }
     }
 }

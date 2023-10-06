@@ -36,14 +36,15 @@ namespace BNS.Service.Implement
             _cacheService = cacheService;
         }
 
-        public async Task<LoginResponse> GetUserLoginInfo(JM_Account user)
+        public async Task<ApiResult<LoginResponse>> GetUserLoginInfo(JM_Account user)
         {
-            var result = new LoginResponse();
+            var result = new ApiResult<LoginResponse>();
             var userCompanys = await _unitOfWork.Repository<JM_AccountCompany>().Include(s => s.JM_Company).Where(s => s.UserId == user.Id && s.Status == EUserStatus.ACTIVE).ToListAsync();
             var userCompany = userCompanys.Where(s => s.IsDefault).FirstOrDefault();
             if (userCompany != null)
             {
-                var viewPermissions = await GetViewPermissionByUser(userCompany.Id, userCompany.TeamId);
+                result.data = new LoginResponse();
+                var viewPermissions = await GetViewPermissionByUser(userCompany.UserId, userCompany.TeamId);
                 //var projects = await _unitOfWork.Repository<JM_ProjectMember>().Include(s => s.JM_Project).Where(s => s.UserId == user.Id).Select(s => _mapper.Map<ProjectResponseItem>(s.JM_Project)).ToListAsync();
                 var roles = new List<string>();
 
@@ -71,28 +72,32 @@ namespace BNS.Service.Implement
                     , signingCredentials: creds
                     );
 
-                result.IsMainAccount = userCompany.IsMainAccount;
-                result.DefaultOrganization = new CompanyResponse
+                result.data.IsMainAccount = userCompany.IsMainAccount;
+                result.data.DefaultOrganization = new CompanyResponse
                 {
                     Code = userCompany?.JM_Company.Organization,
                     Name = userCompany?.JM_Company.Name,
                     ManagementType = EManagementType.ProjectBasedWork
                 };
-                result.UserId = user.Id.ToString();
-                result.AccountCompanyId = userCompany.Id.ToString();
-                result.FullName = user.FullName;
-                result.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
-                result.Image = user.Image;
-                result.ViewPermissions = viewPermissions;
-                result.Token = new JwtSecurityTokenHandler().WriteToken(token);
-                result.Projects = await GetProjectByUser(userCompany);
+                result.data.UserId = user.Id.ToString();
+                result.data.AccountCompanyId = userCompany.Id.ToString();
+                result.data.FullName = user.FullName;
+                result.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
+                result.data.Image = user.Image;
+                result.data.ViewPermissions = viewPermissions;
+                result.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                result.data.Projects = await GetProjectByUser(userCompany);
+            }
+            else
+            {
+                result.errorCode = EErrorCode.UserNotActive.ToString();
             }
             return result;
         }
 
-        public async Task<List<ViewPermissionAction>> GetViewPermissionByUser(Guid accountCompanyId, Guid? teamId)
+        public async Task<List<ViewPermissionAction>> GetViewPermissionByUser(Guid accountId, Guid? teamId)
         {
-            var key = _cacheService.GetCacheKey(EControllerKey.Permission, accountCompanyId);
+            var key = _cacheService.GetCacheKey(EControllerKey.Permission, accountId);
             var permissionFromCacheObject = _cacheService.GetToCache<List<ViewPermissionAction>>(key);
             var viewPermissions = new List<ViewPermissionAction>();
             if (permissionFromCacheObject != null)
@@ -104,7 +109,7 @@ namespace BNS.Service.Implement
                .Include(s => s.ViewPermission)
                .ThenInclude(s => s.ViewPermissionActions)
                .ThenInclude(s => s.ViewPermissionActionDetails)
-               .Where(s => (s.ObjectId == accountCompanyId && s.IsDelete == false && s.ObjectType == EPermissionObject.User) ||
+               .Where(s => (s.ObjectId == accountId && s.IsDelete == false && s.ObjectType == EPermissionObject.User) ||
                (teamId == null || (teamId != null && s.ObjectId == teamId.Value && s.ObjectType == EPermissionObject.Team)))
                .SelectMany(s => s.ViewPermission.ViewPermissionActions.Where(u => u.IsDelete == false).Select(d => new
                {
@@ -127,7 +132,7 @@ namespace BNS.Service.Implement
             return viewPermissions;
         }
 
-        public async Task<bool> CheckPermissionForUser(bool isMainAccount, string controller, string action, ERestMethod method, Guid accountCompanyId, Guid? teamId = null)
+        public async Task<bool> CheckPermissionForUser(bool isMainAccount, string controller, string action, ERestMethod method, Guid accountId, Guid? teamId = null)
         {
             if (isMainAccount)
                 return true;
@@ -136,7 +141,7 @@ namespace BNS.Service.Implement
                 controller = controller.Split('_')[1];
             }
             var result = true;
-            var permissions = await GetViewPermissionByUser(accountCompanyId, teamId);
+            var permissions = await GetViewPermissionByUser(accountId, teamId);
             if (permissions != null && permissions.Count > 0)
             {
                 var permissionByController = permissions.Where(s => s.View.ToLower().Equals(controller.ToLower())).FirstOrDefault();
@@ -155,9 +160,12 @@ namespace BNS.Service.Implement
 
         public async Task UpdateUserPermission(List<Guid> userIds, List<Guid> teamIds)
         {
-            foreach (var id in userIds)
+            if (userIds != null && userIds.Count > 0)
             {
-                _cacheService.RemoveFromCache(_cacheService.GetCacheKey(EControllerKey.Permission, id));
+                foreach (var id in userIds)
+                {
+                    _cacheService.RemoveFromCache(_cacheService.GetCacheKey(EControllerKey.Permission, id));
+                }
             }
         }
 

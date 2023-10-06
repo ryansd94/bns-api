@@ -48,15 +48,13 @@ namespace BNS.Service.Features
             var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.UserName == request.Username);
             if (user == null)
             {
-                response.errorCode = EErrorCode.Failed.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
+                response.errorCode = EErrorCode.UserPasswordNotCorrect.ToString();
                 return response;
             }
             var userCompanys = await _unitOfWork.JM_AccountCompanyRepository.GetAsync(s => s.UserId == user.Id);
             if (!userCompanys.Any(s => s.Status == EUserStatus.ACTIVE))
             {
-                response.errorCode = EErrorCode.Failed.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
+                response.errorCode = EErrorCode.UserNotActive.ToString();
                 return response;
             }
 
@@ -87,7 +85,7 @@ namespace BNS.Service.Features
                 , signingCredentials: creds
                 );
 
-            response.data = await _accountService.GetUserLoginInfo(user);
+            response = await _accountService.GetUserLoginInfo(user);
             return response;
         }
     }

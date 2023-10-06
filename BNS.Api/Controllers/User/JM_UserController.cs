@@ -32,6 +32,8 @@ namespace BNS.Api.Controllers.Project
         [BNSAuthorization]
         public async Task<IActionResult> GetAllData([FromQuery] GetUserRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -48,17 +50,12 @@ namespace BNS.Api.Controllers.Project
         {
             return Ok(await _mediator.Send(request));
         }
-
-        [HttpDelete("{id}")]
+        
+        [HttpPut(Name = "delete-user")]
         [BNSAuthorization]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(DeleteUserRequest request)
         {
-            var request = new DeleteUserRequest();
-            request.Ids.Add(id);
-            request.CompanyId = CompanyId;
             return Ok(await _mediator.Send(request));
         }
-
-
     }
 }

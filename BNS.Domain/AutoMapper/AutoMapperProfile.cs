@@ -52,7 +52,7 @@ namespace BNS.Domain.AutoMapper
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty))
                 .ForMember(s => s.Childs, d => d.MapFrom(u => u.Childs));
             CreateMap<JM_Team, TeamResponseItemById>()
-                .ForMember(s => s.TeamMembers, d => d.MapFrom(e => e.JM_AccountCompanys != null ? e.JM_AccountCompanys.Select(u => u.Id) : null))
+                //.ForMember(s => s.Members, d => d.MapFrom(e => e.Members != null ? e.Members.Select(u => u.UserId) : null))
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty));
             CreateMap<JM_Template, TemplateResponseItem>().ForMember(s => s.Status, d => d.MapFrom(u => u.TemplateStatus.OrderByDescending(s => s.Status.IsStatusStart).OrderBy(s => s.Status.IsStatusEnd).Select(r => new StatusItemResponse { Id = r.StatusId, Name = r.Status.Name, Color = r.Status.Color, IsStatusEnd = r.Status.IsStatusEnd, IsStatusStart = r.Status.IsStatusStart })));
             CreateMap<JM_TaskType, TaskTypeItem>()

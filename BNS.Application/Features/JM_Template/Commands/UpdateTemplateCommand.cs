@@ -48,13 +48,13 @@ namespace BNS.Service.Features
             var status = request.ChangeFields.Where(s => s.Key.Equals("Status")).FirstOrDefault();
             if (status != null)
             {
-                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem<StatusItemRequest>>(status.Value.ToString());
+                var value = JsonConvert.DeserializeObject<ChangeFieldTransferItem<Guid>>(status.Value.ToString());
                 foreach (var item in value.AddValues)
                 {
                     await _unitOfWork.Repository<JM_TemplateStatus>().AddAsync(new JM_TemplateStatus
                     {
                         TemplateId = dataCheck.Id,
-                        StatusId = item.Id,
+                        StatusId = item,
                         CompanyId = request.CompanyId,
                         CreatedDate = DateTime.UtcNow,
                         CreatedUserId = request.UserId,
@@ -62,9 +62,8 @@ namespace BNS.Service.Features
                 }
                 if (value.DeleteValues != null && value.DeleteValues.Count > 0)
                 {
-                    var statusDeleteIds = value.DeleteValues.Select(s=>s.Id);
                     var removeData = await _unitOfWork.Repository<JM_TemplateStatus>().Where(s => s.TemplateId == request.Id &&
-                     statusDeleteIds.Contains(s.StatusId)).ToListAsync();
+                     value.DeleteValues.Contains(s.StatusId)).ToListAsync();
                     _unitOfWork.Repository<JM_TemplateStatus>().RemoveRange(removeData);
                 }
             }

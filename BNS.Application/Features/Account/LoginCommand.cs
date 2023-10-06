@@ -41,18 +41,16 @@ namespace BNS.Service.Features
             var user = await _unitOfWork.JM_AccountRepository.FirstOrDefaultAsync(s => s.UserName == request.Username);
             if (user == null)
             {
-                response.errorCode = EErrorCode.Failed.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
+                response.errorCode = EErrorCode.UserPasswordNotCorrect.ToString();
                 return response;
             }
 
             if (!user.PasswordHash.Equals(Ultility.MD5Encrypt(request.Password)))
             {
-                response.errorCode = EErrorCode.Failed.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserOrPasswordNotCorrect];
+                response.errorCode = EErrorCode.UserPasswordNotCorrect.ToString();
                 return response;
             }
-            response.data = await _accountService.GetUserLoginInfo(user);
+            response = await _accountService.GetUserLoginInfo(user);
             return response;
         }
     }

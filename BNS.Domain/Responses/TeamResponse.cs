@@ -21,6 +21,6 @@ namespace BNS.Domain.Responses
 
     public class TeamResponseItemById  : TeamResponseItem
     { 
-        public List<Guid> TeamMembers { get; set; }
+        public List<UserResponseItem> Members { get; set; }
     }
 }

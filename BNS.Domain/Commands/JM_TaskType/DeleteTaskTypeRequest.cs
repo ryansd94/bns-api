@@ -2,7 +2,7 @@
 
 namespace BNS.Domain.Commands
 {
-    public class DeleteTaskTypeRequest : CommandDeleteBase<ApiResult<Guid>>
+    public class DeleteTaskTypeRequest : CommandDeleteRequest
     {
     }
 }

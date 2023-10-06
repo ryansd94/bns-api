@@ -34,11 +34,9 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpPut(Name = "delete-comment")]
+        public async Task<IActionResult> Delete(DeleteCommentRequest request)
         {
-            var request = new DeleteCommentRequest();
-            request.ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 

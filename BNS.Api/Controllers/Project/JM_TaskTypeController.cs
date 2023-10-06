@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BNS.Api.Controllers.Project
@@ -32,17 +33,15 @@ namespace BNS.Api.Controllers.Project
         [BNSAuthorization(false)]
         public async Task<IActionResult> GetAllData([FromQuery] GetTaskTypeRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut(Name = "delete-task-type")]
         [BNSAuthorization]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(DeleteTaskTypeRequest request)
         {
-            var request = new DeleteTaskTypeRequest();
-            request.Ids.Add(id);
-            request.CompanyId = CompanyId;
-            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 

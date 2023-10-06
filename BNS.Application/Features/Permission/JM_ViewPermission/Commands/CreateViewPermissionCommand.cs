@@ -53,27 +53,33 @@ namespace BNS.Service.Features
                     _unitOfWork.Repository<SYS_ViewPermissionActionDetail>().Add(viewPermissionActionDetail);
                 }
             }
-            foreach (var userId in request.UserSelectedIds)
+            if (request.UserSelectedIds != null)
             {
-                _unitOfWork.Repository<SYS_ViewPermissionObject>().Add(new SYS_ViewPermissionObject
+                foreach (var userId in request.UserSelectedIds)
                 {
-                    ViewPermissionId = viewPermission.Id,
-                    ObjectType = Utilities.Enums.EPermissionObject.User,
-                    ObjectId = userId,
-                    CreatedUserId = request.UserId,
-                    CompanyId = request.CompanyId
-                });
+                    _unitOfWork.Repository<SYS_ViewPermissionObject>().Add(new SYS_ViewPermissionObject
+                    {
+                        ViewPermissionId = viewPermission.Id,
+                        ObjectType = Utilities.Enums.EPermissionObject.User,
+                        ObjectId = userId,
+                        CreatedUserId = request.UserId,
+                        CompanyId = request.CompanyId
+                    });
+                }
             }
-            foreach (var teamId in request.TeamSelectedIds)
+            if (request.TeamSelectedIds != null)
             {
-                _unitOfWork.Repository<SYS_ViewPermissionObject>().Add(new SYS_ViewPermissionObject
+                foreach (var teamId in request.TeamSelectedIds)
                 {
-                    ViewPermissionId = viewPermission.Id,
-                    ObjectType = Utilities.Enums.EPermissionObject.Team,
-                    ObjectId = teamId,
-                    CreatedUserId = request.UserId,
-                    CompanyId = request.CompanyId
-                });
+                    _unitOfWork.Repository<SYS_ViewPermissionObject>().Add(new SYS_ViewPermissionObject
+                    {
+                        ViewPermissionId = viewPermission.Id,
+                        ObjectType = Utilities.Enums.EPermissionObject.Team,
+                        ObjectId = teamId,
+                        CreatedUserId = request.UserId,
+                        CompanyId = request.CompanyId
+                    });
+                }
             }
             var response = await _unitOfWork.SaveChangesAsync();
             _accountService.UpdateUserPermission(request.UserSelectedIds, request.TeamSelectedIds);

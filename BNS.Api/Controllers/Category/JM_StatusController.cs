@@ -36,6 +36,8 @@ namespace BNS.Api.Controllers.Category
         [HttpGet(Name = "get-status")]
         public async Task<IActionResult> GetAllData([FromQuery] GetStatusRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -48,13 +50,9 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Delete(DeleteStatusRequest request)
         {
-            var request = new DeleteStatusRequest();
-            request.CompanyId = CompanyId;
-            request.UserId = UserId;
-            request.Ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 

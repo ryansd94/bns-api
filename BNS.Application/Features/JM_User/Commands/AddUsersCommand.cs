@@ -50,7 +50,7 @@ namespace BNS.Service.Features
             var requestSendMail = new SendMailAddUserRequest
             {
                 CompanyId = request.CompanyId,
-                Emails = lstEmail,
+                Users = request.Users,
                 UserId = request.UserId
             };
             await _mediator.Send(requestSendMail);

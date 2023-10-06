@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BNS.Data.Entities.JM_Entities
 {
+    [Index(nameof(ProjectId), Name = "Nidx_JM_Task_ProjectId")]
+    [Index(nameof(SprintId), Name = "Nidx_JM_Task_SprintId")]
+    [Index(nameof(ParentId), Name = "Nidx_JM_Task_ParentId")]
+    [Index(nameof(StatusId), Name = "Nidx_JM_Task_StatusId")]
+    [Index(nameof(PriorityId), Name = "Nidx_JM_Task_PriorityId")]
+    [Index(nameof(AssignUserId), Name = "Nidx_JM_Task_AssignUserId")]
+    [Index(nameof(TaskTypeId), Name = "Nidx_JM_Task_TaskTypeId")]
     public class JM_Task : BaseJMEntity
     {
         public int Number { get; set; }

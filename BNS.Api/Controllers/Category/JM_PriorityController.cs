@@ -42,11 +42,9 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Delete(DeletePriorityRequest request)
         {
-            var request = new DeletePriorityRequest();
-            request.Ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 

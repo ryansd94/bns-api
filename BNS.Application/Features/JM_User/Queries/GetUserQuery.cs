@@ -39,12 +39,18 @@ namespace BNS.Service.Features
             var response = new ApiResult<UserResponse>();
             response.data = new UserResponse();
 
-            var query = _unitOfWork.Repository<JM_AccountCompany>().Where(s => !s.IsDelete
-               && s.CompanyId == request.CompanyId).Include(s => s.JM_Team).OrderBy(d => d.CreatedDate).Select(s => new UserResponseItem
+            var query = _unitOfWork.Repository<JM_AccountCompany>().Where(s => !s.IsDelete &&
+                s.CompanyId == request.CompanyId &&
+               (!request.isHasNotTeam || (request.isHasNotTeam && !s.TeamId.HasValue)))
+                .Include(s => s.JM_Team)
+               .OrderBy(d => d.CreatedDate)
+               .Select(s => new UserResponseItem
                {
                    Email = s.Account != null ? s.Account.Email : string.Empty,
                    Status = s.Status,
                    FullName = s.Account != null ? s.Account.FullName : string.Empty,
+                   FirstName = s.Account != null ? s.Account.FirstName : string.Empty,
+                   LastName = s.Account != null ? s.Account.LastName : string.Empty,
                    Id = s.Account.Id,
                    CreatedDate = s.CreatedDate,
                    IsMainAccount = s.IsMainAccount,

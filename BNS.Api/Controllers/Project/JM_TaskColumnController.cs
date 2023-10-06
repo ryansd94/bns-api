@@ -24,6 +24,8 @@ namespace BNS.Api.Controllers.Project
         [BNSAuthorization(false)]
         public async Task<IActionResult> GetAllData([FromQuery] GetCustomColumnsRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 

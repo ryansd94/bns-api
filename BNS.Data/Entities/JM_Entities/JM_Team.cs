@@ -15,6 +15,6 @@ namespace BNS.Data.Entities.JM_Entities
         public JM_Team Parent { get; set; }
         public virtual IEnumerable<JM_Team> Childs { get; set; }
 
-        public virtual ICollection<JM_AccountCompany> JM_AccountCompanys { get; set; }
+        public virtual ICollection<JM_AccountCompany> Members { get; set; }
     }
 }

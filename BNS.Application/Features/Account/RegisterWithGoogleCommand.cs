@@ -113,11 +113,11 @@ namespace BNS.Service.Features
                 AccessFailedCount = 0,
                 GoogleId = id,
                 IsActive = true,
-                FullName = infoUser.name.ToString(),
+                FirstName = request.FirstName,
+                LastName = request.LastName
             };
 
             user.PasswordHash = Ultility.MD5Encrypt(request.Password);
-            user.FullName = request.FullName;
             var accountCompany = new JM_AccountCompany
             {
                 Id = Guid.NewGuid(),
@@ -138,7 +138,7 @@ namespace BNS.Service.Features
             await _unitOfWork.JM_AccountCompanyRepository.AddAsync(accountCompany);
             await _unitOfWork.SaveChangesAsync();
 
-            response.data = await _accountService.GetUserLoginInfo(user);
+            response = await _accountService.GetUserLoginInfo(user);
             return response;
         }
     }

@@ -5,7 +5,7 @@ using BNS.Service.Implement.BaseImplement;
 
 namespace BNS.Service.Features
 {
-    public class DeletePriorityCommand : DeleteRequestHandler<DeletePriorityRequest, JM_Priority>
+    public class DeletePriorityCommand : DeleteRequestHandler<CommandDeleteRequest, JM_Priority>
     {
         public DeletePriorityCommand(IUnitOfWork unitOfWork) : base(unitOfWork)
         {

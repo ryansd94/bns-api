@@ -15,13 +15,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BNS.Service.Features
 {
-    public class GetJM_TeamByIdQuery : IRequestHandler<GetTeamByIdRequest, ApiResult<TeamResponseItemById>>
+    public class GetTeamByIdQuery : IRequestHandler<GetTeamByIdRequest, ApiResult<TeamResponseItemById>>
     {
         private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IMapper _mapper;
 
-        public GetJM_TeamByIdQuery(
+        public GetTeamByIdQuery(
          IUnitOfWork unitOfWork,
          IStringLocalizer<SharedResource> sharedLocalizer,
             IMapper mapper)
@@ -33,9 +33,10 @@ namespace BNS.Service.Features
         public async Task<ApiResult<TeamResponseItemById>> Handle(GetTeamByIdRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<TeamResponseItemById>();
-            var data = await _unitOfWork.Repository<JM_Team>().Include(s=>s.JM_AccountCompanys).FirstOrDefaultAsync(s => s.Id == request.Id &&
-            !s.IsDelete &&
-            s.CompanyId == request.CompanyId);
+            var data = await _unitOfWork.Repository<JM_Team>()
+                .Include(s => s.Members).ThenInclude(s => s.Account).FirstOrDefaultAsync(s => s.Id == request.Id &&
+                !s.IsDelete &&
+                s.CompanyId == request.CompanyId);
             if (data == null)
             {
                 response.errorCode = EErrorCode.NotExistsData.ToString();

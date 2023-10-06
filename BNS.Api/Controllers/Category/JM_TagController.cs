@@ -11,7 +11,7 @@ namespace BNS.Api.Controllers.Category
 {
     [AppRouteControllerAttribute]
     [ApiController]
-    [BNSAuthorization]
+    [BNSAuthorization(false)]
     public class JM_TagController : BaseController
     {
         private IMediator _mediator;

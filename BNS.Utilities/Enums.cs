@@ -6,15 +6,15 @@
         {
             Success,
             Failed,
-            USERNAME_PASSWORD_NOTCORRECT,
-            USERNAME_ISEXISTS,
             NotExistsData,
             IsExistsData,
             SystemError,
             UserHasJoinTeam,
             TokenNotValid,
             UserNotRegister,
-            NotPermission
+            NotPermission,
+            UserPasswordNotCorrect,
+            UserNotActive
         }
 
         public enum EAccountType

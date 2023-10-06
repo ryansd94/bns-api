@@ -31,6 +31,8 @@ namespace BNS.Api.Controllers.Project
         [HttpGet(Name = "get-sprint")]
         public async Task<IActionResult> GetAllData([FromQuery] GetJM_SprintRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
@@ -42,11 +44,9 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpPut(Name = "delete-sprint")]
+        public async Task<IActionResult> Delete(DeleteSprintRequest request)
         {
-            var request = new DeleteJM_SprintRequest();
-            request.ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 

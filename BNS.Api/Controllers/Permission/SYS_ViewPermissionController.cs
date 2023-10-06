@@ -32,6 +32,8 @@ namespace BNS.Api.Controllers.Permission
         [BNSAuthorization]
         public async Task<IActionResult> GetAllData([FromQuery] GetViewPermissionRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 

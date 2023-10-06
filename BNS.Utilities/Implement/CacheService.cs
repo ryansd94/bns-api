@@ -16,22 +16,41 @@ namespace BNS.Utilities.Implement
 
         public void AddToCache(string key, object value)
         {
-            _distributedCache.SetString(key, JsonConvert.SerializeObject(value));
+            try
+            {
+                _distributedCache.SetString(key, JsonConvert.SerializeObject(value));
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public void RemoveFromCache(string key)
         {
-            _distributedCache.Remove(key);
+            try
+            {
+                _distributedCache.Remove(key);
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public T GetToCache<T>(string key)
         {
-            var cacheData = _distributedCache.GetString(key);
-            if (!string.IsNullOrEmpty(cacheData))
+            try
             {
-                return JsonConvert.DeserializeObject<T>(cacheData);
+                var cacheData = _distributedCache.GetString(key);
+                if (!string.IsNullOrEmpty(cacheData))
+                {
+                    return JsonConvert.DeserializeObject<T>(cacheData);
+                }
+                return default(T);
             }
-            return default(T);
+            catch (Exception ex)
+            {
+                return default(T);
+            }
         }
 
         public string GetCacheKey(Enums.EControllerKey controllerKey, Guid? objectId, Guid? companyId)

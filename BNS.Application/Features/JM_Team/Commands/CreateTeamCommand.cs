@@ -50,7 +50,8 @@ namespace BNS.Service.Features
             await _unitOfWork.JM_TeamRepository.AddAsync(team);
             if (request.Members != null && request.Members.Count > 0)
             {
-                var accountCompanys = await _unitOfWork.Repository<JM_AccountCompany>().Where(s => request.Members.Contains(s.Id) &&
+                var accountCompanys = await _unitOfWork.Repository<JM_AccountCompany>()
+                    .Where(s => request.Members.Contains(s.Id) &&
                   !s.IsDelete).ToListAsync();
                 foreach (var account in accountCompanys)
                 {

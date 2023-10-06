@@ -66,8 +66,7 @@ namespace BNS.Service.Features
             var infoUser = await Firebase.CheckTokenGoogle(request.Token, DefaultFirebaseApp);
             if (infoUser == null)
             {
-                response.errorCode = EErrorCode.Failed.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.MSG_ExistsData];
+                response.errorCode = EErrorCode.UserPasswordNotCorrect.ToString();
                 return response;
             }
             var email = infoUser.email;
@@ -80,11 +79,10 @@ namespace BNS.Service.Features
                     EmailJoin = infoUser.email.ToString()
                 }));
                 response.errorCode = EErrorCode.UserNotRegister.ToString();
-                response.title = _sharedLocalizer[LocalizedBackendMessages.User.MSG_UserNotRegister];
                 return response;
             }
 
-            response.data = await _accountService.GetUserLoginInfo(user);
+            response = await _accountService.GetUserLoginInfo(user);
             return response;
         }
     }

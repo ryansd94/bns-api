@@ -14,7 +14,7 @@ using BNS.Data.Entities.JM_Entities;
 
 namespace BNS.Service.Features
 {
-    public class DeleteJM_SprintCommand : IRequestHandler<DeleteJM_SprintRequest, ApiResult<Guid>>
+    public class DeleteJM_SprintCommand : IRequestHandler<DeleteSprintRequest, ApiResult<Guid>>
     {
         private readonly IUnitOfWork _unitOfWork;
         protected readonly IStringLocalizer<SharedResource> _sharedLocalizer;
@@ -25,7 +25,7 @@ namespace BNS.Service.Features
             _unitOfWork = unitOfWork;
             _sharedLocalizer = sharedLocalizer;
         }
-        public async Task<ApiResult<Guid>> Handle(DeleteJM_SprintRequest request, CancellationToken cancellationToken)
+        public async Task<ApiResult<Guid>> Handle(DeleteSprintRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
             var dataChecks = await _unitOfWork.Repository<JM_ProjectPhase>().Where(s => request.ids.Contains(s.Id)).ToListAsync();

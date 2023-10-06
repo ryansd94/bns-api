@@ -10,8 +10,9 @@ namespace BNS.Domain.Responses
         public List<UserResponseItem> Items { get; set; }
     }
 
-    public class UserResponseItem : IdentityUser<Guid>
+    public class UserResponseItem
     {
+        public Guid Id { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public Guid? UpdatedUser { get; set; }
         public bool? IsMainAccount { get; set; }
@@ -19,7 +20,10 @@ namespace BNS.Domain.Responses
         public Guid CreatedUser { get; set; }
         public bool IsDelete { get; set; }
         public string GoogleId { get; set; }
+        public string Email { get; set; }
         public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Name { get; set; }
         public string TeamName { get; set; }
         public string Image { get; set; }

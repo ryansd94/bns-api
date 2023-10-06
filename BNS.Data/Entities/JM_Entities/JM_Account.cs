@@ -9,6 +9,8 @@ namespace BNS.Data.Entities.JM_Entities
     {
         [MaxLength(200)]
         public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public Guid? UpdatedUser { get; set; }
         public DateTime CreatedDate { get; set; }

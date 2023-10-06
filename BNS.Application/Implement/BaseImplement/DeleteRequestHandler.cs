@@ -11,7 +11,7 @@ using static BNS.Utilities.Enums;
 
 namespace BNS.Service.Implement.BaseImplement
 {
-    public class DeleteRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest, ApiResult<Guid>> where TEntity : BaseJMEntity where TRequest : CommandDeleteBase<ApiResult<Guid>>
+    public class DeleteRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest, ApiResult<Guid>> where TEntity : BaseJMEntity where TRequest : CommandDeleteRequest
     {
         private readonly IUnitOfWork _unitOfWork;
 

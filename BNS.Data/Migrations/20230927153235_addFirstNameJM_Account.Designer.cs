@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BNS.Data.Migrations
 {
     [DbContext(typeof(BNSDbContext))]
-    [Migration("20230627171631_updateJM_ProjectPhaseAddParentId")]
-    partial class updateJM_ProjectPhaseAddParentId
+    [Migration("20230927153235_addFirstNameJM_Account")]
+    partial class addFirstNameJM_Account
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,9 @@ namespace BNS.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -66,6 +69,9 @@ namespace BNS.Data.Migrations
 
                     b.Property<Guid?>("JM_TaskId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -326,6 +332,9 @@ namespace BNS.Data.Migrations
 
                     b.Property<double?>("Long")
                         .HasColumnType("float");
+
+                    b.Property<int>("ManagementType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasMaxLength(500)
@@ -671,6 +680,9 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -774,6 +786,15 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApplyAll")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAutomaticAdd")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
@@ -869,6 +890,9 @@ namespace BNS.Data.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -907,21 +931,21 @@ namespace BNS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignUserId");
-
                     b.HasIndex("CreatedUserId");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex(new[] { "AssignUserId" }, "Nidx_JM_Task_AssignUserId");
 
-                    b.HasIndex("PriorityId");
+                    b.HasIndex(new[] { "ParentId" }, "Nidx_JM_Task_ParentId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex(new[] { "PriorityId" }, "Nidx_JM_Task_PriorityId");
 
-                    b.HasIndex("SprintId");
+                    b.HasIndex(new[] { "ProjectId" }, "Nidx_JM_Task_ProjectId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex(new[] { "SprintId" }, "Nidx_JM_Task_SprintId");
 
-                    b.HasIndex("TaskTypeId");
+                    b.HasIndex(new[] { "StatusId" }, "Nidx_JM_Task_StatusId");
+
+                    b.HasIndex(new[] { "TaskTypeId" }, "Nidx_JM_Task_TaskTypeId");
 
                     b.ToTable("JM_Tasks");
                 });
@@ -1079,11 +1103,11 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1094,8 +1118,8 @@ namespace BNS.Data.Migrations
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
@@ -1104,6 +1128,8 @@ namespace BNS.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedUserId");
 
                     b.HasIndex("TaskId");
 
@@ -1132,6 +1158,9 @@ namespace BNS.Data.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
@@ -1741,7 +1770,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "JM_Team")
-                        .WithMany("JM_AccountCompanys")
+                        .WithMany("Members")
                         .HasForeignKey("TeamId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "Account")
@@ -1902,7 +1931,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "Project")
                         .WithMany("JM_ProjectMembers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1916,7 +1945,7 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_Account");
 
-                    b.Navigation("JM_Project");
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -1929,19 +1958,19 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", "PhaseParentId")
-                        .WithMany("JM_ProjectPhases")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", "PhaseParent")
+                        .WithMany("Childs")
                         .HasForeignKey("ParentId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
-                        .WithMany("JM_ProjectPhases")
+                        .WithMany("Sprints")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("JM_Project");
 
-                    b.Navigation("PhaseParentId");
+                    b.Navigation("PhaseParent");
 
                     b.Navigation("User");
                 });
@@ -1954,7 +1983,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "JM_Project")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Project", "Project")
                         .WithMany("JM_ProjectTeams")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1966,9 +1995,9 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("JM_Project");
-
                     b.Navigation("JM_Team");
+
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -2008,7 +2037,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "JM_TaskParent")
-                        .WithMany()
+                        .WithMany("Childs")
                         .HasForeignKey("ParentId");
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Priority", "Priority")
@@ -2133,13 +2162,19 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_TaskUser", b =>
                 {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
                         .WithMany("TaskUsers")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "UserAccount")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2148,6 +2183,8 @@ namespace BNS.Data.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserAccount");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
@@ -2158,11 +2195,11 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "TeamParent")
-                        .WithMany()
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Team", "Parent")
+                        .WithMany("Childs")
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("TeamParent");
+                    b.Navigation("Parent");
 
                     b.Navigation("User");
                 });
@@ -2340,18 +2377,20 @@ namespace BNS.Data.Migrations
 
                     b.Navigation("JM_ProjectMembers");
 
-                    b.Navigation("JM_ProjectPhases");
-
                     b.Navigation("JM_ProjectTeams");
+
+                    b.Navigation("Sprints");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectPhase", b =>
                 {
-                    b.Navigation("JM_ProjectPhases");
+                    b.Navigation("Childs");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
+                    b.Navigation("Childs");
+
                     b.Navigation("CommentTasks");
 
                     b.Navigation("TaskCustomColumnValues");
@@ -2363,7 +2402,9 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>
                 {
-                    b.Navigation("JM_AccountCompanys");
+                    b.Navigation("Childs");
+
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Template", b =>

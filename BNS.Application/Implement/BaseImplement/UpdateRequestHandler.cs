@@ -29,6 +29,10 @@ namespace BNS.Service.Implement.BaseImplement
             return _unitOfWork.Repository<TEntity>().Where(s => s.CompanyId == request.CompanyId && s.Id == request.Id).AsQueryable();
         }
 
+        public virtual async Task OtherHandle(TRequest request, TEntity entity)
+        {
+
+        }
         public virtual async Task<ApiResult<Guid>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
@@ -41,6 +45,7 @@ namespace BNS.Service.Implement.BaseImplement
                 return response;
             }
             UpdateEntity<TEntity>(dataCheck, request.ChangeFields, request.UserId);
+            await OtherHandle(request, dataCheck);
             dataCheck.UpdatedDate = DateTime.UtcNow;
             dataCheck.UpdatedUserId = request.UserId;
             _unitOfWork.Repository<TEntity>().Update(dataCheck);
@@ -82,6 +87,13 @@ namespace BNS.Service.Implement.BaseImplement
                             {
                                 entityName.SetValue(entity, Guid.Empty);
                             }
+                        }
+                    }
+                    else if (type == typeof(bool?) || type == typeof(bool))
+                    {
+                        if (item.Value != null)
+                        {
+                            entityName.SetValue(entity, bool.Parse(item.Value.ToString()));
                         }
                     }
                 }

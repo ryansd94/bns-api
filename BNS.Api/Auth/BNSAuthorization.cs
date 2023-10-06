@@ -60,7 +60,7 @@ namespace BNS.Api.Auth
                 {
                     var permissions = JsonConvert.DeserializeObject<List<ViewPermissionAction>>(strRole);
                     var accountService = context.HttpContext.RequestServices.GetService<IAccountService>();
-                    var isPermission = await accountService.CheckPermissionForUser(false, controller, action, Enum.Parse<ERestMethod>(method), Guid.Parse(accountCompanyId.Value));
+                    var isPermission = await accountService.CheckPermissionForUser(false, controller, action, Enum.Parse<ERestMethod>(method), Guid.Parse(userId.Value));
                     if (!isPermission)
                     {
                         context.Result = new ApiResult<string> { status = System.Net.HttpStatusCode.Unauthorized, errorCode = EErrorCode.NotPermission.ToString() };

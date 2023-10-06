@@ -31,6 +31,8 @@ namespace BNS.Api.Controllers.Project
         [HttpGet(Name = "get-project")]
         public async Task<IActionResult> GetAllData([FromQuery] GetProjectByUserIdRequest request)
         {
+            request.CompanyId = CompanyId;
+            request.UserId = UserId;
             return Ok(await _mediator.Send(request));
         }
 
