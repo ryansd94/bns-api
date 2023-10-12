@@ -42,7 +42,7 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpPut]
+        [HttpPut(Name = "delete-priority")]
         public async Task<IActionResult> Delete(DeletePriorityRequest request)
         {
             return Ok(await _mediator.Send(request));

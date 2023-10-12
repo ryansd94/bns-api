@@ -96,6 +96,17 @@ namespace BNS.Service.Implement.BaseImplement
                             entityName.SetValue(entity, bool.Parse(item.Value.ToString()));
                         }
                     }
+                    else if (type == typeof(DateTime?) || type == typeof(DateTime))
+                    {
+                        if (item.Value != null)
+                        {
+                            entityName.SetValue(entity, DateTime.Parse(item.Value.ToString()));
+                        }
+                        else
+                        {
+                            entityName.SetValue(entity, null);
+                        }
+                    }
                 }
             }
             entity.UpdatedDate = DateTime.UtcNow;

@@ -28,7 +28,7 @@ namespace BNS.Service.Features
         public async Task<ApiResult<Guid>> Handle(DeleteTagRequest request, CancellationToken cancellationToken)
         {
             var response = new ApiResult<Guid>();
-            var dataChecks = await _unitOfWork.Repository<JM_Tag>().Where(s => request.ids.Contains(s.Id) &&
+            var dataChecks = await _unitOfWork.Repository<JM_Tag>().Where(s => request.Ids.Contains(s.Id) &&
            s.CompanyId == request.CompanyId).ToListAsync();
             if (dataChecks == null || dataChecks.Count() == 0)
             {

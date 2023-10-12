@@ -43,11 +43,9 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpPut(Name = "delete-tag")]
+        public async Task<IActionResult> Delete(DeleteTagRequest request)
         {
-            var request = new DeleteTagRequest();
-            request.ids.Add(id);
             return Ok(await _mediator.Send(request));
         }
 

@@ -50,7 +50,7 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpPut]
+        [HttpPut(Name = "delete-status")]
         public async Task<IActionResult> Delete(DeleteStatusRequest request)
         {
             return Ok(await _mediator.Send(request));

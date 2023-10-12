@@ -47,7 +47,7 @@ namespace BNS.Api.Controllers.Category
             return Ok(await _mediator.Send(request));
         }
         
-        [HttpPut]
+        [HttpPut(Name = "delete-team")]
         [BNSAuthorization]
         public async Task<IActionResult> Delete(DeleteTeamRequest request)
         {
