@@ -39,54 +39,71 @@ namespace BNS.Service.Implement
         public async Task<ApiResult<LoginResponse>> GetUserLoginInfo(JM_Account user)
         {
             var result = new ApiResult<LoginResponse>();
-            var userCompanys = await _unitOfWork.Repository<JM_AccountCompany>().Include(s => s.JM_Company).Where(s => s.UserId == user.Id && s.Status == EUserStatus.ACTIVE).ToListAsync();
-            var userCompany = userCompanys.Where(s => s.IsDefault).FirstOrDefault();
-            if (userCompany != null)
+            var userCompanys = await _unitOfWork.Repository<JM_AccountCompany>().Include(s => s.JM_Company).Where(s => s.UserId == user.Id).ToListAsync();
+            if (userCompanys.Count > 0)
             {
-                result.data = new LoginResponse();
-                var viewPermissions = await GetViewPermissionByUser(userCompany.UserId, userCompany.TeamId);
-                //var projects = await _unitOfWork.Repository<JM_ProjectMember>().Include(s => s.JM_Project).Where(s => s.UserId == user.Id).Select(s => _mapper.Map<ProjectResponseItem>(s.JM_Project)).ToListAsync();
-                var roles = new List<string>();
-
-                var domain = JsonConvert.SerializeObject(userCompanys.Select(s => s.JM_Company.Organization).ToList());
-                var claims = new[]
+                var userCompanyActive = userCompanys.Where(s => s.Status == EUserStatus.ACTIVE && s.IsDefault).FirstOrDefault();
+                if (userCompanyActive != null)
                 {
-                new Claim(ClaimTypes.GivenName, user.UserName),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(EClaimType.UserId.ToString(), user.Id.ToString()),
-                new Claim(EClaimType.AccountCompanyId.ToString(), userCompany.Id.ToString()),
-                new Claim(EClaimType.DefaultOrganization.ToString(), userCompany?.JM_Company.Organization ?? String.Empty),
-                new Claim(EClaimType.CompanyId.ToString(), userCompany?.CompanyId.ToString()),
-                new Claim(EClaimType.TeamId.ToString(), userCompany?.TeamId?.ToString() ?? string.Empty),
-                new Claim(EClaimType.Role.ToString(), JsonConvert.SerializeObject(viewPermissions)),
-                new Claim(EClaimType.Organization.ToString(), domain),
-                new Claim(EClaimType.IsMainAccount.ToString(), userCompany.IsMainAccount.ToString())
-            };
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    result.data = new LoginResponse();
+                    var viewPermissions = await GetViewPermissionByUser(userCompanyActive.UserId, userCompanyActive.TeamId);
+                    //var projects = await _unitOfWork.Repository<JM_ProjectMember>().Include(s => s.JM_Project).Where(s => s.UserId == user.Id).Select(s => _mapper.Map<ProjectResponseItem>(s.JM_Project)).ToListAsync();
+                    var roles = new List<string>();
 
-                var token = new JwtSecurityToken(_config.Tokens.Issuer
-                    , _config.Tokens.Issuer
-                    , claims
-                    , expires: DateTime.UtcNow.AddDays(1)
-                    , signingCredentials: creds
-                    );
+                    var domain = JsonConvert.SerializeObject(userCompanys.Select(s => s.JM_Company.Organization).ToList());
+                    var claims = new[]
+                    {
+                        new Claim(ClaimTypes.GivenName, user.UserName),
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(EClaimType.UserId.ToString(), user.Id.ToString()),
+                        new Claim(EClaimType.AccountCompanyId.ToString(), userCompanyActive.Id.ToString()),
+                        new Claim(EClaimType.DefaultOrganization.ToString(), userCompanyActive?.JM_Company.Organization ?? String.Empty),
+                        new Claim(EClaimType.CompanyId.ToString(), userCompanyActive?.CompanyId.ToString()),
+                        new Claim(EClaimType.TeamId.ToString(), userCompanyActive?.TeamId?.ToString() ?? string.Empty),
+                        new Claim(EClaimType.Role.ToString(), JsonConvert.SerializeObject(viewPermissions)),
+                        new Claim(EClaimType.Organization.ToString(), domain),
+                        new Claim(EClaimType.IsMainAccount.ToString(), userCompanyActive.IsMainAccount.ToString())
+                    };
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.Tokens.Key));
+                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                result.data.IsMainAccount = userCompany.IsMainAccount;
-                result.data.DefaultOrganization = new CompanyResponse
+                    var token = new JwtSecurityToken(_config.Tokens.Issuer
+                        , _config.Tokens.Issuer
+                        , claims
+                        , expires: DateTime.UtcNow.AddDays(1)
+                        , signingCredentials: creds
+                        );
+
+                    result.data.IsMainAccount = userCompanyActive.IsMainAccount;
+                    result.data.DefaultOrganization = new CompanyResponse
+                    {
+                        Code = userCompanyActive?.JM_Company.Organization,
+                        Name = userCompanyActive?.JM_Company.Name,
+                        ManagementType = EManagementType.ProjectBasedWork
+                    };
+                    result.data.UserId = user.Id.ToString();
+                    result.data.AccountCompanyId = userCompanyActive.Id.ToString();
+                    result.data.FullName = string.Format("{0} {1}", user.FirstName, user.LastName);
+                    result.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
+                    result.data.Image = user.Image;
+                    result.data.ViewPermissions = viewPermissions;
+                    result.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                    result.data.Projects = await GetProjectByUser(userCompanyActive);
+                }
+                else
                 {
-                    Code = userCompany?.JM_Company.Organization,
-                    Name = userCompany?.JM_Company.Name,
-                    ManagementType = EManagementType.ProjectBasedWork
-                };
-                result.data.UserId = user.Id.ToString();
-                result.data.AccountCompanyId = userCompany.Id.ToString();
-                result.data.FullName = user.FullName;
-                result.data.Setting = !string.IsNullOrEmpty(user.Setting) ? JsonConvert.DeserializeObject<SettingResponse>(user.Setting) : new SettingResponse();
-                result.data.Image = user.Image;
-                result.data.ViewPermissions = viewPermissions;
-                result.data.Token = new JwtSecurityTokenHandler().WriteToken(token);
-                result.data.Projects = await GetProjectByUser(userCompany);
+                    var userCompanyWaitingActive = userCompanys.Where(s => s.Status == EUserStatus.WAILTING_CONFIRM_MAIL && s.IsDefault).FirstOrDefault();
+                    if (userCompanyWaitingActive != null)
+                    {
+                        result.errorCode = EErrorCode.UserWaitingConfirm.ToString();
+                        result.data = new LoginResponse
+                        {
+                            AccountCompanyId = userCompanyWaitingActive.Id.ToString()
+                        };
+                        return result;
+                    }
+                    result.errorCode = EErrorCode.UserNotActive.ToString();
+                }
             }
             else
             {
@@ -187,7 +204,7 @@ namespace BNS.Service.Implement
             }
 
             var projectMembers = await _unitOfWork.Repository<JM_ProjectMember>()
-                    .Where(s => !s.IsDelete && s.UserId.Equals(userCompany.UserId) && s.CompanyId == userCompany.CompanyId)
+                    .Where(s => !s.IsDelete && s.AccountCompanyId.Equals(userCompany.UserId) && s.CompanyId == userCompany.CompanyId)
                     .Include(s => s.Project)
                     .Select(s => new ProjectUserResponse
                     {

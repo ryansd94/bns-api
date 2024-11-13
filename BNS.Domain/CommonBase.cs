@@ -7,5 +7,6 @@ namespace BNS.Domain
     {
         public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
+        public Guid AccountCompanyId { get; set; }
     }
 }

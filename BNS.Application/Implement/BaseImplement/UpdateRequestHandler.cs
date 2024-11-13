@@ -107,6 +107,10 @@ namespace BNS.Service.Implement.BaseImplement
                             entityName.SetValue(entity, null);
                         }
                     }
+                    else if (type.BaseType.Name == "Enum")
+                    {
+                        entityName.SetValue(entity, item.Value != null ? int.Parse(item.Value.ToString()) : null);
+                    }
                 }
             }
             entity.UpdatedDate = DateTime.UtcNow;

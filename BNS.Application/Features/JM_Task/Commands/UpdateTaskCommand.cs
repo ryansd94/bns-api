@@ -42,7 +42,6 @@ namespace BNS.Service.Features
                 .Include(s => s.TaskCustomColumnValues)
                 .Include(s => s.TaskTags)
                 .Include(s => s.Childs)
-                .Include(s => s.TaskUsers)
                 .Where(s => s.Id == request.Id).FirstOrDefaultAsync();
             if (dataCheck == null)
             {
@@ -51,7 +50,11 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            var assignUserIds = dataCheck.TaskUsers.Select(s => s.UserId).ToList();
+            var assignUserIds = new List<Guid>();
+            if (dataCheck.AssignUserId.HasValue)
+            {
+                assignUserIds.Add(dataCheck.AssignUserId.Value);
+            }
 
             if (request.UserId != dataCheck.ReporterId && (dataCheck.AssignUserId != request.UserId && !assignUserIds.Contains(request.UserId)))
             {
@@ -79,12 +82,6 @@ namespace BNS.Service.Features
                         if (dataCheck.AssignUserId.HasValue && value.DeleteValues.Contains(dataCheck.AssignUserId.Value))
                         {
                             dataCheck.AssignUserId = null;
-                        }
-                        var taskUsersDelete = dataCheck.TaskUsers.Where(s => value.DeleteValues.Contains(s.UserId)).ToList();
-                        if (taskUsersDelete.Count > 0)
-                        {
-                            taskUsersDelete.ForEach(s => s.IsDelete = false);
-                            _unitOfWork.Repository<JM_TaskUser>().RemoveRange(taskUsersDelete);
                         }
                     }
                     if (value.AddValues != null && value.AddValues.Count > 0)

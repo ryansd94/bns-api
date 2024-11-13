@@ -45,7 +45,6 @@ namespace BNS.Service.Features
                 .ThenInclude(s => s.Template)
                 .ThenInclude(s => s.TemplateStatus)
                 .ThenInclude(s => s.Status)
-                .Include(s => s.TaskUsers)
                 .Include(s => s.User)
                 .Include(s => s.JM_TaskParent)
                 .Include(s => s.CommentTasks).ThenInclude(s => s.Comment).ThenInclude(s => s.Chidrens)

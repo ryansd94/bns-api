@@ -498,34 +498,6 @@ namespace BNS.Utilities
             return null;
         }
 
-        public enum FilterOperator
-        {
-            IsEqualTo,
-            IsNotEqualTo,
-            IsGreaterThan,
-            IsGreaterThanOrEqualTo,
-            IsLessThan,
-            IsLessThanOrEqualTo,
-            Contains,
-            StartsWith,
-            EndsWith
-        }
-
-        public class IFilterCriteria
-        {
-            public string PropertyToCompare { get; set; }
-            public object ValueToCompare { get; set; }
-            public FilterOperator FilterOperator { get; set; }
-            public bool IsList { get; set; }
-            public Expression Expression { get; set; }
-        }
-
-        public enum LogicalOperator
-        {
-            And,
-            Or
-        }
-
         public class PivotTable<TRow, TColumn, TValue>
             where TRow : IComparable, IEquatable<TRow>
             where TColumn : IComparable, IEquatable<TColumn>

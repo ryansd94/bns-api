@@ -14,7 +14,8 @@
             UserNotRegister,
             NotPermission,
             UserPasswordNotCorrect,
-            UserNotActive
+            UserNotActive,
+            UserWaitingConfirm
         }
 
         public enum EAccountType
@@ -186,7 +187,8 @@
             Overview,
             Category,
             TaskGroup,
-            PermissionGroup
+            PermissionGroup,
+            TaskCalendar,
         }
 
         public enum EClaimType

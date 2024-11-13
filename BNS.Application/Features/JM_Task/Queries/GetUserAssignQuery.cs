@@ -75,8 +75,8 @@ namespace BNS.Service.Features
                     .Select(s => s.Account.Id).ToListAsync();
 
                 var projectMemberIds = await _unitOfWork.Repository<JM_ProjectMember>()
-                    .Where(s => s.ProjectId == projectId && !s.IsDelete && !accountIds.Contains(s.UserId))
-                    .Select(s => s.UserId)
+                    .Where(s => s.ProjectId == projectId && !s.IsDelete && !accountIds.Contains(s.AccountCompanyId))
+                    .Select(s => s.AccountCompanyId)
                     .ToListAsync();
 
                 accountIds.AddRange(projectMemberIds);
@@ -92,12 +92,14 @@ namespace BNS.Service.Features
                     Status = s.Status,
                     FullName = s.Account != null ? s.Account.FullName : string.Empty,
                     Name = s.Account != null ? s.Account.FullName : string.Empty,
-                    Id = s.Account.Id,
+                    Id = s.Id,
                     CreatedDate = s.CreatedDate,
                     IsMainAccount = s.IsMainAccount,
                     TeamName = s.JM_Team != null ? s.JM_Team.Name : string.Empty,
                     TeamId = s.TeamId,
                     Image = s.Account != null ? s.Account.Image : string.Empty,
+                    FirstName = s.Account.FirstName,
+                    LastName = s.Account.LastName
                 });
 
             if (!string.IsNullOrEmpty(request.fieldSort))

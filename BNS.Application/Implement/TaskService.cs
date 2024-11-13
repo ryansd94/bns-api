@@ -36,7 +36,8 @@ namespace BNS.Service.Implement
                 {
                     UserMention = new User
                     {
-                        FullName = userMenton.FullName,
+                        FirstName = userMenton.FirstName,
+                        LastName = userMenton.LastName,
                         Id = userMenton.Id,
                         Image = userMenton.Image
                     },

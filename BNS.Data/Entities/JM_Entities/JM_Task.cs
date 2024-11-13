@@ -49,11 +49,10 @@ namespace BNS.Data.Entities.JM_Entities
         [ForeignKey("PriorityId")]
         public virtual JM_Priority Priority { get; set; }
         [ForeignKey("AssignUserId")]
-        public virtual JM_Account AssignUser { get; set; }
+        public virtual JM_AccountCompany AssignUser { get; set; }
         [ForeignKey("TaskTypeId")]
         public virtual JM_TaskType TaskType { get; set; }
         public virtual ICollection<JM_TaskCustomColumnValue> TaskCustomColumnValues { get; set; }
-        public virtual ICollection<JM_TaskUser> TaskUsers { get; set; }
         public virtual ICollection<JM_TaskTag> TaskTags { get; set; }
         public virtual ICollection<JM_CommentTask> CommentTasks { get; set; }
         public virtual ICollection<JM_Task> Childs { get; set; }

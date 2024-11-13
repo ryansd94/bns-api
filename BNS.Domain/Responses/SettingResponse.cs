@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static BNS.Utilities.Enums;
 
 namespace BNS.Domain.Responses
@@ -12,6 +13,7 @@ namespace BNS.Domain.Responses
     {
         public EViewMode ViewMode { get; set; }
         public bool IsFullScreen { get; set; }
+        public string HideStatusIds { get; set; } 
     }
     public class ProjectSetting
     {

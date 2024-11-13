@@ -22,7 +22,7 @@ namespace BNS.Data.EntityContext
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Server=tcp:bns-test.database.windows.net,1433;Initial Catalog=bns;Persist Security Info=False;User ID=bns-user;Password=123456A@a;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                options.UseSqlServer("Server=localhost,1433;Initial Catalog=bns;Persist Security Info=False;User ID=sa;Password=123456;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
             }
         }
         public virtual DbSet<T> Repository<T>() where T : class

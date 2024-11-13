@@ -45,7 +45,7 @@ namespace BNS.Service.Features
                 return response;
             }
 
-            if (!user.PasswordHash.Equals(Ultility.MD5Encrypt(request.Password)))
+            if (!string.IsNullOrEmpty(user.PasswordHash) && !user.PasswordHash.Equals(Ultility.MD5Encrypt(request.Password)))
             {
                 response.errorCode = EErrorCode.UserPasswordNotCorrect.ToString();
                 return response;

@@ -66,7 +66,7 @@ namespace BNS.Service.Features
                     await _unitOfWork.Repository<JM_ProjectMember>().AddAsync(new JM_ProjectMember
                     {
                         ProjectId = request.Id,
-                        UserId = item,
+                        AccountCompanyId = item,
                         CreatedDate = DateTime.UtcNow,
                         CreatedUserId = request.UserId,
                     });
@@ -74,7 +74,7 @@ namespace BNS.Service.Features
                 if (value.DeleteValues != null && value.DeleteValues.Count > 0)
                 {
                     var removeData = await _unitOfWork.Repository<JM_ProjectMember>().Where(s => s.ProjectId == request.Id &&
-                     value.DeleteValues.Contains(s.UserId)).ToListAsync();
+                     value.DeleteValues.Contains(s.AccountCompanyId)).ToListAsync();
                     _unitOfWork.Repository<JM_ProjectMember>().RemoveRange(removeData);
                 }
             }

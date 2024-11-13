@@ -106,6 +106,7 @@ namespace BNS.Service.Features
                         Email = email,
                         IsMainAccount = false,
                         IsDefault = true,
+                        TeamId = user.TeamId,
                         EmailTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()
                     };
                     await _unitOfWork.JM_AccountCompanyRepository.AddAsync(accountCompany);
@@ -113,8 +114,8 @@ namespace BNS.Service.Features
                 else
                 {
                     var currentTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
-                    var aaaa = currentTimestamp - accountCompany.EmailTimestamp;
-                    if (aaaa < 60)
+                    var emailTimestamp = currentTimestamp - accountCompany.EmailTimestamp;
+                    if (emailTimestamp < 60)
                     {
                         continue;
                     }

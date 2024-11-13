@@ -634,6 +634,9 @@ namespace BNS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AccountCompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -658,16 +661,13 @@ namespace BNS.Data.Migrations
                     b.Property<Guid?>("UpdatedUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountCompanyId");
 
                     b.HasIndex("CreatedUserId");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("JM_ProjectMembers");
                 });
@@ -1923,6 +1923,12 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_ProjectMember", b =>
                 {
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_AccountCompany", "AccountCompany")
+                        .WithMany()
+                        .HasForeignKey("AccountCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "User")
                         .WithMany()
                         .HasForeignKey("CreatedUserId")
@@ -1935,13 +1941,7 @@ namespace BNS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "JM_Account")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JM_Account");
+                    b.Navigation("AccountCompany");
 
                     b.Navigation("Project");
 
@@ -2024,7 +2024,7 @@ namespace BNS.Data.Migrations
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Task", b =>
                 {
-                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_Account", "AssignUser")
+                    b.HasOne("BNS.Data.Entities.JM_Entities.JM_AccountCompany", "AssignUser")
                         .WithMany()
                         .HasForeignKey("AssignUserId");
 
@@ -2167,7 +2167,7 @@ namespace BNS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BNS.Data.Entities.JM_Entities.JM_Task", "Task")
-                        .WithMany("TaskUsers")
+                        .WithMany()
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2394,8 +2394,6 @@ namespace BNS.Data.Migrations
                     b.Navigation("TaskCustomColumnValues");
 
                     b.Navigation("TaskTags");
-
-                    b.Navigation("TaskUsers");
                 });
 
             modelBuilder.Entity("BNS.Data.Entities.JM_Entities.JM_Team", b =>

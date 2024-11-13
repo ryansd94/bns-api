@@ -51,7 +51,7 @@ namespace BNS.Service.Features
                    FullName = s.Account != null ? s.Account.FullName : string.Empty,
                    FirstName = s.Account != null ? s.Account.FirstName : string.Empty,
                    LastName = s.Account != null ? s.Account.LastName : string.Empty,
-                   Id = s.Account.Id,
+                   Id = s.Id,
                    CreatedDate = s.CreatedDate,
                    IsMainAccount = s.IsMainAccount,
                    TeamName = s.JM_Team != null ? s.JM_Team.Name : string.Empty,

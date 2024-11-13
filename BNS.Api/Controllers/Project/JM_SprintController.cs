@@ -50,11 +50,11 @@ namespace BNS.Api.Controllers.Project
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpPut(Name = "update-sprint")]
-        public async Task<IActionResult> Update(UpdateJM_SprintRequest request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
+        //[HttpPut(Name = "update-sprint")]
+        //public async Task<IActionResult> Update(UpdateJM_SprintRequest request)
+        //{
+        //    return Ok(await _mediator.Send(request));
+        //}
 
     }
 }

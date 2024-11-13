@@ -1,4 +1,5 @@
 ﻿using BNS.Domain.Commands;
+using BNS.Domain.Commands.Account;
 using BNS.Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,13 @@ namespace BNS.Api.Controllers
         [HttpPost("validate-join")]
         [AllowAnonymous]
         public async Task<IActionResult> ValidateJoin(ValidateAddUserRequest request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost("join-team")]
+        [AllowAnonymous]
+        public async Task<IActionResult> JoinTeam(JoinTeamRequest request)
         {
             return Ok(await _mediator.Send(request));
         }

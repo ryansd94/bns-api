@@ -32,7 +32,7 @@ namespace BNS.Utilities
         public static string GetPath(Guid ShopIndex, EUploadType type)
         {
             var result = "";
-            string directory = $"/{Constants.__PATH_UPLOAD_FILE}/{ShopIndex }/{type.ToString()}/";
+            string directory = $"/{Constants.__PATH_UPLOAD_FILE}/{ShopIndex}/{type.ToString()}/";
             var webRootFolder = "wwwroot";
             result = $"{webRootFolder}/{directory}";
             return result;
@@ -40,7 +40,7 @@ namespace BNS.Utilities
         public static string GetPath(string host, Guid ShopIndex, EUploadType type)
         {
             var result = "";
-            string directory = $"/{Constants.__PATH_UPLOAD_FILE}/{ShopIndex }/{type.ToString()}/";
+            string directory = $"/{Constants.__PATH_UPLOAD_FILE}/{ShopIndex}/{type.ToString()}/";
             var hostFile = $"{directory}";
             result = $"{host}{hostFile}";
             return result;
@@ -59,6 +59,9 @@ namespace BNS.Utilities
             }
         }
 
-       
+        public static string GetFullName(string firstName, string lastName)
+        {
+            return string.Format("{0} {1}", firstName, lastName);
+        }
     }
 }

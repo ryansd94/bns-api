@@ -6,7 +6,6 @@ namespace BNS.Domain.Commands
 {
     public class SignupRequest : CommandBase<ApiResult<LoginResponse>>
     {
-
         [Required]
         public string Token { get; set; }
         public string FullName { get; set; }

@@ -57,13 +57,13 @@ namespace BNS.Service.Features
             }
             if (request.Members != null && request.Members.Count > 0)
             {
-                foreach (var team in request.Members)
+                foreach (var accountCompanyId in request.Members)
                 {
                     await _unitOfWork.Repository<JM_ProjectMember>().AddAsync(new JM_ProjectMember
                     {
                         Id = Guid.NewGuid(),
                         ProjectId = data.Id,
-                        UserId = team,
+                        AccountCompanyId = accountCompanyId,
                         CreatedDate = DateTime.UtcNow,
                         CreatedUserId = request.UserId,
                     });
@@ -78,7 +78,7 @@ namespace BNS.Service.Features
             {
                 Id = Guid.NewGuid(),
                 ProjectId = data.Id,
-                UserId = request.UserId,
+                AccountCompanyId = request.AccountCompanyId,
                 IsCreated = true,
                 CreatedDate = DateTime.UtcNow,
                 CreatedUserId = request.UserId,

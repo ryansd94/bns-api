@@ -73,6 +73,7 @@ namespace BNS.Api.Auth
                     query = query.Add("CompanyId", companyId.Value);
                     query = query.Add("UserId", userId.Value);
                     query = query.Add("isMainAccount", isMainAccount.ToString());
+                    query = query.Add("AccountCompanyId", accountCompanyId.Value);
                     context.HttpContext.Request.QueryString = query;
                 }
                 else if (method == "POST" || method == "PUT")
@@ -98,6 +99,7 @@ namespace BNS.Api.Auth
                     else data = new Dictionary<string, object>();
                     data.Add("CompanyId", companyId.Value);
                     data.Add("UserId", userId.Value);
+                    data.Add("AccountCompanyId", accountCompanyId.Value);
                     var requestData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
                     context.HttpContext.Request.Body = new MemoryStream(requestData);
                 }

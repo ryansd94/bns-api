@@ -2,13 +2,11 @@
 using AutoMapper;
 using BNS.Data.Entities.JM_Entities;
 using BNS.Domain;
-using BNS.Domain.Commands;
 using BNS.Domain.Queries;
 using BNS.Domain.Responses;
 using BNS.Resource;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace BNS.Service.Features
@@ -74,7 +72,6 @@ namespace BNS.Service.Features
         public override IQueryable<JM_Task> GetQueryableData(GetTaskRequest request)
         {
             var query = _unitOfWork.Repository<JM_Task>()
-                .Include(s => s.TaskUsers)
                 .Include(s => s.TaskType)
                 .Include(s => s.Status)
                 .Include(s => s.Childs)
@@ -84,7 +81,7 @@ namespace BNS.Service.Features
                 .Include(s => s.User)
                 .Where(s => !s.IsDelete && s.CompanyId == request.CompanyId &&
                 !s.ParentId.HasValue &&
-                (request.isMainAccount || s.ReporterId == request.UserId || (s.TaskUsers != null && s.TaskUsers.Any(d => d.UserId == request.UserId)) || s.CreatedUserId == request.UserId))
+                (request.isMainAccount || s.ReporterId == request.UserId || s.CreatedUserId == request.UserId))
                   .OrderByDescending(d => d.CreatedDate)
                   .AsQueryable();
             return query;

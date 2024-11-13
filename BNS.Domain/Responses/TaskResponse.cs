@@ -1,4 +1,5 @@
 ﻿using BNS.Domain.Commands;
+using BNS.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -78,7 +79,36 @@ namespace BNS.Domain.Responses
     public class User
     {
         public Guid Id { get; set; }
-        public string FullName { get; set; }
+        public string FullName { get { return Ultility.GetFullName(FirstName, LastName); } }
         public string Image { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
+
+    public class TaskCalendarRespone
+    {
+        public List<TaskCalendarResource> Resources { get; set; }
+        public List<TaskCalendarEventItem> Events { get; set; }
+    }
+
+    public class TaskCalendarResource
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Guid? ParentId { get; set; }
+        public bool GroupOnly { get; set; }
+
+    }
+    public class TaskCalendarEventItem
+    {
+        public Guid Id { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
+        public Guid? ResourceId { get; set; }
+        public string Title { get; set; }
+        public User UserAssign { get; set; }
+        public TaskType TaskType { get; set; }
+        public StatusResponseItem Status { get; set; }
+        public DateTime? StartDate { get; set; }
     }
 }

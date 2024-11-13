@@ -15,11 +15,9 @@ namespace BNS.Domain.AutoMapper
             CreateMap<JM_Task, TaskItem>()
                  .ForMember(s => s.UsersAssignId,
                  d => d.MapFrom(e => e.AssignUserId != null ?
-                 new List<Guid> { e.AssignUserId.Value } :
-                 (e.TaskUsers != null ? e.TaskUsers.Select(s => s.UserId).ToList() : null)))
+                 new List<Guid> { e.AssignUserId.Value } : null))
                  .ForMember(s => s.CreatedUser, d => d.MapFrom(e => new User
                  {
-                     FullName = e.User.FullName,
                      Image = e.User.Image
                  }))
                  .ForMember(s => s.Status, d => d.MapFrom(e => new StatusResponseItem
@@ -42,11 +40,36 @@ namespace BNS.Domain.AutoMapper
                     Name = s.Tag.Name,
                 }).ToArray() : null));
 
+            CreateMap<JM_Task, TaskCalendarEventItem>()
+                 .ForMember(s => s.UserAssign,
+                 d => d.MapFrom(e => e.AssignUser != null ?
+                 new User
+                 {
+                     FirstName = e.AssignUser.Account.FirstName,
+                     LastName = e.AssignUser.Account.LastName,
+                     Image = e.AssignUser.Account.Image,
+                     Id = e.AssignUser.Id
+                 } : null))
+                 .ForMember(s => s.Status, d => d.MapFrom(e => new StatusResponseItem
+                 {
+                     Name = e.Status != null ? e.Status.Name : "",
+                     Color = e.Status != null ? e.Status.Color : "",
+                 }))
+                 .ForMember(s => s.TaskType, d => d.MapFrom(e => new TaskType
+                 {
+                     Name = e.TaskType.Name,
+                     Color = e.TaskType.Color,
+                     Icon = e.TaskType.Icon,
+                 }))
+                 .ForMember(e => e.Start, d => d.MapFrom(s => s.StartDate != null ? s.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : s.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")))
+                 .ForMember(e => e.End, d => d.MapFrom(s => s.DueDate != null ? s.DueDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : s.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")))
+                 .ForMember(e => e.ResourceId, d => d.MapFrom(s => s.AssignUser != null ? s.AssignUser.TeamId : null));
+
             CreateMap<SprintRequest, JM_ProjectPhase>();
             CreateMap<JM_ProjectPhase, SprintResponseItem>();
             CreateMap<JM_Project, ProjectResponseItem>()
                 .ForMember(s => s.Teams, o => o.MapFrom(x => x.JM_ProjectTeams.Select(s => s.TeamId).ToList()))
-                .ForMember(s => s.Members, o => o.MapFrom(x => x.JM_ProjectMembers.Select(s => s.UserId).ToList()))
+                .ForMember(s => s.Members, o => o.MapFrom(x => x.JM_ProjectMembers.Select(s => s.AccountCompanyId).ToList()))
                 .ForMember(s => s.Sprints, o => o.MapFrom(x => x.Sprints.OrderBy(s => s.CreatedDate).Where(s => s.ParentId == null && s.IsDelete == false)));
             CreateMap<JM_Team, TeamResponseItem>()
                 .ForMember(s => s.ParentName, d => d.MapFrom(u => u.Parent != null ? u.Parent.Name : string.Empty))
@@ -72,7 +95,6 @@ namespace BNS.Domain.AutoMapper
             CreateMap<JM_Comment, CommentResponseItem>().ForMember(s => s.User, d => d.MapFrom(e => new User
             {
                 Id = e.User.Id,
-                FullName = e.User.FullName,
                 Image = e.User.Image,
             })).ForMember(s => s.UpdatedTime, d => d.MapFrom(s => s.UpdatedDate.ToString()));
             CreateMap<CreatePriorityRequest, JM_Priority>().ForMember(s => s.CreatedUserId, d => d.MapFrom(e => e.UserId));
